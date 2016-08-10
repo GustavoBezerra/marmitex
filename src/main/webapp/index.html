@@ -1,13 +1,74 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Start Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Marmitex</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Tell the browser to be responsive to screen width -->
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet"
+              href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+
+        <style>
+            .teste {	
+                background-image: url(photos/marmita_4.jpg);
+                background-repeat: round;
+
+            }
+        </style>
     </head>
-    <body>
-        <h1>Hello World!</h1>
-        <form action="Servlet">
-            <button type="submit" value="Testar"/>
-        </form>
+    <body class="teste">
+        <div id="body" class="hold-transition skin-red sidebar-mini">
+            <div class="wrapper">
+                <header class="main-header">
+                    <a href="Home.jsp" class="logo"> <span class="logo-lg">Marmitex
+                            do dia</span>
+                    </a>
+                    <nav class="navbar navbar-static-top" role="navigation">
+                        <div class="navbar-custom-menu">
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown user user-menu"><a href="/Login.jsp">
+                                        <span class="hidden-xs">Sair</span>
+                                    </a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+            </div>
+        </div>
+        <div class="row">
+            <a href="#">
+                <div class="btn-lg bg-red col-md-2"
+                     style="margin-top: 10%; margin-left: 27%; text-align: center;">
+                    <h3>
+                        <b>Pedir marmitex</b>
+                    </h3>
+                </div>
+            </a> <a href="#">
+                <div class="btn-lg bg-green col-md-2"
+                     style="margin-top: 10%; margin-left: 10%; text-align: center;">
+                    <h3>
+                        <b>Cardápio</b>
+                    </h3>
+                </div>
+            </a>
+        </div>
+
+        <div class="row">
+            <h2 style="margin-left: 47%; margin-top: 4%">OU</h2>
+        </div>
+
+        <div class="row">
+            <h3 style="margin-left: 32%; margin-top: 2%">Contate-nos: Av.
+                Japão, 1480. Tel: (11)1234-5678</h3>
+        </div>
     </body>
 </html>
