@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Tell the browser to be responsive to screen width -->
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet"
+              href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini" style="background-color: lightgray">
+        <div id="body" class="hold-transition skin-red sidebar-mini">
+            <header class="main-header">
+                <a href="index.html" class="logo"> <span class="logo-lg">Marmitex
+                        do dia</span>
+                </a>
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <div class="navbar-custom-menu">
+
+                    </div>
+                </nav>
+            </header>
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content">
+                <!-- Main content -->                
+                <!-- form start -->                
+                <div class="box-body">
+                    <form role="form" method="post" action="/ServletCliente">                        
+                        <!-- SOU CADASTRADO -->
+                        <div class="col-md-6">
+                            <div class="box box-default">
+                                <div class="box-header with-border">
+                                    <i class="fa fa-user"></i>
+                                    <h3 class="box-title">Sou cadastrado</h3>
+                                </div><!-- /.box-header -->
+
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInput">E-mail</label>
+                                            <input type="email" class="form-control"  name="txtEmail" placeholder="E-mail">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-12">
+                                            <label for="exampleInput">Senha</label>
+                                            <input type="password" class="form-control" name="txtSenha" placeholder="Senha">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-11">
+                                            <label for="exampleInput"><a href="Esqueci_Dados.html">Esqueci meus dados</a></label>
+                                            <button type="submit" class="btn btn-info pull-right" name="operacao" value="LOGIN">Entrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form role="form" method="post" action="/ServletCliente">
+                        <!-- NÃO SOU CADASTRADO --> 
+                        <div class="col-md-6">
+                            <div class="box box-default">
+                                <div class="box-header with-border">
+                                    <i class="fa fa-user-plus"></i>
+                                    <h3 class="box-title">Não sou cadastrado</h3>
+                                </div>
+                                <div class="box-body">
+                                    <!-- PRIMEIRA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label for="exampleInput">Nome</label>
+                                            <input type="text" class="form-control" name="txtNome" placeholder="Nome">                                    
+                                        </div>                                        
+                                        <div class="form-group col-md-6">
+                                            <label for="exampleInput">Telefone</label>
+                                            <input type="tel" class="form-control" name="txtNome" placeholder="Telefone">                                    
+                                        </div>                                        
+                                    </div>
+                                    <br>
+                                    <div class="box-header with-border">
+                                        <i class="fa fa-map-marker"></i>
+                                        <h3 class="box-title">Localidade</h3>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>CEP</label>
+                                            <input type="text" class="form-control" name="txtCpf" placeholder="CEP">
+                                        </div>
+                                    </div>
+                                    <!-- TERCEIRA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label for="exampleInput">Endereço</label>
+                                            <input type="text" name="DtNasc" class="form-control" placeholder="Endereço (Somente nome da rua)">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="exampleInput">Número</label>
+                                            <input type="tel" class="form-control" name="txtTelefone" placeholder="Número">
+                                        </div>
+                                    </div>
+                                    <!-- SEGUNDA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Complemento</label>
+                                            <input type="text" class="form-control" name="txtCpf" placeholder="Complemento">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Bairro</label>
+                                            <input type="text" class="form-control" name="txtCpf" placeholder="Bairro">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="box-header with-border">
+                                        <i class="fa fa-sign-in"></i>
+                                        <h3 class="box-title">Dados para login</h3>
+                                    </div>
+                                    <!-- QUARTA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-10">
+                                            <label for="exampleInput">E-mail</label>
+                                            <input type="email" class="form-control" name="txtEmail" placeholder="E-mail">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-10">
+                                            <label for="exampleInput">Senha</label>                                            
+                                            <input type="password" class="form-control col-md-10" name="txtSenha" placeholder="Senha">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-10">
+                                            <label for="exampleInput">Confirmar senha</label>
+                                            <input type="password" class="form-control col-md-10" name="txtSenha" placeholder="Confirmar senha">
+                                        </div>
+                                    </div>
+                                    <!-- QUINTA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-7">
+                                            <button type="submit" class="btn btn-success pull-right" name="operacao" value="SALVAR">Cadastrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </form>
+                </div><!-- /.box-body -->
+            </div><!-- /.content-wrapper -->  
+
+        </div>
+    </body>
+</html>
