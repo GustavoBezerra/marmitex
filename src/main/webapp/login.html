@@ -1,12 +1,7 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
-        <title>TODO supply a title</title>        
+        <title>Login</title>        
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <!-- Tell the browser to be responsive to screen width -->
@@ -33,22 +28,19 @@ and open the template in the editor.
 
                     </div>
                 </nav>
-            </header>
-            <!-- Content Wrapper. Contains page content -->
-            <div class="content">
-                <!-- Main content -->                
-                <!-- form start -->                
+            </header>            
+            <div class="content">                
                 <div class="box-body">
                     <form role="form" method="post" action="/ServletCliente">                        
                         <!-- SOU CADASTRADO -->
                         <div class="col-md-6">
                             <div class="box box-default">
-                                <div class="box-header with-border">
-                                    <i class="fa fa-user"></i>
-                                    <h3 class="box-title">Sou cadastrado</h3>
-                                </div><!-- /.box-header -->
-
                                 <div class="box-body">
+                                    <div class="box-header with-border">
+                                        <i class="fa fa-user"></i>
+                                        <h3 class="box-title">Sou cadastrado</h3>
+                                    </div><!-- /.box-header -->
+                                    <br>
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <label for="exampleInput">E-mail</label>
@@ -64,22 +56,23 @@ and open the template in the editor.
                                     <div class="row">
                                         <div class="form-group col-md-11">
                                             <label for="exampleInput"><a href="Esqueci_Dados.html">Esqueci meus dados</a></label>
-                                            <button type="submit" class="btn btn-info pull-right" name="operacao" value="LOGIN">Entrar</button>
+                                            <button type="submit" class="btn btn-google pull-right" name="operacao" value="LOGIN">Entrar</button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
                         </div>
                     </form>
                     <form role="form" method="post" action="/ServletCliente">
                         <!-- NÃO SOU CADASTRADO --> 
                         <div class="col-md-6">
                             <div class="box box-default">
-                                <div class="box-header with-border">
-                                    <i class="fa fa-user-plus"></i>
-                                    <h3 class="box-title">Não sou cadastrado</h3>
-                                </div>
                                 <div class="box-body">
+                                    <div class="box-header with-border">
+                                        <i class="fa fa-user-plus"></i>
+                                        <h3 class="box-title">Não sou cadastrado</h3>
+                                    </div>
+                                    <br>
                                     <!-- PRIMEIRA LINHA -->
                                     <div class="row">
                                         <div class="form-group col-md-6">
