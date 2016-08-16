@@ -19,14 +19,15 @@ import org.springframework.stereotype.Component;
  * @author gustavo
  */
 @Component("/marmitex/login")
-public class UsuarioHelper implements IViewHelper{
+public class LoginHelper implements IViewHelper{
 
     @Override
     public void tratarRequisicaoFrontController(HttpServletRequest request, HttpServletResponse response, ICommand comando) {
+        // TODO: Fazer aqui o inicio da validação do login
         try {
             response.getWriter().append("Served at: ").append(request.getContextPath());
         } catch (IOException ex) {
-            Logger.getLogger(UsuarioHelper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

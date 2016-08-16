@@ -34,8 +34,6 @@ public class FrontControllerServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-                    
-//        response.getWriter().append("Served at: ").append(request.getContextPath());
         // para aceitar acentuacao
         request.setCharacterEncoding("UTF-8");
         
@@ -53,8 +51,7 @@ public class FrontControllerServlet extends HttpServlet {
         
         //Repassa a requisicao para a ViewModel responsavel        
         vh.tratarRequisicaoFrontController(request, response, command);
-        
-        
+                
     }
     
     
