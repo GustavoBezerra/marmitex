@@ -1,4 +1,4 @@
-package com.les.marmitex.model.dominio;
+package com.les.marmitex.core.dominio;
 
 import java.util.List;
 

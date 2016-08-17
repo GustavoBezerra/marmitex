@@ -1,7 +1,7 @@
-package com.les.marmitex.model.fachada;
+package com.les.marmitex.core.fachada;
 
-import com.les.marmitex.model.dominio.IEntidade;
-import com.les.marmitex.model.dominio.Resultado;
+import com.les.marmitex.core.dominio.IEntidade;
+import com.les.marmitex.core.dominio.Resultado;
 
 /**
  *

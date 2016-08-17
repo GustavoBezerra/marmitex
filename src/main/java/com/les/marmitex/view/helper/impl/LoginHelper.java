@@ -7,6 +7,7 @@ package com.les.marmitex.view.helper.impl;
 
 import com.les.marmitex.view.command.ICommand;
 import com.les.marmitex.view.helper.IViewHelper;
+import com.les.marmitex.view.helper.IViewHelper;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

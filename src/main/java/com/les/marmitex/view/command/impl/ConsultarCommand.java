@@ -5,8 +5,8 @@
  */
 package com.les.marmitex.view.command.impl;
 
-import com.les.marmitex.model.dominio.IEntidade;
-import com.les.marmitex.model.dominio.Resultado;
+import com.les.marmitex.core.dominio.IEntidade;
+import com.les.marmitex.core.dominio.Resultado;
 import com.les.marmitex.view.command.ICommand;
 import org.springframework.stereotype.Component;
 
