@@ -2,51 +2,94 @@ package com.les.marmitex.core.dominio;
 
 public class Endereco extends EntidadeDominio {
 
-	private String cep;
+    private String cidade;
+    private String cep;
+    private String rua;
+    private String numero;
+    private String complemento;
+    private String bairro;
 
-	public String getCep() {
-		return cep;
-	}
+    /**
+     * @return the cidade
+     */
+    public String getCidade() {
+        return cidade;
+    }
 
-	public void setCep(String cep) {
-		this.cep = cep;
-	}
+    /**
+     * @param cidade the cidade to set
+     */
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
 
-	public String getRua() {
-		return rua;
-	}
+    /**
+     * @return the cep
+     */
+    public String getCep() {
+        return cep;
+    }
 
-	public void setRua(String rua) {
-		this.rua = rua;
-	}
+    /**
+     * @param cep the cep to set
+     */
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
 
-	public String getNumero() {
-		return numero;
-	}
+    /**
+     * @return the rua
+     */
+    public String getRua() {
+        return rua;
+    }
 
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
+    /**
+     * @param rua the rua to set
+     */
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
 
-	public String getComplemento() {
-		return complemento;
-	}
+    /**
+     * @return the numero
+     */
+    public String getNumero() {
+        return numero;
+    }
 
-	public void setComplemento(String complemento) {
-		this.complemento = complemento;
-	}
+    /**
+     * @param numero the numero to set
+     */
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
 
-	public String getBairro() {
-		return bairro;
-	}
+    /**
+     * @return the complemento
+     */
+    public String getComplemento() {
+        return complemento;
+    }
 
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
+    /**
+     * @param complemento the complemento to set
+     */
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
 
-	private String rua;
-	private String numero;
-	private String complemento;
-	private String bairro;
+    /**
+     * @return the bairro
+     */
+    public String getBairro() {
+        return bairro;
+    }
 
+    /**
+     * @param bairro the bairro to set
+     */
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
 }
