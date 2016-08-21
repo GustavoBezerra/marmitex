@@ -139,13 +139,13 @@ public class ClienteDAO extends AbstractJdbcDAO {
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-
+            
             sql.append("SELECT * FROM tb_cliente");
             if (cliente.getId() != 0) {
                 sql.append(" WHERE id_cliente=?;");
                 clienteEspecifico = true;
             } 
-            else if (!("").equals(cliente.getLogin()) && !("").equals(cliente.getSenha())) {
+            else if (cliente.getLogin() != null && cliente.getSenha() != null) {
                 sql.append(" WHERE login like ? and senha like ?;");
                 clienteLogin = true;
             } 
@@ -161,7 +161,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
                 pst.setString(1, cliente.getLogin());
                 pst.setString(2, cliente.getSenha());
             }
-
+            
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 c = new Cliente();
@@ -173,6 +173,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 
                 clientes.add(c);
             }
+            
         } catch (SQLException e) {
             try {
                 connection.rollback();

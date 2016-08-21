@@ -1,6 +1,8 @@
 package com.les.marmitex.util.teste;
 
 import com.les.marmitex.core.dominio.Cliente;
+import com.les.marmitex.core.fachada.impl.Fachada;
+import java.util.Date;
 
 /**
  * Classe para testar o DAO de Cliente
@@ -11,20 +13,16 @@ public class TestarCliente {
 
     public static void main(String[] args) {
          
-         TestarSpring t = new TestarSpring();
-         Cliente e = new Cliente();
-         System.out.println("DAO: "+t.retornaDAO(e).getClass().getName());
-         
-        
         /** ---- CADASTRAR CLIENTE ---- **/
-//        Cliente c = new Cliente();
-//        c.setDtCriacao(new Date());
-//        c.setLogin("leticia@hotmail.com");
-//        c.setNome("Leticia");
-//        c.setSenha("123");
-//        
-//        ClienteDAO dao = new ClienteDAO();
-//        dao.salvar(c);
+        Cliente c = new Cliente();
+        c.setDtCriacao(new Date());
+//        c.setLogin("maria@hotmail.com");
+        c.setNome("Maria");
+        c.setSenha("12345");
+        c.setId(4);
+        
+        Fachada f = new Fachada();
+        f.excluir(c);
         
 
         /** ---- ALTERAR CLIENTE ---- **/

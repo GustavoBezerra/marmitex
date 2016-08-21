@@ -73,7 +73,6 @@ public class Fachada implements IFachada {
                 List<EntidadeDominio> entidades = new ArrayList<EntidadeDominio>();
                 entidades.add(entidade);
                 resultado.setEntidades(entidades);
-
             } catch (SQLException e) {
 
                 e.printStackTrace();
@@ -92,7 +91,7 @@ public class Fachada implements IFachada {
 
         String nmClasse = entidade.getClass().getName();
 
-        String msg = null; //= executarRegras(entidade, "ALTERAR");
+        String msg = executarRegras(entidade, "ALTERAR");
 
         if (msg == null) {
 
