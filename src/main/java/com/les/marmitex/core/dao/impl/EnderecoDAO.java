@@ -11,12 +11,14 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 /**
  * Classe responsável pelas ações na tb_endereco
  * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
  * @date 20/08/2016
  */
+@Component("com.les.marmitex.core.dominio.Endereco")
 public class EnderecoDAO extends AbstractJdbcDAO{
 
     public EnderecoDAO() {

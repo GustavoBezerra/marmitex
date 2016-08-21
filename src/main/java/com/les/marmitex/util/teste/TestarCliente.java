@@ -1,8 +1,6 @@
 package com.les.marmitex.util.teste;
 
-import com.les.marmitex.core.dao.impl.ClienteDAO;
 import com.les.marmitex.core.dominio.Cliente;
-import java.util.Date;
 
 /**
  * Classe para testar o DAO de Cliente
@@ -12,6 +10,12 @@ import java.util.Date;
 public class TestarCliente {
 
     public static void main(String[] args) {
+         
+         TestarSpring t = new TestarSpring();
+         Cliente e = new Cliente();
+         System.out.println("DAO: "+t.retornaDAO(e).getClass().getName());
+         
+        
         /** ---- CADASTRAR CLIENTE ---- **/
 //        Cliente c = new Cliente();
 //        c.setDtCriacao(new Date());
@@ -54,5 +58,6 @@ public class TestarCliente {
 //        for(EntidadeDominio e : cliente){
 //            System.out.println(e.getId());
 //        }
+        
     }
 }

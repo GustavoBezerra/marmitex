@@ -1,6 +1,6 @@
 package com.les.marmitex.core.fachada;
 
-import com.les.marmitex.core.dominio.IEntidade;
+import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Resultado;
 
 /**
@@ -9,10 +9,10 @@ import com.les.marmitex.core.dominio.Resultado;
  */
 public interface IFachada {
     
-    public Resultado salvar(IEntidade entidade);
-    public Resultado alterar(IEntidade entidade);
-    public Resultado excluir(IEntidade entidade);
-    public Resultado consultar(IEntidade entidade);
-    public Resultado visualizar(IEntidade entidade);
+    public Resultado salvar(EntidadeDominio entidade);
+    public Resultado alterar(EntidadeDominio entidade);
+    public Resultado excluir(EntidadeDominio entidade);
+    public Resultado consultar(EntidadeDominio entidade);
+//    public Resultado visualizar(EntidadeDominio entidade);
     
 }

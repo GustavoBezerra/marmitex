@@ -9,7 +9,7 @@ import java.util.List;
 public class Resultado {
     
     private String mensagem;
-    private List<IEntidade> entidades;
+    private List<EntidadeDominio> entidades;
 
     /**
      * @return the mensagem
@@ -28,14 +28,14 @@ public class Resultado {
     /**
      * @return the entidades
      */
-    public List<IEntidade> getEntidades() {
+    public List<EntidadeDominio> getEntidades() {
         return entidades;
     }
 
     /**
      * @param entidades the entidades to set
      */
-    public void setEntidades(List<IEntidade> entidades) {
+    public void setEntidades(List<EntidadeDominio> entidades) {
         this.entidades = entidades;
     }
 }
