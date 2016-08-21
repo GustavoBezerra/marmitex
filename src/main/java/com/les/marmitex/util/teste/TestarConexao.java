@@ -1,6 +1,6 @@
 package com.les.marmitex.util.teste;
 
-import com.les.marmites.util.Conexao;
+import com.les.marmitex.util.Conexao;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;

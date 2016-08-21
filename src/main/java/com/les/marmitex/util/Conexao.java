@@ -1,4 +1,4 @@
-package com.les.marmites.util;
+package com.les.marmitex.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

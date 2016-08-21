@@ -1,6 +1,6 @@
 package com.les.marmitex.core.dao.impl;
 
-import com.les.marmites.util.Conexao;
+import com.les.marmitex.util.Conexao;
 import com.les.marmitex.core.dao.IDAO;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import java.sql.Connection;
@@ -17,6 +17,9 @@ public abstract class AbstractJdbcDAO implements IDAO {
     protected String table;
     protected String idTable;
     protected boolean ctrlTransaction = true;
+    
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_RESET = "\u001B[0m";
 
     public AbstractJdbcDAO(Connection connection, String table, String idTable) {
         this.table = table;

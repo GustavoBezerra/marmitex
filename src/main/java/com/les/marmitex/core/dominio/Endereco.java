@@ -8,6 +8,9 @@ public class Endereco extends EntidadeDominio {
     private String numero;
     private String complemento;
     private String bairro;
+    private int id_cliente;
+    
+    
 
     /**
      * @return the cidade
@@ -91,5 +94,19 @@ public class Endereco extends EntidadeDominio {
      */
     public void setBairro(String bairro) {
         this.bairro = bairro;
+    }
+
+    /**
+     * @return the id_cliente
+     */
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    /**
+     * @param id_cliente the id_cliente to set
+     */
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
     }
 }
