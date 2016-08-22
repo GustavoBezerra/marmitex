@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -52,7 +53,7 @@ public class EnderecoDAO extends AbstractJdbcDAO{
             pst.setString(5, endereco.getNumero());
             pst.setString(6, endereco.getComplemento());
             pst.setString(7, endereco.getBairro());
-            Timestamp time = new Timestamp(endereco.getDtCriacao().getTime());
+            Timestamp time = new Timestamp(new Date().getTime());
             pst.setTimestamp(8, time);
             pst.executeUpdate();
             connection.commit();
@@ -157,7 +158,7 @@ public class EnderecoDAO extends AbstractJdbcDAO{
                 sql.append(" WHERE id_endereco=?;");
                 enderecoEspecifico = true;
             } else {
-                sql.append("WHERE id_cliente=?;");
+                sql.append(" WHERE id_cliente=?;");
             }
 
             pst = connection.prepareStatement(sql.toString());

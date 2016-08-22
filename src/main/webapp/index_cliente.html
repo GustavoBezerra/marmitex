@@ -3,11 +3,336 @@
 <!-- @date 20/08/2016 -->
 <html>
     <head>
-        <title>Index CLIENTE</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home - Cliente</title>        
+        <meta charset="utf-8">
+        <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
+        <script>
+
+            var d_alteracao;
+
+            montarTabela();
+            function montarTabela() {
+                $.ajax({
+                    url: "/marmitex/endereco",
+                    type: "POST",
+                    data: {
+                        operacao: "CONSULTAR"
+                    },
+                    success: function (data) {
+                        var enderecos = JSON.parse(data);
+                        $("#tabela_enderecos").empty();
+                        for (var i = 0; i < enderecos.length; i++) {
+                            $("#tabela_enderecos").append("<tr name='" + enderecos[i].id + "' id='endereco_" + enderecos[i].id + "'>" +
+                                    "<td class='n_int'>" + enderecos[i].id + "</td>" +
+                                    "<td class='txt_cep'>" + enderecos[i].cep + "</td>" +
+                                    "<td class='txt_cidade'>" + enderecos[i].cidade + "</td>" +
+                                    "<td class='txt_rua'>" + enderecos[i].rua + "</td>" +
+                                    "<td class='txt_numero'>" + enderecos[i].numero + "</td>" +
+                                    "<td class='txt_complemento'>" + enderecos[i].complemento + "</td>" +
+                                    "<td class='txt_bairro'>" + enderecos[i].bairro + "</td>" +
+                                    "<td>" +
+                                    "<button type='button' class='btn btn-warning' onclick='carregarCampos(this)'>Alterar</button>" +
+                                    "<button type='button' class='btn btn-danger' onclick='excluir(this)'>Excluir</button>" +
+                                    "</td>" +
+                                    "</tr>");
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                    }
+                });
+
+            }
+
+            function salvar() {
+                $.ajax({
+                    url: "/marmitex/endereco",
+                    type: "POST",
+                    data: {
+                        operacao: "SALVAR",
+                        cep: document.getElementById("txtCep").value,
+                        cidade: document.getElementById("txtCidade").value,
+                        endereco: document.getElementById("txtEndereco").value,
+                        numero: document.getElementById("txtNumero").value,
+                        complemento: document.getElementById("txtComplemento").value,
+                        bairro: document.getElementById("txtBairro").value
+                    },
+                    success: function (data) {
+                        aparecerDiv(true);
+                        montarTabela();
+                        limparCampos();
+                    },
+                    error: function (err) {
+                        aparecerDiv(false);
+                    }
+                });
+            }
+
+            function alterar() {
+                $.ajax({
+                    url: "/marmitex/endereco",
+                    type: "POST",
+                    data: {
+                        operacao: "ALTERAR",
+                        cep: document.getElementById("txtCep").value,
+                        cidade: document.getElementById("txtCidade").value,
+                        endereco: document.getElementById("txtEndereco").value,
+                        numero: document.getElementById("txtNumero").value,
+                        complemento: document.getElementById("txtComplemento").value,
+                        bairro: document.getElementById("txtBairro").value,
+                        id: id_alteracao
+                    },
+                    success: function (data) {
+                        alert("Endereco alterado com sucesso!");
+                        montarTabela();
+                        cancelarAlterar();
+                    },
+                    error: function (err) {
+                        aparecerDiv(false);
+                    }
+                });
+            }
+
+            function carregarCampos(linha) {
+                var $row = $(linha).closest("tr");    // Find the row
+                id_alteracao = $row.find(".n_int").text(); // Find the text
+                var $cep = $row.find(".txt_cep").text(); // Find the text
+                var $cidade = $row.find(".txt_cidade").text(); // Find the text
+                var $rua = $row.find(".txt_rua").text(); // Find the text
+                var $numero = $row.find(".txt_numero").text(); // Find the text
+                var $complemento = $row.find(".txt_complemento").text(); // Find the text
+                var $bairro = $row.find(".txt_bairro").text(); // Find the text
+                
+                document.getElementById("txtCep").value = $cep;
+                document.getElementById("txtCidade").value = $cidade;
+                document.getElementById("txtEndereco").value = $rua;
+                document.getElementById("txtNumero").value = $numero;
+                document.getElementById("txtComplemento").value = $complemento;
+                document.getElementById("txtBairro").value = $bairro;
+                
+                document.getElementById("cancelar").disabled = false;
+                document.getElementById("salvar").style.display = 'none';
+                document.getElementById("alterar").style.display = 'block';
+            }
+
+            function excluir(linha) {
+                var $row = $(linha).closest("tr");    // Find the row                
+                var $inteiro = $row.find(".n_int").text(); // Find the text
+
+                $.ajax({
+                    url: "/marmitex/endereco",
+                    type: "POST",
+                    data: {
+                        operacao: "EXCLUIR",
+                        id: $inteiro
+                    },
+                    success: function (data) {
+                        $($row).remove();
+                        alert("Endereço excluido!");
+                        montarTabela();
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                        alert("ERRO AO EXCLUIR ENDERECO!");
+                    }
+                });
+            }
+
+            function limparCampos() {
+                document.getElementById("txtCep").value = "";
+                document.getElementById("txtCidade").value = "";
+                document.getElementById("txtEndereco").value = "";
+                document.getElementById("txtNumero").value = "";
+                document.getElementById("txtComplemento").value = "";
+                document.getElementById("txtBairro").value = "";
+                
+            }
+            
+            function cancelarAlterar(){
+                limparCampos();
+                document.getElementById("cancelar").disabled = true;
+                
+                document.getElementById("salvar").style.display = 'block';
+                document.getElementById("alterar").style.display = 'none';
+            }
+
+            function desaparecerDiv() {
+                document.getElementById("avisoErro").style.display = 'none';
+                document.getElementById("avisoOk").style.display = 'none';
+            }
+
+            function aparecerDiv(resultado) {
+                if (resultado === true) {
+                    document.getElementById("avisoOk").style.display = 'block';
+                } else {
+                    document.getElementById("avisoErro").style.display = 'block';
+                }
+            }
+        </script>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Tell the browser to be responsive to screen width -->
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet"
+              href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
     </head>
-    <body>
-        <div>TODO write content</div>
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray">
+        <div id="body" class="hold-transition skin-blue sidebar-mini">        
+            <div class="wrapper">
+                <header class="main-header">
+                    <!-- Logo -->
+                    <a href="index.html" class="logo"> <span class="logo-lg">Marmitex
+                            do dia</span>
+                    </a>
+                    <!-- Header Navbar: style can be found in header.less -->
+                    <nav class="navbar navbar-static-top" role="navigation">                        
+                        <!-- LEFT -->
+                        <div class="navbar-custom-menu">                                                               
+                            <ul class="nav navbar-nav">                
+                                <!-- Notifications: style can be found in dropdown.less -->                                          
+                                <li class="dropdown user user-menu">
+                                    <a href="/login.html">
+                                        <span class="hidden-xs">Sair</span>
+                                    </a>                                
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+
+                <aside class="main-sidebar">
+                    <!-- sidebar: style can be found in sidebar.less -->
+                    <section class="sidebar">                    
+                        <!-- sidebar menu: : style can be found in sidebar.less -->
+                        <ul class="sidebar-menu">
+                            <li class="header">MENUS</li>                        
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-barcode"></i><span class="h4">Meus Pedidos</span>                                    
+                                </a>                                
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-map-marker"></i><span class="h4">Meus Endereços</span>
+                                </a>                                
+                            </li>                            
+                            <li>                                
+                                <a href="#">
+                                    <i class="fa fa-edit"></i> <span class="h4">Editar dados</span>
+                                </a>                                                    
+                            </li>
+                        </ul>
+                    </section>
+                    <!-- /.sidebar -->
+                </aside>
+
+                <!-- Content Wrapper. Contains page content -->
+                <div class="content-wrapper">
+                    <!-- Main content -->                
+                    <!-- form start -->                
+                    <div class="box-body">
+
+                        <!-- NÃO SOU CADASTRADO --> 
+                        <div class="col-md-12">
+                            <div class="box box-default">
+                                <div class="box-body">                                        
+                                    <div class="box-header with-border">
+                                        <i class="fa fa-map-marker"></i>
+                                        <h3 class="box-title">Cadastrar Endereço</h3>
+                                        <button type="button" class="btn btn-info pull-right" name="cancelar" id="cancelar" onclick="cancelarAlterar()" disabled>Cancelar</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>CEP</label>
+                                            <input type="text" class="form-control" name="txtCep" id="txtCep" placeholder="CEP">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Cidade</label>
+                                            <input type="text" class="form-control" name="txtCidade" id="txtCidade" placeholder="Cidade">
+                                        </div>
+                                    </div>
+                                    <!-- TERCEIRA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label for="exampleInput">Endereço</label>
+                                            <input type="text" name="txtEndereco" id="txtEndereco" class="form-control" placeholder="Endereço (Somente nome da rua)">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="exampleInput">Número</label>
+                                            <input type="tel" class="form-control" name="txtNumero" id="txtNumero" placeholder="Número">
+                                        </div>
+                                    </div>
+                                    <!-- SEGUNDA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Complemento</label>
+                                            <input type="text" class="form-control" name="txtComplemento" id="txtComplemento" placeholder="Complemento">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Bairro</label>
+                                            <input type="text" class="form-control" name="txtBairro" id="txtBairro" placeholder="Bairro">
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class ="row col-md-6 col-xs-push-3" id="avisoErro" style="display: none;">
+                                        <div class="alert alert-danger alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true" onclick="desaparecerDiv()">×</button>
+                                            <h4><i class="icon fa fa-ban"></i> Erro!</h4>
+                                            Ocorreu um erro inesperado na gravação do novo endereço!
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class ="row col-md-6 col-xs-push-3" id="avisoOk" style="display: none;">
+                                        <div class="alert alert-success alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true" onclick="desaparecerDiv()">×</button>
+                                            <h4><i class="icon fa fa-check"></i> Sucesso!</h4>
+                                            O novo endereço foi cadastrado com sucesso!
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-11">
+                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" onclick="salvar()">Cadastrar</button>
+                                            <button type="submit" class="btn btn-warning pull-right" style="display: none" id="alterar" name="operacao" value="ALTERAR" onclick="alterar()">Alterar</button>
+                                        </div>
+                                    </div>                                        
+                                    <br/>
+
+                                    <div class="box-header with-border">
+                                        <i class="fa fa-building-o"></i>
+                                        <h3 class="box-title">Endereços cadastrados</h3>
+                                    </div>
+                                    <!-- QUARTA LINHA -->
+                                    <div class="row col-md-12">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>CEP</th>
+                                                <th>CIDADE</th>
+                                                <th>RUA</th>
+                                                <th>NUMERO</th>
+                                                <th>COMPLEMENTO</th>
+                                                <th>BAIRRO</th>
+                                                <th>OPÇÕES</th>
+                                            </tr>   
+                                            <tbody id="tabela_enderecos">
+
+                                            </tbody>
+                                        </table>
+                                    </div>                                                                          
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div>
+
+                    </div><!-- /.box-body -->
+                </div><!-- /.content-wrapper -->  
+            </div>
+        </div>
     </body>
 </html>

@@ -1,6 +1,9 @@
 package com.les.marmitex.view.helper;
 
-import com.les.marmitex.view.command.ICommand;
+import com.les.marmitex.core.dominio.EntidadeDominio;
+import com.les.marmitex.core.dominio.Resultado;
+import java.io.IOException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,5 +12,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author gustavo
  */
 public interface IViewHelper {
-    public void tratarRequisicaoFrontController(HttpServletRequest request, HttpServletResponse response, ICommand comando);
+
+    public EntidadeDominio getEntidade(HttpServletRequest request);
+
+    public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 }

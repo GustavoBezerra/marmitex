@@ -8,6 +8,10 @@
         <servlet-name>FrontControllerServlet</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FrontControllerServlet</servlet-name>
+        <url-pattern>/endereco</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

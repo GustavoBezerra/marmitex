@@ -5,19 +5,18 @@
  */
 package com.les.marmitex.view.command.impl;
 
-import com.les.marmitex.core.dominio.IEntidade;
+import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Resultado;
-import com.les.marmitex.view.command.ICommand;
 
 /**
  *
  * @author gustavo
  */
-public class ExcluirCommand implements ICommand {
+public class ExcluirCommand extends AbstractCommand {
 
     @Override
-    public Resultado execute(IEntidade entidade) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Resultado execute(EntidadeDominio entidade) {
+        return fachada.excluir(entidade);
     }
     
 }
