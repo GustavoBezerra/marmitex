@@ -36,6 +36,7 @@
                                     "</td>" +
                                     "</tr>");
                         }
+
                     },
                     error: function (err) {
                         console.log(err.statusText);
@@ -102,14 +103,14 @@
                 var $numero = $row.find(".txt_numero").text(); // Find the text
                 var $complemento = $row.find(".txt_complemento").text(); // Find the text
                 var $bairro = $row.find(".txt_bairro").text(); // Find the text
-                
+
                 document.getElementById("txtCep").value = $cep;
                 document.getElementById("txtCidade").value = $cidade;
                 document.getElementById("txtEndereco").value = $rua;
                 document.getElementById("txtNumero").value = $numero;
                 document.getElementById("txtComplemento").value = $complemento;
                 document.getElementById("txtBairro").value = $bairro;
-                
+
                 document.getElementById("cancelar").disabled = false;
                 document.getElementById("salvar").style.display = 'none';
                 document.getElementById("alterar").style.display = 'block';
@@ -145,13 +146,13 @@
                 document.getElementById("txtNumero").value = "";
                 document.getElementById("txtComplemento").value = "";
                 document.getElementById("txtBairro").value = "";
-                
+
             }
-            
-            function cancelarAlterar(){
+
+            function cancelarAlterar() {
                 limparCampos();
                 document.getElementById("cancelar").disabled = true;
-                
+
                 document.getElementById("salvar").style.display = 'block';
                 document.getElementById("alterar").style.display = 'none';
             }
