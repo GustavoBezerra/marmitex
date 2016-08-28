@@ -2,6 +2,11 @@ package com.les.marmitex.core.dominio;
 
 import java.util.Date;
 
+/**
+ * Classe entidade dominio
+ * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
+ * @date 27/08/2016
+ */
 public class EntidadeDominio implements IEntidade {
     
     private int id;

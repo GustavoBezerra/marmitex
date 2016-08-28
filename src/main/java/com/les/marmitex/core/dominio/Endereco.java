@@ -1,5 +1,10 @@
 package com.les.marmitex.core.dominio;
 
+/**
+ * Classe para representar o Endereço
+ * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
+ * @date 27/08/2016
+ */
 public class Endereco extends EntidadeDominio {
 
     private String cidade;
@@ -9,8 +14,6 @@ public class Endereco extends EntidadeDominio {
     private String complemento;
     private String bairro;
     private int id_cliente;
-    
-    
 
     /**
      * @return the cidade

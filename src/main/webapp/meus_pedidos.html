@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com -->
+<!-- @date 20/08/2016 -->
+<html>
+    <head>
+        <title>Cliente - Meus Endereços</title>
+        <meta charset="utf-8">
+        <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
+        <script>
+
+            var d_alteracao;
+            var pedidos = [
+                {id: '1', data: '25/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '1'},
+                {id: '2', data: '23/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '2'},
+                {id: '3', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '3'}
+            ];
+            montarTabela();
+
+            function montarTabela() {
+
+//                $("#tabela_pedidos").empty();
+                for (var i = 0; i < pedidos.length; i++) {
+                    $("#tabela_pedidos").append("<tr name='" + pedidos[i].id + "' id='pedido_" + pedidos[i].id + "'>" +
+                            "<td class='n_int'>" + pedidos[i].id + "</td>" +
+                            "<td class='dt_pedido'>" + pedidos[i].data + "</td>" +
+                            "<td class='txt_descricao'>" + pedidos[i].descricao + "</td>");
+                    if (pedidos[i].status === '1') {  // em preparo
+                        $("#tabela_pedidos").append("<td class='txt_status'>" +
+                                "<label class='label label-warning'>Em preparo</label>" + "</td>");
+                    } else if (pedidos[i].status === '2') { // a caminho
+                        $("#tabela_pedidos").append("<td class='txt_status'>" +
+                                "<label class='label label-info'>A caminho</label>" + "</td>");
+                    } else if (pedidos[i].status === '3') { // entregue
+                        $("#tabela_pedidos").append("<td class='txt_status'>" +
+                                "<label class='label label-success'>Entregue</label>" + "</td>");
+                    }
+                    $("#tabela_pedidos").append("<button class='btn btn-danger'>Devolver</button>");
+                }                
+            }
+
+            function salvar() {
+                $.ajax({
+                    url: "/marmitex/endereco",
+                    type: "POST",
+                    data: {
+                        operacao: "SALVAR",
+                        cep: document.getElementById("txtCep").value,
+                        cidade: document.getElementById("txtCidade").value,
+                        endereco: document.getElementById("txtEndereco").value,
+                        numero: document.getElementById("txtNumero").value,
+                        complemento: document.getElementById("txtComplemento").value,
+                        bairro: document.getElementById("txtBairro").value
+                    },
+                    success: function (data) {
+                        aparecerDiv(true);
+                        montarTabela();
+                        limparCampos();
+                    },
+                    error: function (err) {
+                        aparecerDiv(false);
+                    }
+                });
+            }
+
+            function alterar() {
+                $.ajax({
+                    url: "/marmitex/endereco",
+                    type: "POST",
+                    data: {
+                        operacao: "ALTERAR",
+                        cep: document.getElementById("txtCep").value,
+                        cidade: document.getElementById("txtCidade").value,
+                        endereco: document.getElementById("txtEndereco").value,
+                        numero: document.getElementById("txtNumero").value,
+                        complemento: document.getElementById("txtComplemento").value,
+                        bairro: document.getElementById("txtBairro").value,
+                        id: id_alteracao
+                    },
+                    success: function (data) {
+                        alert("Endereco alterado com sucesso!");
+                        montarTabela();
+                        cancelarAlterar();
+                    },
+                    error: function (err) {
+                        aparecerDiv(false);
+                    }
+                });
+            }
+
+            function carregarCampos(linha) {
+                var $row = $(linha).closest("tr");    // Find the row
+                id_alteracao = $row.find(".n_int").text(); // Find the text
+                var $cep = $row.find(".txt_cep").text(); // Find the text
+                var $cidade = $row.find(".txt_cidade").text(); // Find the text
+                var $rua = $row.find(".txt_rua").text(); // Find the text
+                var $numero = $row.find(".txt_numero").text(); // Find the text
+                var $complemento = $row.find(".txt_complemento").text(); // Find the text
+                var $bairro = $row.find(".txt_bairro").text(); // Find the text
+
+                document.getElementById("txtCep").value = $cep;
+                document.getElementById("txtCidade").value = $cidade;
+                document.getElementById("txtEndereco").value = $rua;
+                document.getElementById("txtNumero").value = $numero;
+                document.getElementById("txtComplemento").value = $complemento;
+                document.getElementById("txtBairro").value = $bairro;
+
+                document.getElementById("cancelar").disabled = false;
+                document.getElementById("salvar").style.display = 'none';
+                document.getElementById("alterar").style.display = 'block';
+            }
+
+            function excluir(linha) {
+                var $row = $(linha).closest("tr");    // Find the row
+                var $inteiro = $row.find(".n_int").text(); // Find the text
+
+                $.ajax({
+                    url: "/marmitex/endereco",
+                    type: "POST",
+                    data: {
+                        operacao: "EXCLUIR",
+                        id: $inteiro
+                    },
+                    success: function (data) {
+                        $($row).remove();
+                        alert("Endereço excluido!");
+                        montarTabela();
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                        alert("ERRO AO EXCLUIR ENDERECO!");
+                    }
+                });
+            }
+
+            function limparCampos() {
+                document.getElementById("txtCep").value = "";
+                document.getElementById("txtCidade").value = "";
+                document.getElementById("txtEndereco").value = "";
+                document.getElementById("txtNumero").value = "";
+                document.getElementById("txtComplemento").value = "";
+                document.getElementById("txtBairro").value = "";
+
+            }
+
+            function cancelarAlterar() {
+                limparCampos();
+                document.getElementById("cancelar").disabled = true;
+
+                document.getElementById("salvar").style.display = 'block';
+                document.getElementById("alterar").style.display = 'none';
+            }
+
+            function desaparecerDiv() {
+                document.getElementById("avisoErro").style.display = 'none';
+                document.getElementById("avisoOk").style.display = 'none';
+            }
+
+            function aparecerDiv(resultado) {
+                if (resultado === true) {
+                    document.getElementById("avisoOk").style.display = 'block';
+                } else {
+                    document.getElementById("avisoErro").style.display = 'block';
+                }
+            }
+        </script>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Tell the browser to be responsive to screen width -->
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+    </head>
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray">
+        <div id="body" class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <header class="main-header">
+                    <!--Logo-->
+                    <a href="index.html" class="logo"> <span class="logo-lg">Marmitex
+                            do dia</span>
+                    </a>
+                    <!-- Header Navbar: style can be found in header.less -->
+                    <nav class="navbar navbar-static-top" role="navigation">
+                        <!-- LEFT -->
+                        <div class="navbar-custom-menu">
+                            <ul class="nav navbar-nav">
+                                <!-- Notifications: style can be found in dropdown.less -->
+                                <li class="dropdown user user-menu">
+                                    <a href="/login.html">
+                                        <span class="hidden-xs">Sair</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+
+                <aside class="main-sidebar">
+                    <!-- sidebar: style can be found in sidebar.less -->
+                    <section class="sidebar">
+                        <!-- sidebar menu: : style can be found in sidebar.less -->
+                        <ul class="sidebar-menu">
+                            <li class="header">MENUS</li>
+                            <li>
+                                <a href="meus_pedidos.html">
+                                    <i class="fa fa-barcode"></i><span class="h4">Meus Pedidos</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="meus_enderecos.html">
+                                    <i class="fa fa-map-marker"></i><span class="h4">Meus Endereços</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-edit"></i> <span class="h4">Editar dados</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                    <!-- /.sidebar -->
+                </aside>
+
+                <!-- Content Wrapper. Contains page content -->
+                <div class="content-wrapper">
+                    <!-- Main content -->
+                    <!-- form start -->
+                    <div class="box-body">
+                        <!-- NÃO SOU CADASTRADO -->
+                        <div class="col-md-12">
+                            <div class="box box-default">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="fa fa-cutlery"></i>
+                                        <h3 class="box-title">Meus pedidos</h3>
+                                    </div>
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>ID do pedido</th>
+                                            <th>Data do pedido</th>
+                                            <th>Descrição do pedido</th>
+                                            <th>Status</th>
+                                            <th></th>
+                                        </tr>
+                                        <tbody id="tabela_pedidos"></tbody>
+                                        <!--                                        <tr>
+                                                                                    <td>1</td>
+                                                                                    <td>25/08/2016</td>
+                                                                                    <td>Arroz, Feijão, Salada e Frango</td>
+                                                                                    <td>
+                                                                                        <label class="label label-warning">Em preparo</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-danger">Devolver</button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>2</td>
+                                                                                    <td>25/08/2016</td>
+                                                                                    <td>Arroz, Feijão, Salada e Frango</td>
+                                                                                    <td>
+                                                                                        <label class="label label-info">A caminho</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-danger">Devolver</button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>3</td>
+                                                                                    <td>25/08/2016</td>
+                                                                                    <td>Arroz, Feijão, Salada e Frango</td>
+                                                                                    <td>
+                                                                                        <label class="label label-success">Entregue</label>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-danger">Devolver</button>
+                                                                                    </td>
+                                                                                </tr>-->
+                                    </table>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.content-wrapper -->
+            </div>
+        </div>
+    </body>
+</html>

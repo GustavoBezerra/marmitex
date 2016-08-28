@@ -3,13 +3,13 @@ package com.les.marmitex.core.dominio;
 import java.util.List;
 
 /**
- *
- * @author gustavo
+ * Classe para representar o Cliente
+ * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
+ * @date 27/08/2016
  */
 public class Cliente extends Usuario{
     
-    private List<Endereco> enderecos;
-    private List<Pedido> pedidos;
+    private List<Endereco> enderecos;    
 
     /**
      * @return the enderecos
@@ -23,20 +23,6 @@ public class Cliente extends Usuario{
      */
     public void setEnderecos(List<Endereco> enderecos) {
         this.enderecos = enderecos;
-    }
-
-    /**
-     * @return the pedidos
-     */
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    /**
-     * @param pedidos the pedidos to set
-     */
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
     }
     
 }

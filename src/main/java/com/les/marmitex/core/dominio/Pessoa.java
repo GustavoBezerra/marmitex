@@ -1,8 +1,9 @@
 package com.les.marmitex.core.dominio;
 
 /**
- *
- * @author gustavo
+ * Classe para representar uma Pessoa
+ * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
+ * @date 27/08/2016
  */
 public class Pessoa extends EntidadeDominio {
 
