@@ -66,6 +66,7 @@
             }
 
             function salvar() {
+                console.log("Entrou no salvar");
                 $.ajax({
                     url: "/marmitex/endereco",
                     type: "POST",
@@ -79,11 +80,13 @@
                         bairro: document.getElementById("txtBairro").value
                     },
                     success: function (data) {
+                        console.log("Salvou");
                         aparecerDiv(true);
                         montarTabela();
                         limparCampos();
                     },
                     error: function (err) {
+                        console.log("Caca");
                         aparecerDiv(false);
                     }
                 });
