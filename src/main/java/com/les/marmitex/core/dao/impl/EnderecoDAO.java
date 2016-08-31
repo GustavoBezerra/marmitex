@@ -2,12 +2,12 @@ package com.les.marmitex.core.dao.impl;
 
 import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RED;
 import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RESET;
-import com.les.marmitex.core.dominio.Cliente;
 import com.les.marmitex.core.dominio.Endereco;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,21 +16,22 @@ import org.springframework.stereotype.Component;
 
 /**
  * Classe responsável pelas ações na tb_endereco
+ *
  * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
  * @date 20/08/2016
  */
 @Component("com.les.marmitex.core.dominio.Endereco")
-public class EnderecoDAO extends AbstractJdbcDAO{
+public class EnderecoDAO extends AbstractJdbcDAO {
 
     public EnderecoDAO() {
         super("tb_endereco", "id_endereco");
     }
-    
+
     /**
      * Método para inserir um registro na base
      *
      * @param entidade Entidade para registro no banco (id cliente, cidade, cep,
-     *                         logradouro, numero, complemento e bairro)
+     * logradouro, numero, complemento e bairro)
      * @see com.les.marmitex.core.dominio.Endereco
      */
     public void salvar(EntidadeDominio entidade) {
@@ -42,20 +43,38 @@ public class EnderecoDAO extends AbstractJdbcDAO{
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO tb_endereco(id_cliente, cidade, cep, ");
-            sql.append("logradouro, numero, complemento, bairro, dt_criacao) VALUES (?,?,?,?,?,?,?,?)");
+            sql.append("INSERT INTO tb_endereco(cidade, cep, ");
+            sql.append("logradouro, numero, complemento, bairro, dt_criacao, ativo) VALUES (?,?,?,?,?,?,?,?);");            
 
+            pst = connection.prepareStatement(sql.toString(),
+                    Statement.RETURN_GENERATED_KEYS);            
+            pst.setString(1, endereco.getCidade());
+            pst.setString(2, endereco.getCep());
+            pst.setString(3, endereco.getRua());
+            pst.setString(4, endereco.getNumero());
+            pst.setString(5, endereco.getComplemento());
+            pst.setString(6, endereco.getBairro());
+            Timestamp time = new Timestamp(new Date().getTime());
+            pst.setTimestamp(7, time);
+            pst.setBoolean(8, true);            
+
+            pst.executeUpdate();
+            connection.commit();
+            ResultSet rs = pst.getGeneratedKeys();
+            int idEnd = 0;
+            if (rs.next()) {
+                idEnd = rs.getInt(1);
+            }
+            endereco.setId(idEnd);
+            
+            sql.delete(0, sql.length());
+            sql.append("insert into tb_cliente_endereco(id_cliente, id_endereco) values (?, ?);");
             pst = connection.prepareStatement(sql.toString());
             pst.setInt(1, endereco.getId_cliente());
-            pst.setString(2, endereco.getCidade());
-            pst.setString(3, endereco.getCep());
-            pst.setString(4, endereco.getRua());
-            pst.setString(5, endereco.getNumero());
-            pst.setString(6, endereco.getComplemento());
-            pst.setString(7, endereco.getBairro());
-            Timestamp time = new Timestamp(new Date().getTime());
-            pst.setTimestamp(8, time);
+            pst.setInt(2, endereco.getId());
+            
             pst.executeUpdate();
+
             connection.commit();
         } catch (SQLException e) {
             try {
@@ -88,7 +107,7 @@ public class EnderecoDAO extends AbstractJdbcDAO{
     @Override
     public void alterar(EntidadeDominio entidade) {
         openConnection();
-        PreparedStatement pst = null;        
+        PreparedStatement pst = null;
 
         try {
             Endereco endereco = (Endereco) entidade;
@@ -98,7 +117,7 @@ public class EnderecoDAO extends AbstractJdbcDAO{
             sql.append("UPDATE tb_endereco SET cidade=?, cep=?, logradouro=?, numero=?, complemento=?,");
             sql.append(" bairro=? WHERE id_endereco=?;");
 
-            pst = connection.prepareStatement(sql.toString());            
+            pst = connection.prepareStatement(sql.toString());
             pst.setString(1, endereco.getCidade());
             pst.setString(2, endereco.getCep());
             pst.setString(3, endereco.getRua());
@@ -133,8 +152,8 @@ public class EnderecoDAO extends AbstractJdbcDAO{
     /**
      * Método para consultar um registro específico/todos registros na base
      *
-     * @param entidade Entidade com ID para uma pesquisa específica ou ID do cliente para
-     * pesquisar todos os endereços do mesmo
+     * @param entidade Entidade com ID para uma pesquisa específica ou ID do
+     * cliente para pesquisar todos os endereços do mesmo
      * @return Lista de EntidadeDominio contendo um ou vários registros
      * @see com.les.marmitex.core.dominio.Endereco
      * @see com.les.marmitex.core.dominio.Cliente
@@ -142,7 +161,7 @@ public class EnderecoDAO extends AbstractJdbcDAO{
     @Override
     public List<EntidadeDominio> consultar(EntidadeDominio entidade) {
         openConnection();
-        PreparedStatement pst = null;        
+        PreparedStatement pst = null;
         Endereco e;
         List<EntidadeDominio> enderecos = new ArrayList<>();
         boolean enderecoEspecifico = false;
@@ -153,19 +172,18 @@ public class EnderecoDAO extends AbstractJdbcDAO{
 
             StringBuilder sql = new StringBuilder();
 
-            sql.append("SELECT * FROM tb_endereco");
+            sql.append("SELECT * FROM tb_cliente_endereco c inner join tb_endereco e");
             if (endereco.getId() != 0) {
-                sql.append(" WHERE id_endereco=?;");
+                sql.append(" WHERE e.id_endereco=?;");
                 enderecoEspecifico = true;
             } else {
-                sql.append(" WHERE id_cliente=?;");
+                sql.append(" WHERE c.id_cliente = ? and c.id_endereco = e.id_endereco;");
             }
 
             pst = connection.prepareStatement(sql.toString());
             if (enderecoEspecifico) {
                 pst.setInt(1, endereco.getId());
-            }
-            else{
+            } else {
                 pst.setInt(1, endereco.getId_cliente());
             }
 
@@ -179,9 +197,9 @@ public class EnderecoDAO extends AbstractJdbcDAO{
                 e.setRua(rs.getString("logradouro"));
                 e.setNumero(rs.getString("numero"));
                 e.setComplemento(rs.getString("complemento"));
-                e.setBairro(rs.getString("bairro"));                
+                e.setBairro(rs.getString("bairro"));
                 e.setDtCriacao(rs.getDate("dt_criacao"));
-                
+
                 enderecos.add(e);
             }
         } catch (SQLException ex) {
@@ -205,5 +223,9 @@ public class EnderecoDAO extends AbstractJdbcDAO{
         }
         return enderecos;
     }
-    
+
+    @Override
+    public void excluir(EntidadeDominio entidade) {
+
+    }
 }
