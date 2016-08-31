@@ -44,10 +44,10 @@ public class EnderecoDAO extends AbstractJdbcDAO {
 
             StringBuilder sql = new StringBuilder();
             sql.append("INSERT INTO tb_endereco(cidade, cep, ");
-            sql.append("logradouro, numero, complemento, bairro, dt_criacao, ativo) VALUES (?,?,?,?,?,?,?,?);");            
+            sql.append("logradouro, numero, complemento, bairro, dt_criacao, ativo) VALUES (?,?,?,?,?,?,?,?);");
 
             pst = connection.prepareStatement(sql.toString(),
-                    Statement.RETURN_GENERATED_KEYS);            
+                    Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, endereco.getCidade());
             pst.setString(2, endereco.getCep());
             pst.setString(3, endereco.getRua());
@@ -56,7 +56,7 @@ public class EnderecoDAO extends AbstractJdbcDAO {
             pst.setString(6, endereco.getBairro());
             Timestamp time = new Timestamp(new Date().getTime());
             pst.setTimestamp(7, time);
-            pst.setBoolean(8, true);            
+            pst.setBoolean(8, true);
 
             pst.executeUpdate();
             connection.commit();
@@ -66,13 +66,13 @@ public class EnderecoDAO extends AbstractJdbcDAO {
                 idEnd = rs.getInt(1);
             }
             endereco.setId(idEnd);
-            
+
             sql.delete(0, sql.length());
             sql.append("insert into tb_cliente_endereco(id_cliente, id_endereco) values (?, ?);");
             pst = connection.prepareStatement(sql.toString());
             pst.setInt(1, endereco.getId_cliente());
             pst.setInt(2, endereco.getId());
-            
+
             pst.executeUpdate();
 
             connection.commit();
@@ -226,6 +226,53 @@ public class EnderecoDAO extends AbstractJdbcDAO {
 
     @Override
     public void excluir(EntidadeDominio entidade) {
+        openConnection();
+        PreparedStatement pst = null;
+        
+        try {
+            Endereco endereco = (Endereco) entidade;
+            connection.setAutoCommit(false);
 
+            StringBuilder sql = new StringBuilder();
+
+            sql.append("DELETE FROM tb_cliente_endereco where id_cliente=? and id_endereco=?;");
+            
+
+            pst = connection.prepareStatement(sql.toString());
+            
+            pst.setInt(1, endereco.getId_cliente());
+            pst.setInt(2, endereco.getId());
+            
+            pst.executeUpdate();
+            connection.commit();
+            
+            
+            sql.delete(0, sql.length());
+            sql.append("UPDATE tb_endereco SET ativo=false where id_endereco=?;");
+            pst = connection.prepareStatement(sql.toString());
+            
+            pst.setInt(1, endereco.getId());
+
+            pst.executeUpdate();
+            connection.commit();
+        } catch (SQLException ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
+            }
+            System.out.println(ANSI_RED + "[ERROR] - " + ex.getMessage() + ANSI_RESET);
+        } catch (ClassCastException ce) {
+            System.out.println(ANSI_RED + "[ERROR] - Entidade " + entidade.getClass().getSimpleName() + " não é um Endereço!" + ANSI_RESET);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                connection.close();
+            } catch (SQLException ex) {
+                System.out.println(ANSI_RED + "[ERROR] - " + ex.getMessage() + ANSI_RESET);
+            }
+        }
     }
 }

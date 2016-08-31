@@ -54,6 +54,7 @@ public class EnderecoHelper implements IViewHelper {
             e.setId_cliente(1);
         } else if (("EXCLUIR").equals(operacao)) {
             e = new Endereco();
+            e.setId_cliente(1);
             e.setId(Integer.valueOf(request.getParameter("id")));
         } else if(("ALTERAR").equals(operacao)){
             cep = request.getParameter("cep");
