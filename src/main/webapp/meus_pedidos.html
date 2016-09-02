@@ -7,6 +7,18 @@
         <meta charset="utf-8">
         <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
         <script src="angularJS/angular.js" type="text/javascript"></script>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Tell the browser to be responsive to screen width -->
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+        
         <script>
             var app = angular.module("meusPedidos", []);
             app.controller("MeusPedidosCtrl", function ($scope) {
@@ -26,68 +38,12 @@
                 }
 
             });
-        </script>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <!-- Tell the browser to be responsive to screen width -->
-        <!-- Bootstrap 3.3.5 -->
-        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <!-- Ionicons -->
-        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-        <!-- Theme style -->
-        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
-        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+        </script>        
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray" ng-controller="MeusPedidosCtrl">
         <div id="body" class="hold-transition skin-blue sidebar-mini">
             <div class="wrapper">
-                <header class="main-header">
-                    <!--Logo-->
-                    <a href="index.html" class="logo"> <span class="logo-lg">Marmitex
-                            do dia</span>
-                    </a>
-                    <!-- Header Navbar: style can be found in header.less -->
-                    <nav class="navbar navbar-static-top" role="navigation">
-                        <!-- LEFT -->
-                        <div class="navbar-custom-menu">
-                            <ul class="nav navbar-nav">
-                                <!-- Notifications: style can be found in dropdown.less -->
-                                <li class="dropdown user user-menu">
-                                    <a href="/login.html">
-                                        <span class="hidden-xs">Sair</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </header>
-
-                <aside class="main-sidebar">
-                    <!-- sidebar: style can be found in sidebar.less -->
-                    <section class="sidebar">
-                        <!-- sidebar menu: : style can be found in sidebar.less -->
-                        <ul class="sidebar-menu">
-                            <li class="header">MENUS</li>
-                            <li>
-                                <a href="meus_pedidos.html">
-                                    <i class="fa fa-barcode"></i><span class="h4">Meus Pedidos</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="meus_enderecos.html">
-                                    <i class="fa fa-map-marker"></i><span class="h4">Meus Endereços</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-edit"></i> <span class="h4">Editar dados</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </section>
-                    <!-- /.sidebar -->
-                </aside>
+                <div ng-include="'template_cliente.html'"></div>
 
                 <!-- Content Wrapper. Contains page content -->
                 <div class="content-wrapper">
