@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com> -->
+<!-- Data de criação: 01/09/2016 -->
+<html ng-app="template_admin">
+    <head>
+
+        <script>
+            var app = angular.module("template_admin", []);
+            app.controller("TemplateAdminCtrl", function ($scope) {
+                $scope.titulo = "Template Admin";
+            });
+        </script>
+    </head>
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="TemplateAdminCtrl">
+        <div id="body" class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <header class="main-header">
+                    <!--Logo-->
+                    <a href="index.html" class="logo"> <span class="logo-lg">Marmitex
+                            do dia</span>
+                    </a>
+                    <!-- Header Navbar: style can be found in header.less -->
+                    <nav class="navbar navbar-static-top" role="navigation">
+                        <!-- LEFT -->
+                        <div class="navbar-custom-menu">
+                            <ul class="nav navbar-nav">
+                                <!-- Notifications: style can be found in dropdown.less -->
+                                <li class="dropdown user user-menu">
+                                    <a href="/login.html">
+                                        <span class="hidden-xs">Sair</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+
+                <aside class="main-sidebar">
+                    <!-- sidebar: style can be found in sidebar.less -->
+                    <section class="sidebar">
+                        <!-- sidebar menu: : style can be found in sidebar.less -->
+                        <ul class="sidebar-menu">
+                            <li class="header">MENUS</li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-cutlery"></i><span class="h4">Pedidos</span>
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="#"><i class="fa fa-bell-o"></i>Abertos</a></li>
+                                    <li><a href="#"><i class="fa fa-check-circle"></i>Entregues</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-cubes"></i><span class="h4">Gerenciar estoque</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-edit"></i><span class="h4">Gerenciar cardápio</span>
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="#"><i class="fa fa-plus"></i>Novo prato</a></li>
+                                    <li><a href="#"><i class="fa fa-search"></i>Pratos cadastrados</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-gift"></i><span class="h4">Fidelidade</span>
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="#"><i class="fa fa-plus"></i>Novo plano</a></li>
+                                    <li><a href="#"><i class="fa fa-search"></i>Planos cadastrados</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-street-view"></i><span class="h4">Gerenciar cadastros</span>
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="#"><i class="fa fa-user"></i>Cliente</a></li>
+                                    <li><a href="#"><i class="fa fa-motorcycle"></i>Motoboy</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-line-chart"></i><span class="h4">Análises</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                    <!-- /.sidebar -->
+                </aside>
+            </div>
+        </div>
+    </body>
+</html>
