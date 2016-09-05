@@ -4,9 +4,15 @@
 <html ng-app="meusEnderecos">
     <head>
         <title>Cliente - Meus Endereços</title>
-        <meta charset="utf-8">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
         <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
         <script src="angularJS/angular.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
         
         <script>
             var app = angular.module("meusEnderecos", []);
@@ -229,7 +235,7 @@
                             <div class="box box-default">
                                 <div class="box-body">
                                     <div class="box-header with-border">
-                                        <i class="fa fa-map-marker"></i>
+                                        <i class="glyphicon glyphicon-road"></i>
                                         <h3 class="box-title">Cadastrar Endereço</h3>
                                         <button type="button" class="btn btn-info pull-right" name="cancelar" id="cancelar" onclick="cancelarAlterar()" disabled>Cancelar</button>
                                     </div>
@@ -290,7 +296,7 @@
                                     <br/>
 
                                     <div class="box-header with-border">
-                                        <i class="fa fa-building-o"></i>
+                                        <i class="glyphicon glyphicon-home"></i>
                                         <h3 class="box-title">Endereços cadastrados</h3>
                                     </div>
                                     <!-- QUARTA LINHA -->

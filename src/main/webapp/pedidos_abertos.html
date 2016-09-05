@@ -5,27 +5,25 @@
     <head>
         <title>Home - Admin</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
         <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
         <script src="angularJS/angular.js" type="text/javascript"></script>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <!-- Tell the browser to be responsive to screen width -->
-        <!-- Bootstrap 3.3.5 -->
         <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <!-- Ionicons -->
-        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-        <!-- Theme style -->
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
-        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">        
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
             var app = angular.module("pedidosAbertos", []);
             app.controller("PedidosAbertosCtrl", function ($scope) {
                 $scope.titulo = "Pedidos Abertos";
+                $scope.pedidos = [
+                    {id: '1', data: '25/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '1'},
+                    {id: '2', data: '23/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '2'},
+                    {id: '3', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '3'},
+                    {id: '4', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '4'}
+                ];
             });
         </script>
     </head>
@@ -39,7 +37,43 @@
                     <!-- Main content -->
                     <!-- form start -->
                     <div class="box-body">
-                        Pedidos para fazer
+                        <div class="col-md-12">
+                            <div class="box box-default">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-fire"></i>
+                                        <h3 class="box-title">Pedidos em espera</h3>
+                                    </div>
+                                    <table class="table table-striped" ng-show="pedidos.length > 0">
+                                        <tr>
+                                            <th>ID do pedido</th>
+                                            <th>Data do pedido</th>
+                                            <th>Descrição do pedido</th>
+                                            <th>Status</th>
+                                            <th></th>
+                                        </tr>
+                                        <tr ng-repeat="pedido in pedidos">
+                                            <td>
+                                                <a ng-click="verDetalhes(pedido);">
+                                                    {{pedido.id}}
+                                                </a>
+                                            </td>
+                                            <td>{{pedido.data}}</td>
+                                            <td>{{pedido.descricao}}</td>
+                                            <td>
+                                                <label class='label label-warning' ng-if="pedido.status === '1'">Em preparo</label>
+                                                <label class='label label-info' ng-if="pedido.status === '2'">A caminho</label>
+                                                <label class='label label-success' ng-if="pedido.status === '3'">Entregue</label>
+                                                <label class='label label-primary' ng-if="pedido.status === '4'">Aberto</label>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-info" ng-disabled="pedido.status !== '1'" ng-click="Devolver(pedido);">Entregar!</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div>
                     </div>
                 </div>
             </div>
