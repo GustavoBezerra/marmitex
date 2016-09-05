@@ -26,11 +26,11 @@
                 ];
 
                 $scope.Devolver = function (pedido) {
-                    alert("Devolver o pedido de ID "+pedido.id);
+                    alert("Devolver o pedido de ID " + pedido.id);
                 }
 
-                $scope.verDetalhes = function(pedido){
-                    alert("Ver detalhes do pedido "+pedido.id);
+                $scope.verDetalhes = function (pedido) {
+                    alert("Ver detalhes do pedido " + pedido.id);
                 }
 
             });
@@ -70,6 +70,9 @@
                                             <td>{{pedido.data}}</td>
                                             <td>{{pedido.descricao}}</td>
                                             <td>
+                                                <!-- TODO: Se o status for "Aberto", aparecer a opção de "Preparar" -->
+                                                <!-- TODO: Se o status for "A caminho", aparecer as opções de "Entregue!" e "Cancelar" -->
+                                                <!-- TODO: Pensar em uma solução para conseguir cancelar um pedido em qualquer fase antes de "A caminho" -->
                                                 <label class='label label-warning' ng-if="pedido.status === '1'">Em preparo</label>
                                                 <label class='label label-info' ng-if="pedido.status === '2'">A caminho</label>
                                                 <label class='label label-success' ng-if="pedido.status === '3'">Entregue</label>
