@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com -->
 <!-- @date 20/08/2016 -->
-<html>
+<html ng-app="meusEnderecos">
     <head>
         <title>Cliente - Meus Endereços</title>
         <meta charset="utf-8">
         <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
+        <script src="angularJS/angular.js" type="text/javascript"></script>
+        
+        <script>
+            var app = angular.module("meusEnderecos", []);
+            app.controller("meusEnderecosCtrl", function ($scope) {
+                $scope.titulo = "Meus Enderecos";
+            });
+        </script>
+        
         <script>
 
             var d_alteracao;
@@ -205,7 +214,7 @@
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
     </head>
-    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray">
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray" ng-controller="meusEnderecosCtrl">
         <div id="body" class="hold-transition skin-blue sidebar-mini">
             <div class="wrapper">
                 <div ng-include="'templates/template_cliente.html'"></div>
