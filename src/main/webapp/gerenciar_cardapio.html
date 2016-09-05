@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com> -->
-<!-- Data de criação: 01/09/2016 -->
-<html ng-app="homeCliente">
+<!-- Data de criação: 03/09/2016 -->
+<html ng-app="gerenciarCardapio">
     <head>
-        <title>Home - Cliente</title>
+        <title>Home - Admin</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
+
         <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
         <script src="angularJS/angular.js" type="text/javascript"></script>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,26 +19,27 @@
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
-        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">        
+        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
-            var app = angular.module("homeCliente", []);
-            app.controller("HomeClienteCtrl", function ($scope) {
-                $scope.titulo = "Home Cliente";
+            var app = angular.module("gerenciarCardapio", []);
+            app.controller("gerenciarCardapioCtrl", function ($scope) {
+                $scope.titulo = "Gerenciar Cardapio";
             });
         </script>
     </head>
-
-    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="HomeClienteCtrl">
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="gerenciarCardapioCtrl">
         <div id="body" class="hold-transition skin-blue sidebar-mini">
             <div class="wrapper">
-                <div ng-include="'templates/template_cliente.html'"></div>
+                <div ng-include="'templates/template_admin.html'"></div>
 
                 <!-- Content Wrapper. Contains page content -->
                 <div class="content-wrapper">
                     <!-- Main content -->
                     <!-- form start -->
                     <div class="box-body">
+                        Gerenciar cardápio
                     </div>
                 </div>
             </div>
