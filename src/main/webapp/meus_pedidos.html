@@ -21,7 +21,8 @@
                 $scope.pedidos = [
                     {id: '1', data: '25/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '1'},
                     {id: '2', data: '23/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '2'},
-                    {id: '3', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '3'}
+                    {id: '3', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '3'},
+                    {id: '4', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '4'}
                 ];
 
                 $scope.Devolver = function (pedido) {
@@ -72,6 +73,7 @@
                                                 <label class='label label-warning' ng-if="pedido.status === '1'">Em preparo</label>
                                                 <label class='label label-info' ng-if="pedido.status === '2'">A caminho</label>
                                                 <label class='label label-success' ng-if="pedido.status === '3'">Entregue</label>
+                                                <label class='label label-primary' ng-if="pedido.status === '4'">Aberto</label>
                                             </td>
                                             <td>
                                                 <button class="btn btn-info" ng-disabled="pedido.status !== '3'" ng-click="Devolver(pedido);">Devolver</button>
