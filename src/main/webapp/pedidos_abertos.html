@@ -1,6 +1,38 @@
 <!DOCTYPE html>
 <!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com> -->
 <!-- Data de criação: 03/09/2016 -->
+<!--
+    OBSERVAÇÕES IMPORTANTES:
+
+    Status possíveis dos pedidos:
+
+    Aberto - Código: 1
+    Cor label: primary
+    -----------------------------------
+    Em preparo - Código: 2
+    Cor label: warning
+    Cor botão "Preparar": warning
+    -----------------------------------
+    Pronto - Código: 3
+    Cor label: btn-foursquare
+    Cor botão "Pronto": btn-foursquare
+    -----------------------------------
+    A caminho - Código: 4
+    Cor label: info
+    Cor botão "Entregar": info
+    -----------------------------------
+    Entregue - Código: 5
+    Cor label: success
+    Cor botão "Entregue": success
+    -----------------------------------
+    Cancelado - Código: 6
+    Cor label: btn-github
+    Cor botão "Cancelar": btn-github
+    -----------------------------------
+    Devolvido - Código: 7
+    Cor label: danger
+    Cor botão "Devolver": danger
+-->
 <html ng-app="pedidosAbertos">
     <head>
         <title>Home - Admin</title>
@@ -23,6 +55,14 @@
                     {id: '2', data: '23/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '2'},
                     {id: '3', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '3'},
                     {id: '4', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '4'}
+                ];
+
+                $scope.pedidos_entregues = [
+                    {id: '1', data: '25/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '5'},
+                    {id: '2', data: '23/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '7'},
+                    {id: '3', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '6'},
+                    {id: '4', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '5'},
+                    {id: '5', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '6'}
                 ];
             });
         </script>
@@ -61,22 +101,71 @@
                                             <td>{{pedido.data}}</td>
                                             <td>{{pedido.descricao}}</td>
                                             <td>
-                                                <label class='label label-warning' ng-if="pedido.status === '1'">Em preparo</label>
-                                                <label class='label label-info' ng-if="pedido.status === '2'">A caminho</label>
-                                                <label class='label label-success' ng-if="pedido.status === '3'">Entregue</label>
-                                                <label class='label label-primary' ng-if="pedido.status === '4'">Aberto</label>
+                                                <label class='label label-primary' ng-if="pedido.status === '1'">Aberto</label>
+                                                <label class='label label-warning' ng-if="pedido.status === '2'">Em preparo</label>
+                                                <label class='label btn-foursquare' ng-if="pedido.status === '3'">Pronto</label>
+                                                <label class='label label-info' ng-if="pedido.status === '4'">A caminho</label>
+                                                <label class='label label-success' ng-if="pedido.status === '5'">Entregue</label>
                                             </td>
                                             <td>
-                                                <button class="btn btn-info" ng-disabled="pedido.status !== '1'" ng-click="Devolver(pedido);">Entregar!</button>
+                                                <button class="btn btn-danger" ng-if="pedido.status === '5'" ng-click="Devolver(pedido);">Devolver</button>
+                                                <button class="btn btn-warning" ng-if="pedido.status === '1'">Preparar</button>
+                                                <button class="btn btn-foursquare" ng-if="pedido.status === '2'">Pronto</button>
+                                                <button class="btn btn-info" ng-if="pedido.status === '3'">Entregar</button>
+                                                <button class="btn btn-success" ng-if="pedido.status === '4'">Entregue</button>
+                                                <button class="btn btn-github" ng-if="pedido.status === '1' || pedido.status === '2' || pedido.status === '3' || pedido.status === '4'">Cancelar</button>
                                             </td>
                                         </tr>
                                     </table>
                                 </div>
                             </div><!-- /.box-body -->
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </div><!-- /.box-body -->
+
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="box box-default">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-check"></i>
+                                        <h3 class="box-title">Pedidos finalizados</h3>
+                                    </div>
+                                    <table class="table table-striped" ng-show="pedidos.length > 0">
+                                        <tr>
+                                            <th>ID do pedido</th>
+                                            <th>Data do pedido</th>
+                                            <th>Descrição do pedido</th>
+                                            <th>Status</th>
+                                            <th></th>
+                                        </tr>
+                                        <tr ng-repeat="pedido in pedidos_entregues">
+                                            <td>
+                                                <a ng-click="verDetalhes(pedido);">
+                                                    {{pedido.id}}
+                                                </a>
+                                            </td>
+                                            <td>{{pedido.data}}</td>
+                                            <td>{{pedido.descricao}}</td>
+                                            <td>
+                                                <label class='label label-primary' ng-if="pedido.status === '1'">Aberto</label>
+                                                <label class='label label-warning' ng-if="pedido.status === '2'">Em preparo</label>
+                                                <label class='label btn-foursquare' ng-if="pedido.status === '3'">Pronto</label>
+                                                <label class='label label-info' ng-if="pedido.status === '4'">A caminho</label>
+                                                <label class='label label-success' ng-if="pedido.status === '5'">Entregue</label>
+                                                <label class='label btn-github' ng-if="pedido.status === '6'">Cancelado</label>
+                                                <label class='label btn-danger' ng-if="pedido.status === '7'">Devolvido</label>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger" ng-if="pedido.status === '5'" ng-click="Devolver(pedido);">Devolver</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div> <!-- content wraper -->
+            </div> <!-- wrapper -->
         </div>
     </body>
 </html>
