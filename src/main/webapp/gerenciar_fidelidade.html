@@ -27,13 +27,38 @@
             var app = angular.module("gerenciarFidelidade", []);
             app.controller("gerenciarFidelidadeCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Fidelidade";
+                
+                $scope.regras = [
+                    {id: "1", descricao: "Compras acima de"},
+                    {id: "2", descricao: "Número de compras"},
+                    {id: "3", descricao: "Ingrediente específico"},
+                    {id: "4", descricao: "Combo específico"}
+                ];
+                
+                $scope.ingredientes = [
+                    {id: "1", nome: "Arroz", categoria: "Guarnição"},
+                    {id: "2", nome: "Feijão", categoria: "Guarnição"},
+                    {id: "3", nome: "Macarrão", categoria: "Guarnição"},
+                    {id: "4", nome: "Filé de Frango", categoria: "Mistura"},
+                    {id: "5", nome: "Calabresa", categoria: "Mistura"},
+                    {id: "6", nome: "Filé Mignon", categoria: "Mistura"},
+                    {id: "7", nome: "Coca-cola lata", categoria: "Outros"},
+                    {id: "8", nome: "Guaraná Antartica lata", categoria: "Outros"},
+                    {id: "9", nome: "H2HO", categoria: "Outros"},
+                    {id: "10", nome: "Batata frita", categoria: "Acompanhamento"},
+                    {id: "11", nome: "Mandioca frita", categoria: "Acompanhamento"},
+                    {id: "12", nome: "Pure de batata", categoria: "Acompanhamento"}
+                ];
+                
+                
             });
 
+            // Função com as propriedades do calendário
             $(function () {
                 $('input[name="tempo"]').daterangepicker({
                     format: "DD/MM/YYYY",
                     separator: " até ",
-                    locale: {                        
+                    locale: {
                         "applyLabel": "Aplicar",
                         "cancelLabel": "Cancelar",
                         "fromLabel": "De",
@@ -90,42 +115,28 @@
                                         <div class="form-group col-md-12">
                                             <label>Título do novo plano de fidelidade</label>
                                             <input type="text" class="form-control" name="txtNome" id="txtNome" placeholder="Título do novo plano de fidelidade">
-                                        </div>                                        
+                                        </div>
                                     </div>
-                                    <!-- TERCEIRA LINHA -->
-                                    <div class="row">                                        
-                                        <div class="form-group col-md-3">                                                                                        
+                                    <br/>
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
                                             <label for="daterange">Tempo ativo do plano de fidelidade:</label>
                                             <input type="text" class="form-control" name="tempo" id="tempo" placeholder="Determine o tempo da campanha" />
                                         </div>
-                                    </div>
-                                    <!-- SEGUNDA LINHA -->
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label>Complemento</label>
-                                            <input type="text" class="form-control" name="txtComplemento" id="txtComplemento" placeholder="Complemento">
+                                        <div class="form-group col-md-3">
+                                            <label for="daterange">Regra da campanha:</label>
+                                            <select class="form-control" ng-model="campanha.regra" ng-options="regra.descricao for regra in regras">
+                                                <option value="">Selecione uma regra</option>
+                                            </select>
                                         </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Bairro</label>
-                                            <input type="text" class="form-control" name="txtBairro" id="txtBairro" placeholder="Bairro">
-                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="daterange">Bonus da campanha:</label>
+                                            <select class="form-control" ng-model="campanha.ingrediente" ng-options="ingrediente.nome group by ingrediente.categoria for ingrediente in ingredientes">
+                                                <option value="">Selecione um ingrediente</option>
+                                            </select>
+                                        </div>                                        
                                     </div>
-                                    <br/>
-                                    <div class ="row col-md-6 col-xs-push-3" id="avisoErro" style="display: none;">
-                                        <div class="alert alert-danger alert-dismissible">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true" onclick="desaparecerDiv()">×</button>
-                                            <h4><i class="icon fa fa-ban"></i> Erro!</h4>
-                                            Ocorreu um erro inesperado na gravação do novo endereço!
-                                        </div>
-                                    </div>
-                                    <br/>
-                                    <div class ="row col-md-6 col-xs-push-3" id="avisoOk" style="display: none;">
-                                        <div class="alert alert-success alert-dismissible">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true" onclick="desaparecerDiv()">×</button>
-                                            <h4><i class="icon fa fa-check"></i> Sucesso!</h4>
-                                            O novo endereço foi cadastrado com sucesso!
-                                        </div>
-                                    </div>
+                                    <!-- SEGUNDA LINHA -->                                    
                                     <div class="row">
                                         <div class="form-group col-md-11">
                                             <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" onclick="salvar()">Cadastrar</button>
