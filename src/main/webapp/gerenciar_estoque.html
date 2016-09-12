@@ -18,11 +18,94 @@
             var app = angular.module("gerenciarEstoque", []);
             app.controller("gerenciarEstoqueCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Estoque";
+
+                $scope.consultar = function () {
+                    $.ajax({
+                        url: "/marmitex/ingrediente",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"
+                        },
+                        success: function (data) {
+                            console.log("consultou");
+                            $scope.recursos = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+                
+                $scope.excluir = function (ingrediente) {                    
+                    $.ajax({
+                        url: "/marmitex/ingrediente",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "EXCLUIR",
+                            id: ingrediente.id
+                        },
+                        success: function () {                            
+                            $scope.consultar();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.salvar = function (ingrediente) {                    
+                    $.ajax({
+                        url: "/marmitex/ingrediente",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "SALVAR",
+                            nome: ingrediente.nome,
+                            quantidade: ingrediente.quantidade,
+                            medida: ingrediente.medida.descricao,
+                            vencimento: ingrediente.vencimento,
+                            categoria: ingrediente.categoria.descricao
+                        },
+                        success: function () {
+                            $scope.consultar();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+                
+                $scope.visualizar = function (ingrediente) {             
+                    document.getElementById("txtNome").value = ingrediente.nome;
+                    //document.getElementById("categoria").value = ingrediente.categoria.descricao;
+                    $("select#categoria").val(ingrediente.categoria.id); 
+                    document.getElementById("txtQuantidade").value = ingrediente.quantidade;
+                    document.getElementById("medida").value = ingrediente.medida.descricao;
+                    document.getElementById("txtVencimento").value = ingrediente.vencimento;
+                    
+                };
+
+                $scope.categorias = [
+                    {id: 1, descricao: "Mistura"},
+                    {id: 2, descricao: "Guarnição"},
+                    {id: 3, descricao: "Acompanhamento"},
+                    {id: 4, descricao: "Outros"}
+                ];
+
+                $scope.medidas = [
+                    {id: 1, descricao: "Litro(s)"},
+                    {id: 2, descricao: "Ml(s)"},
+                    {id: 3, descricao: "Unidade(s)"},
+                    {id: 4, descricao: "Kilo(s)"},
+                    {id: 5, descricao: "Grama(s)"}
+                ];
             });
         </script>
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="gerenciarEstoqueCtrl">
-        <div id="body" class="hold-transition skin-blue sidebar-mini">
+        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="consultar()">
             <div class="wrapper">
                 <div ng-include="'templates/template_admin.html'"></div>
 
@@ -31,7 +114,97 @@
                     <!-- Main content -->
                     <!-- form start -->
                     <div class="box-body">
-                        Gerenciar estoque
+                        <div class="col-md-12">
+                            <div class="box box-success">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-apple"></i>
+                                        <h3 class="box-title">Cadastrar novo recurso</h3>
+                                        <button type="button" class="btn btn-info pull-right" name="cancelar" id="cancelar" disabled>Cancelar</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-5">
+                                            <label>Nome do novo recurso</label>
+                                            <input type="text" class="form-control" ng-model="recurso.nome" name="txtNome" id="txtNome" placeholder="Nome do novo recurso">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="categoria">Categoria:</label>
+                                            <select class="form-control" id="categoria" ng-model="recurso.categoria"
+                                                    ng-options="categoria.descricao for categoria in categorias">
+                                                <option value="">Selecione uma categoria</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-md-5">
+                                            <label for="txtQuantidade">Quantidade</label>
+                                            <input type="text" class="form-control" ng-model="recurso.quantidade" name="txtQuantidade" id="txtQuantidade" placeholder="Quantidade">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="medida">Medida:</label>
+                                            <select class="form-control" id="medida" ng-model="recurso.medida"
+                                                    ng-options="medida.descricao for medida in medidas">
+                                                <option value="">Selecione uma medida</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="txtVencimento">Data de validade:</label>
+                                            <input type="date" id="txtVencimento" ng-model="recurso.vencimento" class="form-control"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- SEGUNDA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-11">
+                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" ng-disabled="!(recurso.nome && recurso.categoria && recurso.quantidade && recurso.medida && recurso.vencimento)" value="SALVAR" ng-click="salvar(recurso)">Cadastrar</button>
+                                            <button type="submit" class="btn btn-warning pull-right" style="display: none" id="alterar" name="operacao" value="ALTERAR" onclick="alterar()">Alterar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CONSULTAR -->
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="box box-success">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-apple"></i>
+                                        <h3 class="box-title">Consultar recursos</h3>
+                                    </div>
+                                    <table class="table table-striped" ng-show="recursos.length > 0">
+                                        <tr>
+                                            <th>ID do recurso</th>
+                                            <th>Nome</th>
+                                            <th>Categoria</th>
+                                            <th>Quantidade</th>
+                                            <th>Medida</th>
+                                            <th>Data de validade</th>
+                                            <th>Opções</th>
+                                        </tr>
+                                        <tr ng-repeat="r in recursos">
+                                            <td>
+                                                <a ng-click="verDetalhes(r);">
+                                                    {{r.id}}
+                                                </a>
+                                            </td>
+                                            <td>{{r.nome}}</td>
+                                            <td>{{r.categoria.nome}}</td>
+                                            <td>{{r.quantidade}}</td>
+                                            <td>{{r.medida}}</td>
+                                            <td>{{r.dtVencimento}}</td>
+                                            <td>
+                                                <button type='button' class='btn btn-warning' ng-click='visualizar(r)'>Alterar</button>
+                                                <button type='button' class='btn btn-danger' ng-click='excluir(r)'>Excluir</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

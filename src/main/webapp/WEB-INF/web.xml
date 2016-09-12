@@ -16,6 +16,10 @@
         <servlet-name>FrontControllerServlet</servlet-name>
         <url-pattern>/campanha</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FrontControllerServlet</servlet-name>
+        <url-pattern>/ingrediente</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

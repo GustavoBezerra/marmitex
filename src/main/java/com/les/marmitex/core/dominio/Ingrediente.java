@@ -7,12 +7,13 @@ import java.util.Date;
  * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
  * @date 27/08/2016
  */
-public class Ingrediente {
+public class Ingrediente extends EntidadeDominio{
     
     private String nome;
     private double quantidade;
     private String medida;
     private Date dtVencimento;
+    private Categoria categoria;
 
     /**
      * @return the nome
@@ -68,6 +69,20 @@ public class Ingrediente {
      */
     public void setDtVencimento(Date dtVencimento) {
         this.dtVencimento = dtVencimento;
+    }
+
+    /**
+     * @return the categoria
+     */
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    /**
+     * @param categoria the categoria to set
+     */
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
     
 }
