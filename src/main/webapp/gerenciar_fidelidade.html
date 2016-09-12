@@ -4,9 +4,8 @@
 <html ng-app="gerenciarFidelidade">
     <head>
         <title>Home - Admin</title>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
         <!-- Importe do bootstrap -->
         <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
         <!-- Importe do jQuery -->
@@ -34,11 +33,12 @@
                     $.ajax({
                         url: "/marmitex/campanha",
                         type: "POST",
+                        async: false,
                         data: {
                             operacao: "CONSULTAR"
                         },
                         success: function (data) {
-                            console.log("funcionou");
+                            console.log("consultou");
                             $scope.campanhas = JSON.parse(data);
                         },
                         error: function (err) {
@@ -46,12 +46,8 @@
                         }
                     });
                 };
-                
-                $scope.testeTabela = function(){
-                    return "Teste";
-                };
 
-                $scope.exibirCampanha = function (campanha) {
+                $scope.salvar = function (campanha) {
                     var vBeneficio = 0;
                     var vRegra = 0;
 
@@ -74,9 +70,30 @@
                             (campanha.regra.id === '3' && campanha.prato.id && campanha.beneficio.id === '4')) {
                         vBeneficio = campanha.cortesia;
                     }
-                }
-
-
+                    
+                    $.ajax({
+                        url: "/marmitex/campanha",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "SALVAR",
+                            nome: campanha.nome,
+                            descricao: campanha.descricao,
+                            tempo: campanha.data,
+                            regra: campanha.regra.id,
+                            valor_regra: vRegra,
+                            beneficio: campanha.beneficio.id,
+                            valor_beneficio: vBeneficio
+                        },
+                        success: function () {
+                            alert("Campanha salva!");
+                            $scope.consultar();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
 
                 $scope.regras = [
                     {id: "1", descricao: "Compras acima de"},
@@ -150,11 +167,6 @@
             });
 
         </script>
-
-        <script>
-
-        </script>
-
 
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="gerenciarFidelidadeCtrl" data-ng-init="consultar()">
@@ -260,11 +272,10 @@
                                             </div>
                                         </div>                                        
                                     </div>          
-                                    {{campanhas}}
                                     <!-- SEGUNDA LINHA -->                                    
                                     <div class="row">
                                         <div class="form-group col-md-11">
-                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" ng-click="exibirCampanha(campanha)">Cadastrar</button>
+                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" ng-click="salvar(campanha)">Cadastrar</button>
                                             <button type="submit" class="btn btn-warning pull-right" style="display: none" id="alterar" name="operacao" value="ALTERAR" onclick="alterar()">Alterar</button>
                                         </div>
                                     </div>
@@ -301,7 +312,7 @@
                                             <td>{{c.descricao}}</td>
                                             <td>{{c.inicio}}</td>
                                             <td></td>
-                                            <td>{{testeTabela()}}</td>
+                                            <td>{{testeTabela(c)}}</td>
                                         </tr>
                                     </table>
                                 </div>
