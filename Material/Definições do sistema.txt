@@ -1,0 +1,34 @@
+DEFINIÇÃO DE CATEGORIAS:
+Mistura
+Guarnição
+Acompanhamento
+Sobremesa
+Bebida
+Outros
+
+
+DEFINIÇÃO DO FIDELIDADE:
+Campos:
+- Nome da campanha
+- Descrição da campanha
+- Tempo de vigência
+- Regra da campanha:
+  - Compras acima de ...
+  - Na Nº compra ganhe ...
+  - Dia da semana
+- Prêmio da campanha:
+  - Desconto %
+  - Desconto R$
+  - Frete grátis
+  - Marmitex grátis
+  - Recurso gratuito(refrigerante, porção de batata)
+
+
+  DEFINIÇÃO DOS STATUS DO PEDIDO:
+  Aberto(1)
+  Em preparo(2)
+  Pronto(3)
+  A caminho(4)
+  Entregue(5)
+  Cancelado(6)
+  Devolvido(7)

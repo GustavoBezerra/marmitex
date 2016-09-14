@@ -47,6 +47,13 @@
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
+            var parseObj = JSON.parse(window.sessionStorage["usuario"]);
+            var usuario = parseObj[0];
+
+            alert("Bem-vindo "+usuario.nome+"!");
+        </script>
+        
+        <script>
             var app = angular.module("pedidosAbertos", []);
             app.controller("PedidosAbertosCtrl", function ($scope) {
                 $scope.titulo = "Pedidos Abertos";

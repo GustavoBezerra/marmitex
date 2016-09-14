@@ -6,7 +6,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>FrontControllerServlet</servlet-name>
-        <url-pattern>/login</url-pattern>
+        <url-pattern>/cliente</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FrontControllerServlet</servlet-name>

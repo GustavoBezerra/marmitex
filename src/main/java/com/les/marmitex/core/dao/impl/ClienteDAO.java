@@ -1,7 +1,9 @@
 package com.les.marmitex.core.dao.impl;
 
 import com.les.marmitex.core.dominio.Cliente;
+import com.les.marmitex.core.dominio.Credito;
 import com.les.marmitex.core.dominio.EntidadeDominio;
+import com.les.marmitex.core.dominio.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,8 +44,8 @@ public class ClienteDAO extends AbstractJdbcDAO {
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, cliente.getNome());
-            pst.setString(2, cliente.getLogin());
-            pst.setString(3, cliente.getSenha());
+            pst.setString(2, cliente.getUsuario().getLogin());
+            pst.setString(3, cliente.getUsuario().getSenha());
             Timestamp time = new Timestamp(cliente.getDtCriacao().getTime());
             pst.setTimestamp(4, time);
             pst.executeUpdate();
@@ -89,8 +91,8 @@ public class ClienteDAO extends AbstractJdbcDAO {
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, cliente.getNome());
-            pst.setString(2, cliente.getLogin());
-            pst.setString(3, cliente.getSenha());
+            pst.setString(2, cliente.getUsuario().getLogin());
+            pst.setString(3, cliente.getUsuario().getSenha());
             pst.setInt(4, cliente.getId());
             pst.executeUpdate();
             connection.commit();
@@ -145,7 +147,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
                 sql.append(" WHERE id_cliente=?;");
                 clienteEspecifico = true;
             } 
-            else if (cliente.getLogin() != null && cliente.getSenha() != null) {
+            else if (cliente.getUsuario().getLogin() != null && cliente.getUsuario().getSenha() != null) {
                 sql.append(" WHERE login like ? and senha like ?;");
                 clienteLogin = true;
             } 
@@ -158,18 +160,25 @@ public class ClienteDAO extends AbstractJdbcDAO {
                 pst.setInt(1, cliente.getId());
             }
             else if(clienteLogin){
-                pst.setString(1, cliente.getLogin());
-                pst.setString(2, cliente.getSenha());
+                pst.setString(1, cliente.getUsuario().getLogin());
+                pst.setString(2, cliente.getUsuario().getSenha());
             }
             
             ResultSet rs = pst.executeQuery();
+            Usuario u;
+            Credito cr;
             while (rs.next()) {
                 c = new Cliente();
+                u = new Usuario();
+                cr = new Credito();
+                c.setCredito(cr);
+                c.setUsuario(u);
                 c.setId(rs.getInt("id_cliente"));
                 c.setDtCriacao(rs.getDate("dt_criacao"));
-                c.setLogin(rs.getString("login"));
-                c.setSenha(rs.getString("senha"));
+                c.getUsuario().setLogin(rs.getString("login"));
+                c.getUsuario().setSenha(rs.getString("senha"));
                 c.setNome(rs.getString("nome"));
+                c.getCredito().setValor(rs.getDouble("credito"));
 
                 clientes.add(c);
             }

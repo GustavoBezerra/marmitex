@@ -7,7 +7,7 @@ import java.util.List;
  * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
  * @date 27/08/2016
  */
-public class Usuario extends Pessoa {
+public class Usuario extends EntidadeDominio {
 
     private String login;
     private String senha;

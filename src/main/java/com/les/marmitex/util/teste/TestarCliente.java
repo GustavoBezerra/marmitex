@@ -17,9 +17,9 @@ public class TestarCliente {
         Cliente c = new Cliente();
         c.setDtCriacao(new Date());
 //        c.setLogin("maria@hotmail.com");
-        c.setNome("Maria");
-        c.setSenha("12345");
-        c.setId(4);
+//        c.setNome("Maria");
+//        c.setSenha("12345");
+//        c.setId(4);
         
         Fachada f = new Fachada();
         f.excluir(c);

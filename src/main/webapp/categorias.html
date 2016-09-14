@@ -15,10 +15,17 @@
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
+            var parseObj = JSON.parse(window.sessionStorage["usuario"]);
+            var usuario = parseObj[0];
+
+            
+        </script>
+        
+        <script>
             var app = angular.module("gerenciarCategorias", []);
             app.controller("gerenciarCategoriaCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Categoria";
-                
+
                 $scope.opAlterar = false;
 
                 $scope.consultar = function () {
@@ -74,9 +81,9 @@
                         }
                     });
                 };
-                
-                $scope.alterar = function(){
-                    var newNome = document.getElementById("txtNome").value;                    
+
+                $scope.alterar = function () {
+                    var newNome = document.getElementById("txtNome").value;
                     $.ajax({
                         url: "/marmitex/categoria",
                         type: "POST",
@@ -102,7 +109,7 @@
                     document.getElementById("txtNome").value = categoria.nome;
                     $scope.opAlterar = true;
                 };
-                
+
                 $scope.cancelar = function () {
                     document.getElementById("txtNome").value = "";
                     $scope.opAlterar = false;
@@ -135,7 +142,7 @@
                                         </div>
                                     </div>
                                     <!-- SEGUNDA LINHA -->
-                                    
+
                                     <div class="row">
                                         <div class="form-group col-md-11">
                                             <button type="submit" class="btn btn-success pull-right" ng-if="!opAlterar" name="operacao" id="salvar" ng-disabled="!(categoria.nome)" value="SALVAR" ng-click="salvar(categoria)">Cadastrar</button>
