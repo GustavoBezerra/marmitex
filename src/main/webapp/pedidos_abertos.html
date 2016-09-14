@@ -50,7 +50,10 @@
             var parseObj = JSON.parse(window.sessionStorage["usuario"]);
             var usuario = parseObj[0];
 
-            alert("Bem-vindo "+usuario.nome+"!");
+            alert("Bem-vindo "+usuario.nome+"!\n"+
+                    "ID: "+usuario.id+"\n"+
+                    "Login: "+usuario.usuario.login+"\n"+
+                    "Senha: "+usuario.usuario.senha);
         </script>
         
         <script>

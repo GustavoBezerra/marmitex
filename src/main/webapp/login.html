@@ -13,17 +13,6 @@
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
-        <script>
-//            var obj = {nome: "Joaozinho"};
-//            var strObj = JSON.stringify(obj);
-//
-//            window.sessionStorage.setItem("obj", strObj);
-//
-//            var parseObj = JSON.parse(window.sessionStorage["obj"]);
-//
-//            alert(parseObj.nome);
-//            window.location.href = "http://localhost:8084/marmitex/categorias.html";
-        </script>
 
         <script>
             var app = angular.module("login", []);
@@ -48,6 +37,32 @@
                             alert("Erro ao efetuar login!\nLogin ou senha incorretos!");
                         }
                     });
+                };
+
+                $scope.salvar = function (usuario) {
+                    if (usuario.confirmar_senha !== usuario.senha) {
+                        alert("Senhas diferentes!");
+                    } else {
+                        $.ajax({
+                            url: "/marmitex/cliente",
+                            type: "POST",
+                            async: false,
+                            data: {
+                                operacao: "SALVAR",
+                                login: usuario.email,
+                                senha: usuario.senha,
+                                telefone: usuario.telefone,
+                                nome: usuario.nome
+                            },
+                            success: function (data) {                                
+                                window.sessionStorage.setItem("usuario", data);
+                                window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
+                            },
+                            error: function () {
+                                alert("Erro ao cadastrar!");
+                            }
+                        });
+                    }
                 };
             });
         </script>
@@ -110,11 +125,11 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label for="exampleInput">Nome</label>
-                                        <input type="text" class="form-control" name="txtNome" placeholder="Nome">
+                                        <input type="text" class="form-control" name="txtNome" ng-model="usuario.nome" placeholder="Nome">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="exampleInput">Telefone</label>
-                                        <input type="tel" class="form-control" name="txtNome" placeholder="Telefone">
+                                        <input type="tel" class="form-control" name="txtNome" ng-model="usuario.telefone" placeholder="Telefone">
                                     </div>
                                 </div>
 
@@ -127,25 +142,29 @@
                                 <div class="row">
                                     <div class="form-group col-md-10">
                                         <label for="exampleInput">E-mail</label>
-                                        <input type="email" class="form-control" name="txtEmail" placeholder="E-mail">
+                                        <input type="email" class="form-control" name="txtEmail" ng-model="usuario.email" placeholder="E-mail">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-10">
                                         <label for="exampleInput">Senha</label>
-                                        <input type="password" class="form-control col-md-10" name="txtSenha" placeholder="Senha">
+                                        <input type="password" class="form-control col-md-10" name="txtSenha" ng-model="usuario.senha" placeholder="Senha">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-10">
                                         <label for="exampleInput">Confirmar senha</label>
-                                        <input type="password" class="form-control col-md-10" name="txtSenha" placeholder="Confirmar senha">
+                                        <input type="password" class="form-control col-md-10" name="txtSenha" ng-model="usuario.confirmar_senha" placeholder="Confirmar senha">
                                     </div>
                                 </div>
                                 <!-- QUINTA LINHA -->
                                 <div class="row">
                                     <div class="form-group col-md-7">
-                                        <button type="submit" class="btn btn-success pull-right" name="operacao" value="SALVAR">Cadastrar</button>
+                                        <button type="submit" class="btn btn-success pull-right" name="operacao" 
+                                                ng-click="salvar(usuario)" value="SALVAR"
+                                                ng-disabled="!(usuario.nome && usuario.telefone && usuario.email && usuario.senha && usuario.confirmar_senha)">
+                                            Cadastrar
+                                        </button>
                                     </div>
                                 </div>
                             </div>

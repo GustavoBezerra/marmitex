@@ -7,6 +7,7 @@ import com.les.marmitex.core.dominio.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Classe responsável pelas ações na tb_cliente
+ *
  * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
  * @date 20/08/2016
  */
@@ -40,15 +42,25 @@ public class ClienteDAO extends AbstractJdbcDAO {
 
             StringBuilder sql = new StringBuilder();
             sql.append("INSERT INTO tb_cliente(nome, login, senha, ");
-            sql.append("dt_criacao) VALUES (?,?,?,?)");
+            sql.append("dt_criacao, credito) VALUES (?,?,?,?,?)");
 
-            pst = connection.prepareStatement(sql.toString());
+            pst = connection.prepareStatement(sql.toString(),
+                    Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, cliente.getNome());
             pst.setString(2, cliente.getUsuario().getLogin());
             pst.setString(3, cliente.getUsuario().getSenha());
             Timestamp time = new Timestamp(cliente.getDtCriacao().getTime());
             pst.setTimestamp(4, time);
+            pst.setDouble(5, 0);
+
             pst.executeUpdate();
+            ResultSet rs = pst.getGeneratedKeys();
+            int idCli = 0;
+            if (rs.next()) {
+                idCli = rs.getInt(1);
+            }
+            cliente.setId(idCli);
+
             connection.commit();
         } catch (SQLException e) {
             try {
@@ -122,8 +134,8 @@ public class ClienteDAO extends AbstractJdbcDAO {
      * Método para consultar um registro específico/todos registros na base
      *
      * @param entidade Entidade com ID para uma pesquisa específica ou ID 0 para
-     * pesquisar todos.
-     * Caso a entidade tenha ID 0 e login e senha preenchidos, será feita a verificação de login
+     * pesquisar todos. Caso a entidade tenha ID 0 e login e senha preenchidos,
+     * será feita a verificação de login
      * @return Lista de EntidadeDominio contendo um ou vários registros
      * @see com.les.marmitex.core.dominio.Cliente
      */
@@ -141,29 +153,26 @@ public class ClienteDAO extends AbstractJdbcDAO {
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-            
+
             sql.append("SELECT * FROM tb_cliente");
             if (cliente.getId() != 0) {
                 sql.append(" WHERE id_cliente=?;");
                 clienteEspecifico = true;
-            } 
-            else if (cliente.getUsuario().getLogin() != null && cliente.getUsuario().getSenha() != null) {
+            } else if (cliente.getUsuario().getLogin() != null && cliente.getUsuario().getSenha() != null) {
                 sql.append(" WHERE login like ? and senha like ?;");
                 clienteLogin = true;
-            } 
-            else {
+            } else {
                 sql.append(";");
             }
 
             pst = connection.prepareStatement(sql.toString());
             if (clienteEspecifico) {
                 pst.setInt(1, cliente.getId());
-            }
-            else if(clienteLogin){
+            } else if (clienteLogin) {
                 pst.setString(1, cliente.getUsuario().getLogin());
                 pst.setString(2, cliente.getUsuario().getSenha());
             }
-            
+
             ResultSet rs = pst.executeQuery();
             Usuario u;
             Credito cr;
@@ -182,7 +191,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
 
                 clientes.add(c);
             }
-            
+
         } catch (SQLException e) {
             try {
                 connection.rollback();
