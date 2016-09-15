@@ -35,6 +35,7 @@ public class ClienteHelper implements IViewHelper {
         String senha = null;
         String telefone = null;
         String nome = null;
+        String id = null;
 
         if (("CONSULTAR").equals(operacao)) {
             u = new Usuario();
@@ -61,6 +62,28 @@ public class ClienteHelper implements IViewHelper {
             c.setNome(nome);
             c.setDtCriacao(new Date());
             c.setTelefone(telefone);
+        } else if (("ALTERAR").equals(operacao)) {
+            u = new Usuario();
+            c = new Cliente();
+
+            login = request.getParameter("email");
+            senha = request.getParameter("senha");
+            telefone = request.getParameter("telefone");
+            nome = request.getParameter("nome");
+            id = request.getParameter("id");
+
+            u.setLogin(login);
+            u.setSenha(senha);
+            c.setUsuario(u);
+            c.setNome(nome);
+            c.setDtCriacao(new Date());
+            c.setTelefone(telefone);
+            c.setId(Integer.valueOf(id));
+        } else if (("EXCLUIR").equals(operacao)) {
+            c = new Cliente();
+            
+            id = request.getParameter("id");
+            c.setId(Integer.valueOf(id));
         }
 
         return c;
