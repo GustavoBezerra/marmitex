@@ -60,7 +60,7 @@ public class ClienteHelper implements IViewHelper {
             c.setUsuario(u);
             c.setNome(nome);
             c.setDtCriacao(new Date());
-            //TODO acrescentar o telefone
+            c.setTelefone(telefone);
         }
 
         return c;

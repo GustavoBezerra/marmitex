@@ -12,6 +12,7 @@ public class Cliente extends Pessoa{
     private List<Endereco> enderecos;
     private Usuario usuario;
     private Credito credito;
+    private String telefone;
 
     /**
      * @return the enderecos
@@ -53,6 +54,20 @@ public class Cliente extends Pessoa{
      */
     public void setCredito(Credito credito) {
         this.credito = credito;
+    }
+
+    /**
+     * @return the telefone
+     */
+    public String getTelefone() {
+        return telefone;
+    }
+
+    /**
+     * @param telefone the telefone to set
+     */
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
     
 }

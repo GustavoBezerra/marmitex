@@ -41,17 +41,18 @@ public class ClienteDAO extends AbstractJdbcDAO {
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO tb_cliente(nome, login, senha, ");
-            sql.append("dt_criacao, credito) VALUES (?,?,?,?,?)");
+            sql.append("INSERT INTO tb_cliente(nome, telefone, login, senha, ");
+            sql.append("dt_criacao, credito) VALUES (?,?,?,?,?,?)");
 
             pst = connection.prepareStatement(sql.toString(),
                     Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, cliente.getNome());
-            pst.setString(2, cliente.getUsuario().getLogin());
-            pst.setString(3, cliente.getUsuario().getSenha());
+            pst.setString(2, cliente.getTelefone());
+            pst.setString(3, cliente.getUsuario().getLogin());
+            pst.setString(4, cliente.getUsuario().getSenha());
             Timestamp time = new Timestamp(cliente.getDtCriacao().getTime());
-            pst.setTimestamp(4, time);
-            pst.setDouble(5, 0);
+            pst.setTimestamp(5, time);
+            pst.setDouble(6, 0);
 
             pst.executeUpdate();
             ResultSet rs = pst.getGeneratedKeys();
@@ -99,13 +100,14 @@ public class ClienteDAO extends AbstractJdbcDAO {
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE tb_cliente SET nome=?, login=?, senha=? WHERE id_cliente=?;");
+            sql.append("UPDATE tb_cliente SET nome=?, telefone=?, login=?, senha=? WHERE id_cliente=?;");
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, cliente.getNome());
-            pst.setString(2, cliente.getUsuario().getLogin());
-            pst.setString(3, cliente.getUsuario().getSenha());
-            pst.setInt(4, cliente.getId());
+            pst.setString(2, cliente.getTelefone());
+            pst.setString(3, cliente.getUsuario().getLogin());
+            pst.setString(4, cliente.getUsuario().getSenha());
+            pst.setInt(5, cliente.getId());
             pst.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -188,6 +190,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
                 c.getUsuario().setSenha(rs.getString("senha"));
                 c.setNome(rs.getString("nome"));
                 c.getCredito().setValor(rs.getDouble("credito"));
+                c.setTelefone(rs.getString("telefone"));
 
                 clientes.add(c);
             }

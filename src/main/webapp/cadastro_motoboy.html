@@ -23,11 +23,100 @@
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
+                
+                $scope.opAlterar = false;
+
+                $scope.consultar = function () {
+                    $.ajax({
+                        url: "/marmitex/entregador",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"
+                        },
+                        success: function (data) {
+                            console.log("consultou");
+                            $scope.entregadores = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.excluir = function (motoboy) {
+                    $.ajax({
+                        url: "/marmitex/entregador",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "EXCLUIR",
+                            id: motoboy.id
+                        },
+                        success: function () {
+                            $scope.consultar();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.salvar = function (motoboy) {
+                    $.ajax({
+                        url: "/marmitex/entregador",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "SALVAR",
+                            nome: motoboy.nome
+                        },
+                        success: function () {
+                            $scope.consultar();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.alterar = function () {
+                    var newNome = document.getElementById("txtNome").value;
+                    $.ajax({
+                        url: "/marmitex/entregador",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "ALTERAR",
+                            id: mot.id,
+                            nome: newNome
+                        },
+                        success: function () {
+                            $scope.consultar();
+                            alert("Motoboy alterado!");
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                    $scope.cancelar();
+                };
+                var mot;
+                $scope.visualizar = function (motoboy) {
+                    mot = motoboy;
+                    document.getElementById("txtNome").value = motoboy.nome;
+                    $scope.opAlterar = true;
+                };
+
+                $scope.cancelar = function () {
+                    document.getElementById("txtNome").value = "";
+                    $scope.opAlterar = false;
+                };
             });
         </script>
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="cadastroMotoboyCtrl">
-        <div id="body" class="hold-transition skin-blue sidebar-mini">
+        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="consultar()">
             <div class="wrapper">
                 <div ng-include="'templates/template_admin.html'"></div>
 
@@ -36,7 +125,64 @@
                     <!-- Main content -->
                     <!-- form start -->
                     <div class="box-body">
-                        Cadastrar Motoboy
+                        <div class="col-md-12">
+                            <div class="box box-success">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-road"></i>
+                                        <h3 class="box-title">Cadastrar novo motoboy</h3>
+                                        <button type="button" class="btn btn-info pull-right" ng-if="opAlterar" name="cancelar" ng-click="cancelar()" id="cancelar">Cancelar</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-5">
+                                            <label for="txtNome">Nome do motoboy</label>
+                                            <input type="text" class="form-control" ng-model="motoboy.nome" name="txtNome" id="txtNome" placeholder="Nome da categoria">
+                                        </div>
+                                    </div>
+                                    <!-- SEGUNDA LINHA -->
+
+                                    <div class="row">
+                                        <div class="form-group col-md-11">
+                                            <button type="submit" class="btn btn-success pull-right" ng-if="!opAlterar" name="operacao" id="salvar" ng-disabled="!(motoboy.nome)" value="SALVAR" ng-click="salvar(motoboy)">Cadastrar</button>
+                                            <button type="submit" class="btn btn-warning pull-right" ng-if="opAlterar" id="alterar" name="operacao" value="ALTERAR" ng-click="alterar()">Alterar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CONSULTAR -->
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="box box-info">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-road"></i>
+                                        <h3 class="box-title">Consultar motoboy</h3>
+                                    </div>
+                                    <table class="table table-striped" ng-show="entregadores.length > 0">
+                                        <tr>
+                                            <th>ID do motoboy</th>
+                                            <th>Nome</th>
+                                            <th>Opções</th>
+                                        </tr>
+                                        <tr ng-repeat="e in entregadores">
+                                            <td>
+                                                <a ng-click="visualizar(e);">
+                                                    {{e.id}}
+                                                </a>
+                                            </td>
+                                            <td>{{e.nome}}</td>
+                                            <td>
+                                                <button type='button' class='btn btn-warning' ng-click='visualizar(e)'>Alterar</button>
+                                                <button type='button' class='btn btn-danger' ng-click='excluir(e)'>Excluir</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
