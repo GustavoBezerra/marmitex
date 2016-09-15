@@ -18,6 +18,11 @@
             var app = angular.module("gerenciarEstoque", []);
             app.controller("gerenciarEstoqueCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Estoque";
+                
+                $scope.sair = function () {
+                    window.sessionStorage.clear();
+                    window.location.href = "http://localhost:8084/marmitex/login.html";
+                };
 
                 $scope.consultar = function () {
                     $.ajax({

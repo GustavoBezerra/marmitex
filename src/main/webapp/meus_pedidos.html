@@ -50,6 +50,12 @@
             var app = angular.module("meusPedidos", []);
             app.controller("MeusPedidosCtrl", function ($scope) {
                 $scope.titulo = "Meus Pedidos";
+                
+                $scope.sair = function () {
+                    window.sessionStorage.clear();
+                    window.location.href = "http://localhost:8084/marmitex/login.html";
+                };
+                
                 $scope.pedidos = [
                     {id: '6', data: '25/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '1'},
                     {id: '7', data: '23/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '2'},

@@ -18,6 +18,11 @@
             var app = angular.module("gerenciarCardapio", []);
             app.controller("gerenciarCardapioCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Cardapio";
+                
+                $scope.sair = function () {
+                    window.sessionStorage.clear();
+                    window.location.href = "http://localhost:8084/marmitex/login.html";
+                };
             });
         </script>
     </head>

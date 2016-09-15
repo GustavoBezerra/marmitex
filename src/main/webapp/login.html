@@ -30,11 +30,21 @@
                             senha: login.senha
                         },
                         success: function (data) {
-                            window.sessionStorage.setItem("usuario", data);
-                            window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
+                            if (data === "[]") {
+                                alert("Nenhum usuário encontrado com o login e a senha informados!");
+                            } else {
+                                window.sessionStorage.setItem("usuario", data);
+                                var parseObj = JSON.parse(window.sessionStorage["usuario"]);
+                                var usuario = parseObj[0];                                
+                                if (usuario.id === 1) {
+                                    window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
+                                } else {
+                                    window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html";
+                                }
+                            }
                         },
                         error: function () {
-                            alert("Erro ao efetuar login!\nLogin ou senha incorretos!");
+                            alert("[ERRO] Nenhum usuário encontrado com o login e a senha informados!");
                         }
                     });
                 };
@@ -54,7 +64,7 @@
                                 telefone: usuario.telefone,
                                 nome: usuario.nome
                             },
-                            success: function (data) {                                
+                            success: function (data) {
                                 window.sessionStorage.setItem("usuario", data);
                                 window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
                             },
@@ -160,7 +170,7 @@
                                 <!-- QUINTA LINHA -->
                                 <div class="row">
                                     <div class="form-group col-md-7">
-                                        <button type="submit" class="btn btn-success pull-right" name="operacao" 
+                                        <button type="submit" class="btn btn-success pull-right" name="operacao"
                                                 ng-click="salvar(usuario)" value="SALVAR"
                                                 ng-disabled="!(usuario.nome && usuario.telefone && usuario.email && usuario.senha && usuario.confirmar_senha)">
                                             Cadastrar

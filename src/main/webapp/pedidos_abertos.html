@@ -50,10 +50,10 @@
             var parseObj = JSON.parse(window.sessionStorage["usuario"]);
             var usuario = parseObj[0];
 
-            alert("Bem-vindo "+usuario.nome+"!\n"+
-                    "ID: "+usuario.id+"\n"+
-                    "Login: "+usuario.usuario.login+"\n"+
-                    "Senha: "+usuario.usuario.senha);
+//            alert("Bem-vindo "+usuario.nome+"!\n"+
+//                    "ID: "+usuario.id+"\n"+
+//                    "Login: "+usuario.usuario.login+"\n"+
+//                    "Senha: "+usuario.usuario.senha);
         </script>
         
         <script>
@@ -66,6 +66,11 @@
                     {id: '3', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '3'},
                     {id: '4', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '4'}
                 ];
+                
+                $scope.sair = function () {
+                    window.sessionStorage.clear();
+                    window.location.href = "http://localhost:8084/marmitex/login.html";
+                };
 
                 $scope.pedidos_entregues = [
                     {id: '1', data: '25/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '5'},
