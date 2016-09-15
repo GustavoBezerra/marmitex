@@ -5,7 +5,7 @@
     <head>
         <title>Home - Admin</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
+
         <!-- Importe do bootstrap -->
         <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
         <!-- Importe do jQuery -->
@@ -28,7 +28,7 @@
             var app = angular.module("gerenciarFidelidade", []);
             app.controller("gerenciarFidelidadeCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Fidelidade";
-                
+
                 $scope.sair = function () {
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
@@ -75,7 +75,7 @@
                             (campanha.regra.id === '3' && campanha.prato.id && campanha.beneficio.id === '4')) {
                         vBeneficio = campanha.cortesia;
                     }
-                    
+
                     $.ajax({
                         url: "/marmitex/campanha",
                         type: "POST",
@@ -210,12 +210,12 @@
                                     <div class="row">
                                         <div class="form-group col-md-3">
                                             <label for="daterange">Tempo ativo do plano de fidelidade:</label>
-                                            <input type="text" class="form-control" ng-model="campanha.data" name="tempo" id="tempo" 
+                                            <input type="text" class="form-control" ng-model="campanha.data" name="tempo" id="tempo"
                                                    placeholder="Determine o tempo da campanha" />
                                         </div>
                                         <div class="form-group col-md-3">
                                             <label for="daterange">Regra da campanha:</label>
-                                            <select class="form-control" id="regra" ng-model="campanha.regra" 
+                                            <select class="form-control" id="regra" ng-model="campanha.regra"
                                                     ng-options="regra.descricao for regra in regras">
                                                 <option value="">Selecione uma regra</option>
                                             </select>
@@ -229,13 +229,13 @@
                                             <!-- NUMERO DE COMPRAS -->
                                             <div>
                                                 <label for="txtValor" ng-if="campanha.regra.id === '2'">Número de compras:</label>
-                                                <input type="text" class="form-control" id="txtQtde" ng-model="campanha.compras" name="txtQtde" placeholder="Número de compras" 
+                                                <input type="text" class="form-control" id="txtQtde" ng-model="campanha.compras" name="txtQtde" placeholder="Número de compras"
                                                        ng-if="campanha.regra.id === '2'" />
-                                            </div>                                            
+                                            </div>
                                             <!-- COMBO ESPECÍFICO -->
                                             <div>
                                                 <label for="daterange" ng-if="campanha.regra.id === '3'">Qual será o prato:</label>
-                                                <select class="form-control" ng-model="campanha.prato" ng-if="campanha.regra.id === '3'" 
+                                                <select class="form-control" ng-model="campanha.prato" ng-if="campanha.regra.id === '3'"
                                                         ng-options="prato.descricao for prato in pratos">
                                                     <option value="">Selecione um prato</option>
                                                 </select>
@@ -246,10 +246,10 @@
                                                                         (campanha.regra.id === '1' && campanha.valor)">
                                                     Benefício:
                                                 </label>
-                                                <select class="form-control" ng-model="campanha.beneficio" 
+                                                <select class="form-control" ng-model="campanha.beneficio"
                                                         ng-if="(campanha.regra.id === '3' && campanha.prato.id) ||
                                                                                 (campanha.regra.id === '2' && campanha.compras) ||
-                                                                                (campanha.regra.id === '1' && campanha.valor)" 
+                                                                                (campanha.regra.id === '1' && campanha.valor)"
                                                         ng-options="b.descricao for b in beneficios">
                                                     <option value="">Selecione um beneficio</option>
                                                 </select>
@@ -275,9 +275,9 @@
                                                 </label>
                                                 <input type="text" id="cortesia_desconto" name="cortesia_desconto" class="form-control" ng-model="campanha.cortesia">
                                             </div>
-                                        </div>                                        
-                                    </div>          
-                                    <!-- SEGUNDA LINHA -->                                    
+                                        </div>
+                                    </div>
+                                    <!-- SEGUNDA LINHA -->
                                     <div class="row">
                                         <div class="form-group col-md-11">
                                             <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" ng-click="salvar(campanha)">Cadastrar</button>
@@ -296,7 +296,7 @@
                                 <div class="box-body">
                                     <div class="box-header with-border" style="text-align: center;">
                                         <i class="glyphicon glyphicon-heart"></i>
-                                        <h3 class="box-title">Planos de fidelidade já cadastrados</h3>                                        
+                                        <h3 class="box-title">Planos de fidelidade já cadastrados</h3>
                                     </div>
                                     <table class="table table-striped" ng-show="campanhas.length > 0">
                                         <tr>

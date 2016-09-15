@@ -8,7 +8,7 @@ import java.util.Date;
  * @date 27/08/2016
  */
 public class Ingrediente extends EntidadeDominio{
-    
+
     private String nome;
     private double quantidade;
     private String medida;
@@ -84,5 +84,5 @@ public class Ingrediente extends EntidadeDominio{
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
-    
+
 }

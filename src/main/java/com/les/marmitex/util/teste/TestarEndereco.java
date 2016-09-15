@@ -8,7 +8,7 @@ package com.les.marmitex.util.teste;
 public class TestarEndereco {
 
     public static void main(String[] args) {
-        
+
     }
 
 }

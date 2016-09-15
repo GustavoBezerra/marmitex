@@ -12,7 +12,7 @@ import java.util.Date;
 public class TestarCliente {
 
     public static void main(String[] args) {
-         
+
         /** ---- CADASTRAR CLIENTE ---- **/
         Cliente c = new Cliente();
         c.setDtCriacao(new Date());
@@ -20,18 +20,18 @@ public class TestarCliente {
 //        c.setNome("Maria");
 //        c.setSenha("12345");
 //        c.setId(4);
-        
+
         Fachada f = new Fachada();
         f.excluir(c);
-        
+
 
         /** ---- ALTERAR CLIENTE ---- **/
-//        Cliente c = new Cliente();        
+//        Cliente c = new Cliente();
 //        c.setLogin("gustavo@hotmail.com");
 //        c.setNome("Gustavo");
 //        c.setSenha("12345");
 //        c.setId(1);
-//        
+//
 //        ClienteDAO dao = new ClienteDAO();
 //        dao.alterar(c);
 
@@ -40,7 +40,7 @@ public class TestarCliente {
         /** ---- EXCLUIR CLIENTE ---- **/
 //        Cliente c = new Cliente();
 //        c.setId(2);
-//        
+//
 //        ClienteDAO dao = new ClienteDAO();
 //        dao.excluir(c);
 
@@ -49,13 +49,13 @@ public class TestarCliente {
         /** ---- CONSULTAR CLIENTE ---- **/
 //        Cliente c = new Cliente();
 //        c.setId(1);
-//        
+//
 //        ClienteDAO dao = new ClienteDAO();
 //        List<EntidadeDominio> cliente = dao.consultar(c);
 //        System.out.println("Total de clientes encontrados: "+cliente.size());
 //        for(EntidadeDominio e : cliente){
 //            System.out.println(e.getId());
 //        }
-        
+
     }
 }

@@ -7,7 +7,7 @@ import com.les.marmitex.core.strategy.IStrategy;
 
 public class ValidarCamposEmBranco implements IStrategy {
 
-    private boolean emBranco = false;    
+    private boolean emBranco = false;
 
     @Override
     public String validar(EntidadeDominio entidade) {

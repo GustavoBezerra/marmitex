@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("com.les.marmitex.core.dominio.Entregador")
 public class EntregadorDAO extends AbstractJdbcDAO{
-    
+
     public EntregadorDAO(){
         super("tb_entregador", "id_entregador");
     }
@@ -39,9 +39,9 @@ public class EntregadorDAO extends AbstractJdbcDAO{
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, entregador.getNome());
-            
+
             pst.executeUpdate();
-            connection.commit();            
+            connection.commit();
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -74,13 +74,13 @@ public class EntregadorDAO extends AbstractJdbcDAO{
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE tb_entregador SET nome=? WHERE id_entregador=?;");
-            
+
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, entregador.getNome());
             pst.setInt(2, entregador.getId());
-            
+
             pst.executeUpdate();
-            connection.commit();            
+            connection.commit();
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -105,7 +105,7 @@ public class EntregadorDAO extends AbstractJdbcDAO{
     @Override
     public List<EntidadeDominio> consultar(EntidadeDominio entidade) throws SQLException {
         openConnection();
-        PreparedStatement pst = null;        
+        PreparedStatement pst = null;
         Entregador e;
         List<EntidadeDominio> entregadores = new ArrayList<>();
         boolean entregadorEspecifico = false;
@@ -120,16 +120,16 @@ public class EntregadorDAO extends AbstractJdbcDAO{
             if (entregador.getId() != 0) {
                 sql.append(" WHERE id_entregador=?;");
                 entregadorEspecifico = true;
-            } 
+            }
 
             pst = connection.prepareStatement(sql.toString());
             if (entregadorEspecifico) {
                 pst.setInt(1, entregador.getId());
-            } 
-            
+            }
+
             ResultSet rs = pst.executeQuery();
-            while (rs.next()) {                
-                e = new Entregador();                
+            while (rs.next()) {
+                e = new Entregador();
                 e.setNome(rs.getString("nome"));
                 e.setId(rs.getInt("id_entregador"));
                 entregadores.add(e);
@@ -154,7 +154,7 @@ public class EntregadorDAO extends AbstractJdbcDAO{
             }
         }
         return entregadores;
-    
+
     }
-    
+
 }

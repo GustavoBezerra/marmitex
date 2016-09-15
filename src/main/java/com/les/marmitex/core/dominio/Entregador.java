@@ -6,5 +6,5 @@ package com.les.marmitex.core.dominio;
  * @date 27/08/2016
  */
 public class Entregador extends Pessoa{
-    
+
 }

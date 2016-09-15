@@ -18,12 +18,12 @@
             var parseObj = JSON.parse(window.sessionStorage["usuario"]);
             var usuario = parseObj[0];
         </script>
-        
+
         <script>
             var app = angular.module("gerenciarCategorias", []);
             app.controller("gerenciarCategoriaCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Categoria";
-                
+
                 $scope.sair = function () {
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";

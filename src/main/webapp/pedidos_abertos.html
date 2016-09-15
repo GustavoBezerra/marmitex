@@ -56,7 +56,7 @@
 //                    "Senha: "+usuario.usuario.senha+"\n"+
 //                    "Telefone: "+usuario.telefone);
         </script>
-        
+
         <script>
             var app = angular.module("pedidosAbertos", []);
             app.controller("PedidosAbertosCtrl", function ($scope) {
@@ -67,7 +67,7 @@
                     {id: '3', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '3'},
                     {id: '4', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '4'}
                 ];
-                
+
                 $scope.sair = function () {
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";

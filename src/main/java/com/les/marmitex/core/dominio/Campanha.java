@@ -105,7 +105,7 @@ public class Campanha extends EntidadeDominio {
     public void setRegra(int regra) {
         this.regra = regra;
     }
-    
+
     /**
      * @return the inicio
      */
@@ -137,7 +137,7 @@ public class Campanha extends EntidadeDominio {
 //    @Override
 //    public String toString() {
 //        String formatoDt = "dd/MM/yyyy";
-//        
+//
 //        SimpleDateFormat df = new SimpleDateFormat(formatoDt);
 //
 //        String dtInicio = df.format(getInicio());

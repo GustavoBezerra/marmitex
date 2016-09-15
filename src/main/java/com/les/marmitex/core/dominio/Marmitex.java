@@ -8,7 +8,7 @@ import java.util.List;
  * @date 27/08/2016
  */
 public class Marmitex extends EntidadeDominio{
-    
+
     private List<Ingrediente> ingredientes;
     private double valor;
 
@@ -39,5 +39,5 @@ public class Marmitex extends EntidadeDominio{
     public void setValor(double valor) {
         this.valor = valor;
     }
-    
+
 }

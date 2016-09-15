@@ -55,8 +55,8 @@ public class IngredienteHelper implements IViewHelper {
             i.setQuantidade(quantidade);
             i.setMedida(medida);
             i.setDtCriacao(new Date());
-            i.setDtVencimento(new Date(dtVencimento));            
-            
+            i.setDtVencimento(new Date(dtVencimento));
+
         } else if (("CONSULTAR").equals(operacao)) {
             i = new Ingrediente();
 

@@ -17,7 +17,7 @@ public abstract class AbstractJdbcDAO implements IDAO {
     protected String table;
     protected String idTable;
     protected boolean ctrlTransaction = true;
-    
+
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_RESET = "\u001B[0m";
 

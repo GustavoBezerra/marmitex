@@ -8,7 +8,7 @@ import java.util.List;
  * @date 27/08/2016
  */
 public class Pedido extends EntidadeDominio{
-    
+
     private List<Marmitex> marmitex;
     private double valorFrete;
     private double valorTotal;
@@ -99,5 +99,5 @@ public class Pedido extends EntidadeDominio{
     public void setEntregador(Entregador entregador) {
         this.entregador = entregador;
     }
-    
+
 }

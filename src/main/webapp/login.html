@@ -35,7 +35,7 @@
                             } else {
                                 window.sessionStorage.setItem("usuario", data);
                                 var parseObj = JSON.parse(window.sessionStorage["usuario"]);
-                                var usuario = parseObj[0];                                
+                                var usuario = parseObj[0];
                                 if (usuario.id === 1) {
                                     window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
                                 } else {

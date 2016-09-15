@@ -12,7 +12,7 @@ public class Usuario extends EntidadeDominio {
     private String login;
     private String senha;
     private List<Pedido> pedidos;
-    
+
     public String getLogin() {
         if (login == null || login.equals("")) {
             return null;
@@ -48,5 +48,5 @@ public class Usuario extends EntidadeDominio {
     public void setPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
-    
+
 }

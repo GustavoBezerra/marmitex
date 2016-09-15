@@ -13,7 +13,7 @@ public class TestaDate {
     public static void main(String[] args) {
         Date d = new Date("2016-05-19");
         System.out.println(d.getTime());
-        
+
     }
 
 }

@@ -7,7 +7,7 @@ import java.util.List;
  * @author gustavo
  */
 public class Resultado {
-    
+
     private String mensagem;
     private List<EntidadeDominio> entidades;
 

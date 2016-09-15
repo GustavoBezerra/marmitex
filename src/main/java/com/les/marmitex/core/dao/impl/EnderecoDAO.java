@@ -228,7 +228,7 @@ public class EnderecoDAO extends AbstractJdbcDAO {
     public void excluir(EntidadeDominio entidade) {
         openConnection();
         PreparedStatement pst = null;
-        
+
         try {
             Endereco endereco = (Endereco) entidade;
             connection.setAutoCommit(false);
@@ -236,21 +236,21 @@ public class EnderecoDAO extends AbstractJdbcDAO {
             StringBuilder sql = new StringBuilder();
 
             sql.append("DELETE FROM tb_cliente_endereco where id_cliente=? and id_endereco=?;");
-            
+
 
             pst = connection.prepareStatement(sql.toString());
-            
+
             pst.setInt(1, endereco.getId_cliente());
             pst.setInt(2, endereco.getId());
-            
+
             pst.executeUpdate();
             connection.commit();
-            
-            
+
+
             sql.delete(0, sql.length());
             sql.append("UPDATE tb_endereco SET ativo=false where id_endereco=?;");
             pst = connection.prepareStatement(sql.toString());
-            
+
             pst.setInt(1, endereco.getId());
 
             pst.executeUpdate();

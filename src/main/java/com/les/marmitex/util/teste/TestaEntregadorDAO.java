@@ -16,10 +16,10 @@ public class TestaEntregadorDAO {
     public static void main(String[] args) throws SQLException {
         Entregador e = new Entregador();
         EntregadorDAO dao = new EntregadorDAO();
-        
+
         e.setNome("Pedro");
         //e.setId(2);
-        
+
         dao.salvar(e);
         //dao.excluir(e);
         //dao.alterar(e);

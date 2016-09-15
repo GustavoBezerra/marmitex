@@ -8,7 +8,7 @@ import java.util.List;
  * @date 27/08/2016
  */
 public class Cliente extends Pessoa{
-    
+
     private List<Endereco> enderecos;
     private Usuario usuario;
     private Credito credito;
@@ -69,5 +69,5 @@ public class Cliente extends Pessoa{
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-    
+
 }

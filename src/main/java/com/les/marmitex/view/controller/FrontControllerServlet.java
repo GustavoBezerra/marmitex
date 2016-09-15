@@ -30,7 +30,7 @@ public class FrontControllerServlet extends HttpServlet {
     public FrontControllerServlet() {
         // recupera as anotations
         context = new AnnotationConfigApplicationContext("com.les.marmitex");
-        /* Utilizando o command para chamar a fachada e indexando cada command 
+        /* Utilizando o command para chamar a fachada e indexando cada command
     	 * pela operação garantimos que esta servelt atenderá qualquer operação */
         commands = new HashMap<String, ICommand>();
 
@@ -54,7 +54,7 @@ public class FrontControllerServlet extends HttpServlet {
         // para aceitar acentuacao
         request.setCharacterEncoding("UTF-8");
 
-        //Obtém a uri que invocou esta servlet 
+        //Obtém a uri que invocou esta servlet
         String uri = request.getRequestURI();
 
         //Obtêm um viewhelper indexado pela uri que invocou esta servlet
@@ -70,13 +70,13 @@ public class FrontControllerServlet extends HttpServlet {
         ICommand command = commands.get(operacao);
 
         /*Executa o command que chamará a fachada para executar a operação requisitada
-        * o retorno é uma instância da classe resultado que pode conter mensagens derro 
+        * o retorno é uma instância da classe resultado que pode conter mensagens derro
         * ou entidades de retorno
         */
         Resultado resultado = command.execute(entidade);
 
         /*
-        * Executa o método setView do view helper específico para definir como deverá ser apresentado 
+        * Executa o método setView do view helper específico para definir como deverá ser apresentado
         * o resultado para o usuário
         */
         vh.setView(resultado, request, response);

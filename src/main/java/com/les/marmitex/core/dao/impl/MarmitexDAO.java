@@ -6,5 +6,5 @@ package com.les.marmitex.core.dao.impl;
  * @date 27/08/2016
  */
 public class MarmitexDAO {
-    
+
 }

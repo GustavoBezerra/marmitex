@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("/marmitex/entregador")
 public class EntregadorHelper implements IViewHelper{
-    
+
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         String operacao = request.getParameter("operacao");
@@ -35,8 +35,8 @@ public class EntregadorHelper implements IViewHelper{
             e = new Entregador();
             id = Integer.valueOf(request.getParameter("id"));
             nome = request.getParameter("nome");
-            
-            e.setId(id);           
+
+            e.setId(id);
             e.setNome(nome);
         } else if(("EXCLUIR").equals(operacao)){
             e = new Entregador();

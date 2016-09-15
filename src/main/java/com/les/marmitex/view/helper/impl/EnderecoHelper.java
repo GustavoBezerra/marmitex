@@ -24,13 +24,13 @@ public class EnderecoHelper implements IViewHelper {
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         String operacao = request.getParameter("operacao");
         Endereco e = null;
-        
+
         String cep;
         String cidade;
         String endereco;
         String numero;
         String complemento;
-        String bairro;        
+        String bairro;
 
         if (("SALVAR").equals(operacao)) {
             cep = request.getParameter("cep");
@@ -38,7 +38,7 @@ public class EnderecoHelper implements IViewHelper {
             endereco = request.getParameter("endereco");
             numero = request.getParameter("numero");
             complemento = request.getParameter("complemento");
-            bairro = request.getParameter("bairro");            
+            bairro = request.getParameter("bairro");
 
             e = new Endereco();
             e.setId_cliente(1);
@@ -96,10 +96,10 @@ public class EnderecoHelper implements IViewHelper {
             }
         }
         else if(("EXCLUIR").equals(operacao)){
-            
+
         }
         else if(("ALTERAR").equals(operacao)){
-            
+
         }
     }
 

@@ -44,16 +44,16 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, ingrediente.getNome());
             pst.setDouble(2, ingrediente.getQuantidade());
-            pst.setString(3, ingrediente.getMedida());            
+            pst.setString(3, ingrediente.getMedida());
             Timestamp timeVenc = new Timestamp(ingrediente.getDtVencimento().getTime());
             Timestamp timeCad = new Timestamp(ingrediente.getDtCriacao().getTime());
             pst.setTimestamp(4, timeVenc);
             pst.setTimestamp(5, timeCad);
             pst.setString(6, ingrediente.getCategoria().getNome());
-            
+
             pst.executeUpdate();
             connection.commit();
-            
+
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -86,20 +86,20 @@ public class IngredienteDAO extends AbstractJdbcDAO {
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE tb_ingredientes SET nome=?, quantidade=?, ");
-            sql.append("medida=?, dt_vencimento=?, categoria=? where id_ingrediente=?;");            
+            sql.append("medida=?, dt_vencimento=?, categoria=? where id_ingrediente=?;");
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, ingrediente.getNome());
             pst.setDouble(2, ingrediente.getQuantidade());
-            pst.setString(3, ingrediente.getMedida());            
-            Timestamp timeVenc = new Timestamp(ingrediente.getDtVencimento().getTime());            
+            pst.setString(3, ingrediente.getMedida());
+            Timestamp timeVenc = new Timestamp(ingrediente.getDtVencimento().getTime());
             pst.setTimestamp(4, timeVenc);
             pst.setString(5, ingrediente.getCategoria().getNome());
             pst.setInt(6, ingrediente.getId());
-            
+
             pst.executeUpdate();
             connection.commit();
-            
+
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -140,23 +140,23 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             if (ingrediente.getId() != 0) {
                 sql.append(" WHERE id_ingrediente=?;");
                 ingredienteEspecifico = true;
-            } 
+            }
 
             pst = connection.prepareStatement(sql.toString());
             if (ingredienteEspecifico) {
                 pst.setInt(1, ingrediente.getId());
-            } 
-            
+            }
+
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 i = new Ingrediente();
                 c = new Categoria();
-                i.setId(rs.getInt("id_ingrediente"));                
+                i.setId(rs.getInt("id_ingrediente"));
                 i.setNome(rs.getString("nome"));
                 i.setQuantidade(rs.getDouble("quantidade"));
                 i.setMedida(rs.getString("medida"));
                 i.setDtVencimento(rs.getDate("dt_vencimento"));
-                i.setDtCriacao(rs.getDate("dt_cadastro")); 
+                i.setDtCriacao(rs.getDate("dt_cadastro"));
                 c.setNome(rs.getString("categoria"));
                 i.setCategoria(c);
 
@@ -183,7 +183,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
         }
         return ingredientes;
     }
-    
-    
+
+
 
 }

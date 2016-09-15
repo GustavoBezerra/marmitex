@@ -6,7 +6,7 @@ package com.les.marmitex.core.dominio;
  * @date 12/09/2016
  */
 public class Categoria extends EntidadeDominio{
-    
+
     private String nome;
 
     /**
@@ -22,7 +22,7 @@ public class Categoria extends EntidadeDominio{
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
-    
-    
+
+
+
 }

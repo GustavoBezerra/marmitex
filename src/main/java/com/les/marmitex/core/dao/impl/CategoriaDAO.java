@@ -23,7 +23,7 @@ public class CategoriaDAO extends AbstractJdbcDAO{
     public CategoriaDAO(){
         super("tb_categoria", "id_categoria");
     }
-    
+
     @Override
     public void salvar(EntidadeDominio entidade) throws SQLException {
         openConnection();
@@ -39,10 +39,10 @@ public class CategoriaDAO extends AbstractJdbcDAO{
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, categoria.getNome());
-            
+
             pst.executeUpdate();
             connection.commit();
-            
+
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -80,10 +80,10 @@ public class CategoriaDAO extends AbstractJdbcDAO{
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, categoria.getNome());
             pst.setInt(2, categoria.getId());
-            
+
             pst.executeUpdate();
             connection.commit();
-            
+
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -108,7 +108,7 @@ public class CategoriaDAO extends AbstractJdbcDAO{
     @Override
     public List<EntidadeDominio> consultar(EntidadeDominio entidade) throws SQLException {
         openConnection();
-        PreparedStatement pst = null;        
+        PreparedStatement pst = null;
         Categoria c;
         List<EntidadeDominio> categorias = new ArrayList<>();
         boolean categoriaEspecifica = false;
@@ -123,17 +123,17 @@ public class CategoriaDAO extends AbstractJdbcDAO{
             if (categoria.getId() != 0) {
                 sql.append(" WHERE id_categoria=?;");
                 categoriaEspecifica = true;
-            } 
+            }
 
             pst = connection.prepareStatement(sql.toString());
             if (categoriaEspecifica) {
                 pst.setInt(1, categoria.getId());
-            } 
-            
+            }
+
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                
-                c = new Categoria();                
+
+                c = new Categoria();
                 c.setNome(rs.getString("nome"));
                 c.setId(rs.getInt("id_categoria"));
                 categorias.add(c);
@@ -159,5 +159,5 @@ public class CategoriaDAO extends AbstractJdbcDAO{
         }
         return categorias;
     }
-    
+
 }

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("com.les.marmitex.core.dominio.Campanha")
 public class CampanhaDAO extends AbstractJdbcDAO{
-    
+
     public CampanhaDAO() {
         super("tb_campanha", "id_campanha");
     }
@@ -50,10 +50,10 @@ public class CampanhaDAO extends AbstractJdbcDAO{
             Timestamp timeFim = new Timestamp(campanha.getFim().getTime());
             pst.setTimestamp(8, timeInicio);
             pst.setTimestamp(9, timeFim);
-            
+
             pst.executeUpdate();
             connection.commit();
-            
+
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -98,13 +98,13 @@ public class CampanhaDAO extends AbstractJdbcDAO{
             if (campanha.getId() != 0) {
                 sql.append(" WHERE id_campanha=?;");
                 campanhaEspecifica = true;
-            } 
+            }
 
             pst = connection.prepareStatement(sql.toString());
             if (campanhaEspecifica) {
                 pst.setInt(1, campanha.getId());
-            } 
-            
+            }
+
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 c = new Campanha();
@@ -142,5 +142,5 @@ public class CampanhaDAO extends AbstractJdbcDAO{
         }
         return campanhas;
     }
-    
+
 }

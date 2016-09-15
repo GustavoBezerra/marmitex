@@ -6,7 +6,7 @@ package com.les.marmitex.core.dominio;
  * @date 13/09/2016
  */
 public class Credito extends EntidadeDominio{
-    
+
     private double valor;
 
     /**
@@ -22,5 +22,5 @@ public class Credito extends EntidadeDominio{
     public void setValor(double valor) {
         this.valor = valor;
     }
-    
+
 }

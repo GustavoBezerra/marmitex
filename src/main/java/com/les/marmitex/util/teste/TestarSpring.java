@@ -11,13 +11,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * @date 21/08/2016
  */
 public class TestarSpring {
-    
+
     private AnnotationConfigApplicationContext daos = null;
-    
+
 
     public TestarSpring() {
-        daos = new AnnotationConfigApplicationContext("com.les.marmitex.core.dao");        
-    }    
+        daos = new AnnotationConfigApplicationContext("com.les.marmitex.core.dao");
+    }
 
     public IDAO retornaDAO(EntidadeDominio e){
         return (IDAO) daos.getBean(e.getClass().getName());

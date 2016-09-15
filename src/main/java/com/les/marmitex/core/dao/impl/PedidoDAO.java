@@ -9,5 +9,5 @@ import org.springframework.stereotype.Component;
  */
 @Component("com.les.marmitex.core.dominio.Pedido")
 public class PedidoDAO {
-    
+
 }

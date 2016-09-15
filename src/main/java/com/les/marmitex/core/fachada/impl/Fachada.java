@@ -36,29 +36,29 @@ public class Fachada implements IFachada {
         ValidarCamposEmBranco vCamposEmBranco = new ValidarCamposEmBranco();
         ValidarCamposEndereco vCamposEndereco = new ValidarCamposEndereco();
 
-        
+
         /* ------- DECLARAÇÃO DAS RNS POR OPERAÇÃO/ENTIDADE -------  */
         List<IStrategy> rnsSalvarEndereco = new ArrayList<IStrategy>();
         List<IStrategy> rnsAlterarEndereco = new ArrayList<IStrategy>();
         List<IStrategy> rnsExcluirEndereco = new ArrayList<IStrategy>();
         List<IStrategy> rnsConsultarEndereco = new ArrayList<IStrategy>();
-        
-        
+
+
         /* ------- ADD STRATEGIES EM SUAS RESPECTIVAS OPERAÇÕES -------  */
 //        rnsSalvarEndereco.add(vCamposEndereco);
-        
-        
+
+
         /* ------- DECLARAÇÃO DOS RNS POR ENTIDADE -------  */
         Map<String, List<IStrategy>> rnsEndereco = new HashMap<String, List<IStrategy>>();
-        
-        
+
+
         /* ------- ADD OS MAPS POR OPERAÇÃO EM SUAS ENTIDADES -------  */
         rnsEndereco.put("SALVAR", rnsSalvarEndereco);
         rnsEndereco.put("CONSULTAR", rnsSalvarEndereco);
 
-        
+
         /* ------- ADD OS MAPS POR ENTIDADES NO MAP GERAL -------  */
-        rns.put(Endereco.class.getName(), rnsEndereco);        
+        rns.put(Endereco.class.getName(), rnsEndereco);
 
     }
 

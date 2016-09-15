@@ -8,7 +8,7 @@ import java.util.Date;
  * @date 27/08/2016
  */
 public class EntidadeDominio implements IEntidade {
-    
+
     private int id;
     private Date dtCriacao;
 

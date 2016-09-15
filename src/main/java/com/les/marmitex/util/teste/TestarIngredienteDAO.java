@@ -17,20 +17,20 @@ public class TestarIngredienteDAO {
     public static void main(String[] args) throws SQLException {
         Ingrediente i = new Ingrediente();
         IngredienteDAO dao = new IngredienteDAO();
-        
+
         i.setDtCriacao(new Date());
         i.setDtVencimento(new Date());
         i.setMedida("litros");
         i.setNome("Leite");
         i.setQuantidade(2);
         //i.setId(1);
-        
+
         //dao.salvar(i);
         //dao.alterar(i);
         //dao.excluir(i);
-        
+
         Ingrediente in = null;
-        
+
         for(EntidadeDominio e : dao.consultar(i)){
             in = (Ingrediente) e;
             System.out.println("ID: "+in.getId()+"\n"
@@ -41,7 +41,7 @@ public class TestarIngredienteDAO {
                     + "Dt cadastro: "+in.getDtCriacao()+"\n"
                     + "------------------------");
         }
-        
+
     }
 
 }
