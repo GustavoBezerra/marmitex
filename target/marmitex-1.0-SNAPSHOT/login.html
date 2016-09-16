@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com -->
+<!-- @date 20/08/2016 -->
+<html ng-app="login">
+    <head>
+        <title>Login</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
+        <script src="angularJS/angular.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
+
+        <script>
+            var app = angular.module("login", []);
+            app.controller("loginCtrl", function ($scope) {
+                $scope.titulo = "Login";
+
+                $scope.consultar = function (login) {
+                    $.ajax({
+                        url: "/marmitex/cliente",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR",
+                            login: login.email,
+                            senha: login.senha
+                        },
+                        success: function (data) {
+                            if (data === "[]") {
+                                alert("Nenhum usuário encontrado com o login e a senha informados!");
+                            } else {
+                                window.sessionStorage.setItem("usuario", data);
+                                var parseObj = JSON.parse(window.sessionStorage["usuario"]);
+                                var usuario = parseObj[0];
+                                if (usuario.id === 1) {
+                                    window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
+                                } else {
+                                    window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html";
+                                }
+                            }
+                        },
+                        error: function () {
+                            alert("[ERRO] Nenhum usuário encontrado com o login e a senha informados!");
+                        }
+                    });
+                };
+
+                $scope.salvar = function (usuario) {
+                    if (usuario.confirmar_senha !== usuario.senha) {
+                        alert("Senhas diferentes!");
+                    } else {
+                        $.ajax({
+                            url: "/marmitex/cliente",
+                            type: "POST",
+                            async: false,
+                            data: {
+                                operacao: "SALVAR",
+                                login: usuario.email,
+                                senha: usuario.senha,
+                                telefone: usuario.telefone,
+                                nome: usuario.nome
+                            },
+                            success: function (data) {
+                                window.sessionStorage.setItem("usuario", data);
+                                window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html";
+                            },
+                            error: function () {
+                                alert("Erro ao cadastrar!");
+                            }
+                        });
+                    }
+                };
+            });
+        </script>
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini" style="background-color: lightgray" ng-controller="loginCtrl">
+        <div id="body" class="hold-transition skin-red sidebar-mini">
+            <header class="main-header">
+                <a href="index.html" class="logo"> <span class="logo-lg">Marmitex
+                        do dia</span>
+                </a>
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <div class="navbar-custom-menu">
+
+                    </div>
+                </nav>
+            </header>
+            <div class="content">
+                <div class="box-body">
+
+                    <!-- SOU CADASTRADO -->
+                    <div class="col-md-6">
+                        <div class="box box-default">
+                            <div class="box-body">
+                                <div class="box-header with-border">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    <h3 class="box-title">Sou cadastrado</h3>
+                                </div><!-- /.box-header -->
+                                <br>
+                                <div class="row">
+                                    <div class="form-group col-md-11">
+                                        <label for="txtEmail">E-mail</label>
+                                        <input type="email" class="form-control" ng-model="login.email" name="txtEmail" id="txtEmail" placeholder="E-mail">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-11">
+                                        <label for="txtSenha">Senha</label>
+                                        <input type="password" class="form-control" ng-model="login.senha" name="txtSenha" id="txtSenha" placeholder="Senha">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-7">
+                                        <button type="submit" class="btn btn-google pull-right" name="operacao" value="CONSULTAR" ng-disabled="!(login.email && login.senha)" ng-click="consultar(login)">Entrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NÃO SOU CADASTRADO -->
+                    <div class="col-md-6">
+                        <div class="box box-default">
+                            <div class="box-body">
+                                <div class="box-header with-border">
+                                    <i class="glyphicon glyphicon-plus-sign"></i>
+                                    <h3 class="box-title">Não sou cadastrado</h3>
+                                </div>
+                                <br>
+                                <!-- PRIMEIRA LINHA -->
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="exampleInput">Nome</label>
+                                        <input type="text" class="form-control" name="txtNome" ng-model="usuario.nome" placeholder="Nome">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="exampleInput">Telefone</label>
+                                        <input type="tel" class="form-control" name="txtNome" ng-model="usuario.telefone" placeholder="Telefone">
+                                    </div>
+                                </div>
+
+                                <br>
+                                <div class="box-header with-border">
+                                    <i class="glyphicon glyphicon-log-in"></i>
+                                    <h3 class="box-title">Dados para login</h3>
+                                </div>
+                                <!-- QUARTA LINHA -->
+                                <div class="row">
+                                    <div class="form-group col-md-10">
+                                        <label for="exampleInput">E-mail</label>
+                                        <input type="email" class="form-control" name="txtEmail" ng-model="usuario.email" placeholder="E-mail">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-10">
+                                        <label for="exampleInput">Senha</label>
+                                        <input type="password" class="form-control col-md-10" name="txtSenha" ng-model="usuario.senha" placeholder="Senha">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-10">
+                                        <label for="exampleInput">Confirmar senha</label>
+                                        <input type="password" class="form-control col-md-10" name="txtSenha" ng-model="usuario.confirmar_senha" placeholder="Confirmar senha">
+                                    </div>
+                                </div>
+                                <!-- QUINTA LINHA -->
+                                <div class="row">
+                                    <div class="form-group col-md-7">
+                                        <button type="submit" class="btn btn-success pull-right" name="operacao"
+                                                ng-click="salvar(usuario)" value="SALVAR"
+                                                ng-disabled="!(usuario.nome && usuario.telefone && usuario.email && usuario.senha && usuario.confirmar_senha)">
+                                            Cadastrar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+
+                </div><!-- /.box-body -->
+            </div><!-- /.content-wrapper -->
+        </div>
+    </body>
+</html>

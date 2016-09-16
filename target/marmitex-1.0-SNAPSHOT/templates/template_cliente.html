@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com> -->
+<!-- Data de criação: 01/09/2016 -->
+<html ng-app="template_cliente">
+    <head>
+
+        <script>
+            var app = angular.module("template_cliente", []);
+            app.controller("TemplateClienteCtrl", function ($scope) {
+                $scope.titulo = "Template Cliente";
+            });
+        </script>
+    </head>
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="TemplateClienteCtrl">
+        <div id="body" class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <header class="main-header">
+                    <!--Logo-->
+                    <a href="index.html" class="logo"> <span class="logo-lg">Marmitex
+                            do dia</span>
+                    </a>
+                    <!-- Header Navbar: style can be found in header.less -->
+                    <nav class="navbar navbar-static-top" role="navigation">
+                        <!-- LEFT -->
+                        <div class="navbar-custom-menu">
+                            <ul class="nav navbar-nav">
+                                <!-- Notifications: style can be found in dropdown.less -->
+                                <li class="dropdown user user-menu">
+                                    <button class="btn btn-danger" ng-click="sair()">
+                                        Sair
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+
+                <aside class="main-sidebar">
+                    <!-- sidebar: style can be found in sidebar.less -->
+                    <section class="sidebar">
+                        <!-- sidebar menu: : style can be found in sidebar.less -->
+                        <ul class="sidebar-menu">
+                            <li class="header">MENUS</li>
+                            <li>
+                                <a href="meus_pedidos.html">
+                                    <i class="glyphicon glyphicon-barcode"></i><span class="h4">Meus Pedidos</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="meus_enderecos.html">
+                                    <i class="glyphicon glyphicon-home"></i><span class="h4">Meus Endereços</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="editar_dados.html">
+                                    <i class="glyphicon glyphicon-pencil"></i> <span class="h4">Editar dados</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                    <!-- /.sidebar -->
+                </aside>
+            </div>
+        </div>
+    </body>
+</html>

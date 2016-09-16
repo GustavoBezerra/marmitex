@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com> -->
+<!-- Data de criação: 03/09/2016 -->
+<html ng-app="gerenciarFidelidade">
+    <head>
+        <title>Home - Admin</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <!-- Importe do bootstrap -->
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <!-- Importe do jQuery -->
+        <script src="adminLTE/js/jquery-3.1.0.min.js" type="text/javascript"></script>
+        <!-- Importe do AngularJS -->
+        <script src="angularJS/angular.js" type="text/javascript"></script>
+        <!-- Importes do ADMINLTE -->
+        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
+        <script src="adminLTE/dist/js/demo.js" type="text/javascript"></script>
+        <!-- Importes para o Date -->
+        <script src="adminLTE/plugins/daterangepicker/moment.min.js" type="text/javascript"></script>
+        <script src="adminLTE/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+        <link href="adminLTE/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
+
+
+
+        <script>
+            var app = angular.module("gerenciarFidelidade", []);
+            app.controller("gerenciarFidelidadeCtrl", function ($scope) {
+                $scope.titulo = "Gerenciar Fidelidade";
+
+                $scope.sair = function () {
+                    window.sessionStorage.clear();
+                    window.location.href = "http://localhost:8084/marmitex/login.html";
+                };
+
+                $scope.consultar = function () {
+                    $.ajax({
+                        url: "/marmitex/campanha",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"
+                        },
+                        success: function (data) {
+                            console.log("consultou");
+                            $scope.campanhas = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.salvar = function (campanha) {
+                    var vBeneficio = 0;
+                    var vRegra = 0;
+
+                    // Verificar o valor da regra
+                    if (campanha.regra.id === '1') {
+                        vRegra = campanha.valor;
+                    } else if (campanha.regra.id === '2') {
+                        vRegra = campanha.compras;
+                    } else if (campanha.regra.id === '3') {
+                        vRegra = campanha.prato.id;
+                    }
+
+                    // Verificar o valor do beneficio
+                    if ((campanha.regra.id === '1' && campanha.valor && campanha.beneficio.id === '3') ||
+                            (campanha.regra.id === '2' && campanha.compras && campanha.beneficio.id === '3') ||
+                            (campanha.regra.id === '3' && campanha.prato.id && campanha.beneficio.id === '3')) {
+                        vBeneficio = campanha.ingrediente.id;
+                    } else if ((campanha.regra.id === '1' && campanha.valor && campanha.beneficio.id === '4') ||
+                            (campanha.regra.id === '2' && campanha.compras && campanha.beneficio.id === '4') ||
+                            (campanha.regra.id === '3' && campanha.prato.id && campanha.beneficio.id === '4')) {
+                        vBeneficio = campanha.cortesia;
+                    }
+
+                    $.ajax({
+                        url: "/marmitex/campanha",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "SALVAR",
+                            nome: campanha.nome,
+                            descricao: campanha.descricao,
+                            tempo: campanha.data,
+                            regra: campanha.regra.id,
+                            valor_regra: vRegra,
+                            beneficio: campanha.beneficio.id,
+                            valor_beneficio: vBeneficio
+                        },
+                        success: function () {
+                            alert("Campanha salva!");
+                            $scope.consultar();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.regras = [
+                    {id: "1", descricao: "Compras acima de"},
+                    {id: "2", descricao: "Número de compras"},
+                    {id: "3", descricao: "Prato específico"}
+                ];
+
+                $scope.ingredientes = [
+                    {id: "1", nome: "Arroz", categoria: "Guarnição"},
+                    {id: "2", nome: "Feijão", categoria: "Guarnição"},
+                    {id: "3", nome: "Macarrão", categoria: "Guarnição"},
+                    {id: "4", nome: "Filé de Frango", categoria: "Mistura"},
+                    {id: "5", nome: "Calabresa", categoria: "Mistura"},
+                    {id: "6", nome: "Filé Mignon", categoria: "Mistura"},
+                    {id: "7", nome: "Coca-cola lata", categoria: "Outros"},
+                    {id: "8", nome: "Guaraná Antartica lata", categoria: "Outros"},
+                    {id: "9", nome: "H2HO", categoria: "Outros"},
+                    {id: "10", nome: "Batata frita", categoria: "Acompanhamento"},
+                    {id: "11", nome: "Mandioca frita", categoria: "Acompanhamento"},
+                    {id: "12", nome: "Pure de batata", categoria: "Acompanhamento"}
+                ];
+
+                $scope.pratos = [
+                    {id: "1", descricao: "Virada Paulista"},
+                    {id: "2", descricao: "Feijoada"},
+                    {id: "3", descricao: "Strogonoff"}
+                ];
+
+                $scope.beneficios = [
+                    {id: "1", descricao: "Frete grátis"},
+                    {id: "2", descricao: "Marmitex grátis"},
+                    {id: "3", descricao: "Cortesia"},
+                    {id: "4", descricao: "Desconto"}
+                ];
+                // Função com as propriedades do calendário
+                $(function () {
+                    $('input[name="tempo"]').daterangepicker({
+                        format: "DD/MM/YYYY",
+                        separator: " até ",
+                        locale: {
+                            "applyLabel": "Aplicar",
+                            "cancelLabel": "Cancelar",
+                            "fromLabel": "De",
+                            "toLabel": "Até",
+                            "daysOfWeek": [
+                                "Do",
+                                "Se",
+                                "Te",
+                                "Qa",
+                                "Qi",
+                                "Sx",
+                                "Sa"
+                            ],
+                            "monthNames": [
+                                "Janeiro",
+                                "Fevereiro",
+                                "Março",
+                                "Abril",
+                                "Maio",
+                                "Junho",
+                                "Julho",
+                                "Agosto",
+                                "Setembro",
+                                "Outubro",
+                                "Novembro",
+                                "Dezembro"
+                            ]
+                        }
+                    });
+                });
+            });
+
+        </script>
+
+    </head>
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="gerenciarFidelidadeCtrl" data-ng-init="consultar()">
+        <div id="body" class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <div ng-include="'templates/template_admin.html'"></div>
+
+                <!-- Content Wrapper. Contains page content -->
+                <div class="content-wrapper">
+                    <!-- Main content -->
+                    <!-- form start -->
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="box box-success">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-heart"></i>
+                                        <h3 class="box-title">Cadastrar novo plano de fidelidade</h3>
+                                        <button type="button" class="btn btn-info pull-right" name="cancelar" id="cancelar" onclick="cancelarAlterar()" disabled>Cancelar</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-7">
+                                            <label>Título do novo plano de fidelidade</label>
+                                            <input type="text" class="form-control" ng-model="campanha.nome" name="txtNome" id="txtNome" placeholder="Título do novo plano de fidelidade">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-md-7">
+                                            <label>Descrição do plano (irá aparecer para o cliente)</label>
+                                            <textarea class="form-control" ng-model="campanha.descricao" rows="3" placeholder="Descrição da plano">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
+                                            <label for="daterange">Tempo ativo do plano de fidelidade:</label>
+                                            <input type="text" class="form-control" ng-model="campanha.data" name="tempo" id="tempo"
+                                                   placeholder="Determine o tempo da campanha" />
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="daterange">Regra da campanha:</label>
+                                            <select class="form-control" id="regra" ng-model="campanha.regra"
+                                                    ng-options="regra.descricao for regra in regras">
+                                                <option value="">Selecione uma regra</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <!-- COMPRAS COM VALOR ACIMA DE -->
+                                            <div>
+                                                <label for="txtValor" ng-if="campanha.regra.id === '1'">Compras com valor acima de:</label>
+                                                <input type="text" class="form-control" id="txtValor" name="txtValor" ng-model="campanha.valor" placeholder="Compras acima de"  ng-if="campanha.regra.id === '1'"/>
+                                            </div>
+                                            <!-- NUMERO DE COMPRAS -->
+                                            <div>
+                                                <label for="txtValor" ng-if="campanha.regra.id === '2'">Número de compras:</label>
+                                                <input type="text" class="form-control" id="txtQtde" ng-model="campanha.compras" name="txtQtde" placeholder="Número de compras"
+                                                       ng-if="campanha.regra.id === '2'" />
+                                            </div>
+                                            <!-- COMBO ESPECÍFICO -->
+                                            <div>
+                                                <label for="daterange" ng-if="campanha.regra.id === '3'">Qual será o prato:</label>
+                                                <select class="form-control" ng-model="campanha.prato" ng-if="campanha.regra.id === '3'"
+                                                        ng-options="prato.descricao for prato in pratos">
+                                                    <option value="">Selecione um prato</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="daterange" ng-if="(campanha.regra.id === '3' && campanha.prato.id) ||
+                                                                        (campanha.regra.id === '2' && campanha.compras) ||
+                                                                        (campanha.regra.id === '1' && campanha.valor)">
+                                                    Benefício:
+                                                </label>
+                                                <select class="form-control" ng-model="campanha.beneficio"
+                                                        ng-if="(campanha.regra.id === '3' && campanha.prato.id) ||
+                                                                                (campanha.regra.id === '2' && campanha.compras) ||
+                                                                                (campanha.regra.id === '1' && campanha.valor)"
+                                                        ng-options="b.descricao for b in beneficios">
+                                                    <option value="">Selecione um beneficio</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- VALOR DO BENEFICIO -->
+                                            <div ng-if="(campanha.regra.id === '1' && campanha.valor && campanha.beneficio.id === '3') ||
+                                                                    (campanha.regra.id === '2' && campanha.compras && campanha.beneficio.id === '3') ||
+                                                                    (campanha.regra.id === '3' && campanha.prato.id && campanha.beneficio.id === '3')">
+                                                <label for="select_ingredientes">
+                                                    Cortesia:
+                                                </label>
+                                                <select class="form-control" id="select_ingredientes" ng-model="campanha.ingrediente" ng-options="ingrediente.nome group by ingrediente.categoria for ingrediente in ingredientes">
+                                                    <option value="">Selecione um ingrediente</option>
+                                                </select>
+                                            </div>
+
+                                            <div ng-if="(campanha.regra.id === '1' && campanha.valor && campanha.beneficio.id === '4') ||
+                                                                    (campanha.regra.id === '2' && campanha.compras && campanha.beneficio.id === '4') ||
+                                                                    (campanha.regra.id === '3' && campanha.prato.id && campanha.beneficio.id === '4')">
+                                                <label for="cortesia_desconto">
+                                                    % do desconto:
+                                                </label>
+                                                <input type="text" id="cortesia_desconto" name="cortesia_desconto" class="form-control" ng-model="campanha.cortesia">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- SEGUNDA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-11">
+                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" ng-click="salvar(campanha)">Cadastrar</button>
+                                            <button type="submit" class="btn btn-warning pull-right" style="display: none" id="alterar" name="operacao" value="ALTERAR" onclick="alterar()">Alterar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="box box-primary">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-heart"></i>
+                                        <h3 class="box-title">Planos de fidelidade já cadastrados</h3>
+                                    </div>
+                                    <table class="table table-striped" ng-show="campanhas.length > 0">
+                                        <tr>
+                                            <th>ID da campanha</th>
+                                            <th>Título</th>
+                                            <th>Descrição</th>
+                                            <th>Duração</th>
+                                            <th>Regra</th>
+                                            <th>Beneficio</th>
+                                        </tr>
+                                        <tr ng-repeat="c in campanhas">
+                                            <td>
+                                                <a ng-click="verDetalhes(c);">
+                                                    {{c.id}}
+                                                </a>
+                                            </td>
+                                            <td>{{c.nome}}</td>
+                                            <td>{{c.descricao}}</td>
+                                            <td>{{c.inicio}}</td>
+                                            <td></td>
+                                            <td>{{testeTabela(c)}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com> -->
+<!-- Data de criação: 01/09/2016 -->
+<html ng-app="template_admin">
+    <head>
+
+        <script>
+            var app = angular.module("template_admin", []);
+            app.controller("TemplateAdminCtrl", function ($scope) {
+                $scope.titulo = "Template Admin";
+            });
+        </script>
+    </head>
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="TemplateAdminCtrl">
+        <div id="body" class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <header class="main-header">
+                    <!--Logo-->
+                    <a href="index.html" class="logo"> <span class="logo-lg">Marmitex
+                            do dia</span>
+                    </a>
+                    <!-- Header Navbar: style can be found in header.less -->
+                    <nav class="navbar navbar-static-top" role="navigation">
+                        <!-- LEFT -->
+                        <div class="navbar-custom-menu">
+                            <ul class="nav navbar-nav">
+                                <!-- Notifications: style can be found in dropdown.less -->
+                                <li class="dropdown user user-menu">
+                                    <button class="btn btn-danger" ng-click="sair()">
+                                        Sair
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+
+                <aside class="main-sidebar">
+                    <!-- sidebar: style can be found in sidebar.less -->
+                    <section class="sidebar">
+                        <!-- sidebar menu: : style can be found in sidebar.less -->
+                        <ul class="sidebar-menu">
+                            <li class="header">MENUS</li>
+                            <li>
+                                <a href="pedidos_abertos.html">
+                                    <i class="glyphicon glyphicon-fire"></i><span class="h4">Pedidos</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="gerenciar_estoque.html">
+                                    <i class="glyphicon glyphicon-apple"></i><span class="h4">Gerenciar estoque</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="categorias.html">
+                                    <i class="glyphicon glyphicon-list-alt"></i><span class="h4">Gerenciar categorias</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="gerenciar_cardapio.html">
+                                    <i class="glyphicon glyphicon-cutlery"></i><span class="h4">Gerenciar cardápio</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="gerenciar_fidelidade.html">
+                                    <i class="glyphicon glyphicon-heart"></i><span class="h4">Fidelidade</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="cadastro_cliente.html">
+                                    <i class="glyphicon glyphicon-user"></i><span class="h4">Cadastro de Cliente</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="cadastro_motoboy.html">
+                                    <i class="glyphicon glyphicon-road"></i><span class="h4">Cadastro de Motoboy</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="analises.html">
+                                    <i class="glyphicon glyphicon-stats"></i><span class="h4">Análises</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                    <!-- /.sidebar -->
+                </aside>
+            </div>
+        </div>
+    </body>
+</html>
