@@ -73,8 +73,7 @@
                         async: false,
                         data: {
                             operacao: "SALVAR",
-                            nome: categoria.nome,
-                            valor: categoria.valor
+                            nome: categoria.nome                            
                         },
                         success: function () {
                             $scope.consultar();
@@ -86,8 +85,7 @@
                 };
 
                 $scope.alterar = function () {
-                    var newNome = document.getElementById("txtNome").value;
-                    var newValor = document.getElementById("txtValor").value;
+                    var newNome = document.getElementById("txtNome").value;                    
                     $.ajax({
                         url: "/marmitex/categoria",
                         type: "POST",
@@ -95,8 +93,7 @@
                         data: {
                             operacao: "ALTERAR",
                             id: cat.id,
-                            nome: newNome,
-                            valor: newValor
+                            nome: newNome                            
                         },
                         success: function () {
                             $scope.consultar();
@@ -111,14 +108,12 @@
                 var cat;
                 $scope.visualizar = function (categoria) {
                     cat = categoria;
-                    document.getElementById("txtNome").value = categoria.nome;
-                    document.getElementById("txtValor").value = categoria.valor;
+                    document.getElementById("txtNome").value = categoria.nome;                    
                     $scope.opAlterar = true;
                 };
 
                 $scope.cancelar = function () {
-                    document.getElementById("txtNome").value = "";
-                    document.getElementById("txtValor").value = "";
+                    document.getElementById("txtNome").value = "";                    
                     $scope.opAlterar = false;
                 };
             });
@@ -146,18 +141,14 @@
                                         <div class="form-group col-md-5">
                                             <label>Nome da categoria</label>
                                             <input type="text" class="form-control" ng-model="categoria.nome" name="txtNome" id="txtNome" placeholder="Nome da categoria">
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label>Valor para a categoria</label>
-                                            <input type="text" class="form-control" ng-model="categoria.valor" name="txtValor" id="txtValor" placeholder="Valor">
-                                        </div>
+                                        </div>                                        
                                     </div>
                                     
                                     <!-- SEGUNDA LINHA -->
 
                                     <div class="row">
                                         <div class="form-group col-md-11">
-                                            <button type="submit" class="btn btn-success pull-right" ng-if="!opAlterar" name="operacao" id="salvar" ng-disabled="!(categoria.nome && categoria.valor)" value="SALVAR" ng-click="salvar(categoria)">Cadastrar</button>
+                                            <button type="submit" class="btn btn-success pull-right" ng-if="!opAlterar" name="operacao" id="salvar" ng-disabled="!(categoria.nome)" value="SALVAR" ng-click="salvar(categoria)">Cadastrar</button>
                                             <button type="submit" class="btn btn-warning pull-right" ng-if="opAlterar" id="alterar" name="operacao" value="ALTERAR" ng-click="alterar()">Alterar</button>
                                         </div>
                                     </div>
@@ -178,8 +169,7 @@
                                     <table class="table table-striped" ng-show="categorias.length > 0">
                                         <tr>
                                             <th>ID da categoria</th>
-                                            <th>Nome</th>
-                                            <th>Valor</th>
+                                            <th>Nome</th>                                            
                                             <th>Opções</th>
                                         </tr>
                                         <tr ng-repeat="c in categorias">
@@ -188,8 +178,7 @@
                                                     {{c.id}}
                                                 </a>
                                             </td>
-                                            <td>{{c.nome}}</td>
-                                            <td>{{c.valor}}</td>
+                                            <td>{{c.nome}}</td>                                            
                                             <td>
                                                 <button type='button' class='btn btn-warning' ng-click='visualizar(c)'>Alterar</button>
                                                 <button type='button' class='btn btn-danger' ng-click='excluir(c)'>Excluir</button>
