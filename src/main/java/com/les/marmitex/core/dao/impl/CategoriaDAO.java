@@ -34,11 +34,12 @@ public class CategoriaDAO extends AbstractJdbcDAO{
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO tb_categoria(nome)");
-            sql.append(" VALUES (?);");
+            sql.append("INSERT INTO tb_categoria(nome, valor)");
+            sql.append(" VALUES (?, ?);");
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, categoria.getNome());
+            pst.setDouble(2, categoria.getValor());
 
             pst.executeUpdate();
             connection.commit();
@@ -74,12 +75,13 @@ public class CategoriaDAO extends AbstractJdbcDAO{
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE tb_categoria SET nome=?");
+            sql.append("UPDATE tb_categoria SET nome=?, valor=?");
             sql.append(" WHERE id_categoria=?;");
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, categoria.getNome());
-            pst.setInt(2, categoria.getId());
+            pst.setDouble(2, categoria.getValor());
+            pst.setInt(3, categoria.getId());
 
             pst.executeUpdate();
             connection.commit();
@@ -132,10 +134,10 @@ public class CategoriaDAO extends AbstractJdbcDAO{
 
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-
                 c = new Categoria();
                 c.setNome(rs.getString("nome"));
                 c.setId(rs.getInt("id_categoria"));
+                c.setValor(rs.getDouble("valor"));
                 categorias.add(c);
             }
         } catch (SQLException ex) {

@@ -8,6 +8,7 @@ package com.les.marmitex.core.dominio;
 public class Categoria extends EntidadeDominio{
 
     private String nome;
+    private Double valor;
 
     /**
      * @return the nome
@@ -21,6 +22,20 @@ public class Categoria extends EntidadeDominio{
      */
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    /**
+     * @return the valor
+     */
+    public Double getValor() {
+        return valor;
+    }
+
+    /**
+     * @param valor the valor to set
+     */
+    public void setValor(Double valor) {
+        this.valor = valor;
     }
 
 

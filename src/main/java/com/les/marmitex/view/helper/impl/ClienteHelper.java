@@ -81,7 +81,7 @@ public class ClienteHelper implements IViewHelper {
             c.setId(Integer.valueOf(id));
         } else if (("EXCLUIR").equals(operacao)) {
             c = new Cliente();
-            
+
             id = request.getParameter("id");
             c.setId(Integer.valueOf(id));
         }
@@ -98,14 +98,14 @@ public class ClienteHelper implements IViewHelper {
         l.add(c);
 
         if (("SALVAR").equals(operacao)) {
-            retorno = gson.toJson(l);
+            retorno = gson.toJson(c);
             try {
                 response.getWriter().write(retorno);
             } catch (IOException ex) {
                 System.out.println("ERRO!");
             }
         } else if (("CONSULTAR").equals(operacao)) {
-            retorno = gson.toJson(resultado.getEntidades());
+            retorno = gson.toJson(resultado.getEntidades().get(0));
             try {
                 response.getWriter().write(retorno);
             } catch (IOException ex) {
@@ -114,7 +114,12 @@ public class ClienteHelper implements IViewHelper {
         } else if (("EXCLUIR").equals(operacao)) {
 
         } else if (("ALTERAR").equals(operacao)) {
-
+            retorno = gson.toJson(c);
+            try {
+                response.getWriter().write(retorno);
+            } catch (IOException ex) {
+                System.out.println("ERRO!");
+            }
         }
     }
 

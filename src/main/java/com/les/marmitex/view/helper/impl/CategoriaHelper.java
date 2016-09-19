@@ -23,19 +23,24 @@ public class CategoriaHelper implements IViewHelper{
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         String operacao = request.getParameter("operacao");
         String nome;
+        double valor;
         int id;
         Categoria c = null;
 
         if(("SALVAR").equals(operacao)){
             c = new Categoria();
             nome = request.getParameter("nome");
+            valor = Double.valueOf(request.getParameter("valor"));
             c.setNome(nome);
+            c.setValor(valor);
         } else if(("ALTERAR").equals(operacao)){
             c = new Categoria();
             id = Integer.valueOf(request.getParameter("id"));
             c.setId(id);
             nome = request.getParameter("nome");
             c.setNome(nome);
+            valor = Double.valueOf(request.getParameter("valor"));
+            c.setValor(valor);
         } else if(("EXCLUIR").equals(operacao)){
             c = new Categoria();
             id = Integer.valueOf(request.getParameter("id"));

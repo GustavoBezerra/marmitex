@@ -12,19 +12,17 @@
         <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
-        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
-        <script src="adminLTE/js/bootstrap-confirmation.js" type="text/javascript"></script>
+        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>        
 
         <script>
-            var parseObj = JSON.parse(window.sessionStorage["usuario"]);
-            var u = parseObj[0];
+            var parseObj = JSON.parse(window.sessionStorage["usuario"]);            
         </script>
 
         <script>
             var app = angular.module("meusDados", []);
             app.controller("MeusDadosCtrl", function ($scope) {
                 $scope.titulo = "Meus Dados";
-                $scope.usuario = u;
+                $scope.usuario = parseObj;
 
                 $scope.sair = function () {
                     window.sessionStorage.clear();
@@ -33,49 +31,51 @@
 
                 $scope.alterar = function (usuario) {
                     if (usuario.usuario.senha === document.getElementById("txtConfirmarSenha").value) {
-                        var decisao = confirm("Deseja mesmo excluir sua conta?");
-                        if (decisao) {
-                            $.ajax({
-                                url: "/marmitex/cliente",
-                                type: "POST",
-                                async: false,
-                                data: {
-                                    operacao: "ALTERAR",
-                                    id: usuario.id,
-                                    nome: usuario.nome,
-                                    email: usuario.usuario.login,
-                                    senha: usuario.usuario.senha,
-                                    telefone: usuario.telefone
-                                },
-                                success: function () {
-                                    alert("Informações alteradas!\nEmail: " + JSON.parse(window.sessionStorage["usuario"])[0].usuario.login);
-                                },
-                                error: function (err) {
-                                    console.log(err.statusText);
-                                }
-                            });
-                        }
+                        $.ajax({
+                            url: "/marmitex/cliente",
+                            type: "POST",
+                            async: false,
+                            data: {
+                                operacao: "ALTERAR",
+                                id: usuario.id,
+                                nome: usuario.nome,
+                                email: usuario.usuario.login,
+                                senha: usuario.usuario.senha,
+                                telefone: usuario.telefone
+                            },
+                            success: function (data) {                                
+                                window.sessionStorage.setItem("usuario", data);
+                                alert("Dados alterados!");
+                            },
+                            error: function (err) {
+                                console.log(err.statusText);
+                            }
+                        });
                     } else {
-                        alert("Senhas incorretas!");
+                        alert("Senhas diferentes!");
                     }
                 };
 
-                $scope.excluir = function () {
-                    $.ajax({
-                        url: "/marmitex/cliente",
-                        type: "POST",
-                        async: false,
-                        data: {
-                            operacao: "EXCLUIR",
-                            id: u.id
-                        },
-                        success: function () {
-                            $scope.sair();
-                        },
-                        error: function (err) {
-                            console.log(err.statusText);
-                        }
-                    });
+                $scope.excluir = function (usuario) {
+                    var decisao = confirm("Deseja mesmo excluir sua conta?");
+                    if (decisao) {
+                        $.ajax({
+                            url: "/marmitex/cliente",
+                            type: "POST",
+                            async: false,
+                            data: {
+                                operacao: "EXCLUIR",
+                                id: usuario.id
+                            },
+                            success: function () {
+                                alert("Conta excluída!");
+                                $scope.sair();
+                            },
+                            error: function (err) {
+                                console.log(err.statusText);
+                            }
+                        });
+                    }
                 };
             });
         </script>
@@ -96,7 +96,7 @@
                                     <div class="box-header with-border">
                                         <i class="glyphicon glyphicon-edit"></i>
                                         <h3 class="box-title">Editar meus dados</h3>
-                                        <button type="button" class="btn btn-danger pull-right" name="excluir" ng-click="excluir()" id="excluir">Excluir conta</button>
+                                        <button type="button" class="btn btn-danger pull-right" name="excluir" ng-click="excluir(usuario)" id="excluir">Excluir conta</button>
 
                                     </div>
                                     <br>
