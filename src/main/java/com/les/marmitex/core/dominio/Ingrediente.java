@@ -14,6 +14,7 @@ public class Ingrediente extends EntidadeDominio{
     private String medida;
     private Date dtVencimento;
     private Categoria categoria;
+    private double valor;
 
     /**
      * @return the nome
@@ -83,6 +84,20 @@ public class Ingrediente extends EntidadeDominio{
      */
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    /**
+     * @return the valor
+     */
+    public double getValor() {
+        return valor;
+    }
+
+    /**
+     * @param valor the valor to set
+     */
+    public void setValor(double valor) {
+        this.valor = valor;
     }
 
 }

@@ -14,11 +14,15 @@
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
         
         <script>
+            var ingredientes = document.getElementsByName("ingredientes");
+            var ingredientesCheckados;
             var app = angular.module("montarMarmitex", []);
             app.controller("marmitexCtrl", function ($scope) {
                 $scope.titulo = "Montar marmitex";
+                $scope.ingredientes = $scope.consultarIngredientes();
+                $scope.categorias = $scope.consultarCategorias();;
 
-                $scope.consultar = function (login) {
+                $scope.consultarCategorias = function () {
                     $.ajax({
                         url: "/marmitex/marmitex",
                         type: "POST",
@@ -30,46 +34,34 @@
                             if (data === "[]") {
                                 alert("Nenhum dado encontrado!");
                             } else {
-                                window.sessionStorage.setItem("usuario", data);
-                                var parseObj = JSON.parse(window.sessionStorage["usuario"]);
-                                var usuario = parseObj;
-                                if (usuario.id === 1) {
-                                    window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
-                                } else {
-                                    window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html";
-                                }
+                                return JSON.parse(data);
                             }
                         },
                         error: function () {
-                            alert("[ERRO] Nenhum usuário encontrado com o login e a senha informados!");
+                            alert("[ERRO] Erro ao consultar categorias!");
                         }
                     });
                 };
-
-                $scope.salvar = function (usuario) {
-                    if (usuario.confirmar_senha !== usuario.senha) {
-                        alert("Senhas diferentes!");
-                    } else {
-                        $.ajax({
-                            url: "/marmitex/marmitex",
-                            type: "POST",
-                            async: false,
-                            data: {
-                                operacao: "SALVAR",
-                                login: usuario.email,
-                                senha: usuario.senha,
-                                telefone: usuario.telefone,
-                                nome: usuario.nome
-                            },
-                            success: function (data) {
-                                window.sessionStorage.setItem("usuario", data);
-                                window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html";
-                            },
-                            error: function () {
-                                alert("Erro ao cadastrar!");
+                
+                $scope.consultarIngredientes = function () {
+                    $.ajax({
+                        url: "/marmitex/marmitex",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"                            
+                        },
+                        success: function (data) {
+                            if (data === "[]") {
+                                alert("Nenhum dado encontrado!");
+                            } else {
+                                return JSON.parse(data);
                             }
-                        });
-                    }
+                        },
+                        error: function () {
+                            alert("[ERRO] Erro ao consultar ingredientes!");
+                        }
+                    });
                 };
             });
         </script>

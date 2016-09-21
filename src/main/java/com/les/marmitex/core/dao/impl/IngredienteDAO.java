@@ -9,6 +9,7 @@ import com.les.marmitex.core.dominio.Ingrediente;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,8 @@ public class IngredienteDAO extends AbstractJdbcDAO {
 
             StringBuilder sql = new StringBuilder();
             sql.append("INSERT INTO tb_ingredientes(nome, quantidade, ");
-            sql.append("medida, dt_vencimento, dt_cadastro, categoria)");
-            sql.append(" VALUES (?,?,?,?,?,?);");
+            sql.append("medida, dt_vencimento, dt_cadastro, categoria, valor, ativo)");
+            sql.append(" VALUES (?,?,?,?,?,?,?,?);");
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, ingrediente.getNome());
@@ -49,7 +50,9 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             Timestamp timeCad = new Timestamp(ingrediente.getDtCriacao().getTime());
             pst.setTimestamp(4, timeVenc);
             pst.setTimestamp(5, timeCad);
-            pst.setString(6, ingrediente.getCategoria().getNome());
+            pst.setInt(6, ingrediente.getCategoria().getId());
+            pst.setDouble(7, ingrediente.getValor());
+            pst.setBoolean(8, ingrediente.isAtivo());
 
             pst.executeUpdate();
             connection.commit();
@@ -86,7 +89,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE tb_ingredientes SET nome=?, quantidade=?, ");
-            sql.append("medida=?, dt_vencimento=?, categoria=? where id_ingrediente=?;");
+            sql.append("medida=?, dt_vencimento=?, categoria=?, valor=? where id_ingrediente=?;");
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, ingrediente.getNome());
@@ -95,7 +98,8 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             Timestamp timeVenc = new Timestamp(ingrediente.getDtVencimento().getTime());
             pst.setTimestamp(4, timeVenc);
             pst.setString(5, ingrediente.getCategoria().getNome());
-            pst.setInt(6, ingrediente.getId());
+            pst.setDouble(6, ingrediente.getValor());
+            pst.setInt(7, ingrediente.getId());
 
             pst.executeUpdate();
             connection.commit();
@@ -127,6 +131,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
         PreparedStatement pst = null;
         Ingrediente i;
         Categoria c;
+        CategoriaDAO categoriaDAO = new CategoriaDAO();
         List<EntidadeDominio> ingredientes = new ArrayList<>();
         boolean ingredienteEspecifico = false;
 
@@ -134,15 +139,15 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             Ingrediente ingrediente = (Ingrediente) entidade;
             connection.setAutoCommit(false);
 
-            StringBuilder sql = new StringBuilder();
-
-            sql.append("SELECT * FROM tb_ingredientes");
+            StringBuilder sql = new StringBuilder();            
+            
+            sql.append("SELECT * FROM tb_ingredientes WHERE ativo=true");
             if (ingrediente.getId() != 0) {
-                sql.append(" WHERE id_ingrediente=?;");
+                sql.append(" and id_ingrediente=?");
                 ingredienteEspecifico = true;
             }
-
-            pst = connection.prepareStatement(sql.toString());
+            
+            pst = connection.prepareStatement(sql.toString());            
             if (ingredienteEspecifico) {
                 pst.setInt(1, ingrediente.getId());
             }
@@ -157,8 +162,9 @@ public class IngredienteDAO extends AbstractJdbcDAO {
                 i.setMedida(rs.getString("medida"));
                 i.setDtVencimento(rs.getDate("dt_vencimento"));
                 i.setDtCriacao(rs.getDate("dt_cadastro"));
-                c.setNome(rs.getString("categoria"));
-                i.setCategoria(c);
+                c.setId(rs.getInt("categoria"));                
+                i.setCategoria((Categoria)categoriaDAO.consultar(c).get(0));
+                i.setValor(rs.getDouble("valor"));
 
                 ingredientes.add(i);
             }
@@ -183,7 +189,40 @@ public class IngredienteDAO extends AbstractJdbcDAO {
         }
         return ingredientes;
     }
+    
+    @Override
+    public void excluir(EntidadeDominio entidade){
+        openConnection();
+        PreparedStatement pst = null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("UPDATE tb_ingredientes SET ativo=false WHERE id_ingrediente=?;");
+        
+        try {
+            connection.setAutoCommit(false);
+            pst = connection.prepareStatement(sb.toString());
+            pst.setInt(1, entidade.getId());
 
+            pst.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
 
+            try {
+                pst.close();
+                if (ctrlTransaction) {
+                    connection.close();
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

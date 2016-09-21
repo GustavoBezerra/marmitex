@@ -39,6 +39,8 @@ public class IngredienteHelper implements IViewHelper {
         String medida;
         String dtVencimento;
         String categoria;
+        String id_categoria;
+        Double valor;
 
         if (("SALVAR").equals(operacao)) {
             i = new Ingrediente();
@@ -48,14 +50,19 @@ public class IngredienteHelper implements IViewHelper {
             medida = request.getParameter("medida");
             dtVencimento = request.getParameter("vencimento");
             categoria = request.getParameter("categoria");
+            id_categoria = request.getParameter("id_categoria");
+            valor = Double.valueOf(request.getParameter("valor"));
 
             c.setNome(categoria);
+            c.setId(Integer.valueOf(id_categoria));
             i.setCategoria(c);
             i.setNome(nome);
             i.setQuantidade(quantidade);
             i.setMedida(medida);
             i.setDtCriacao(new Date());
             i.setDtVencimento(new Date(dtVencimento));
+            i.setValor(valor);
+            i.setAtivo(true);
 
         } else if (("CONSULTAR").equals(operacao)) {
             i = new Ingrediente();

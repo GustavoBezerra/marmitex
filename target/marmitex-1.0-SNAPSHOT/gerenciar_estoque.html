@@ -18,10 +18,36 @@
             var app = angular.module("gerenciarEstoque", []);
             app.controller("gerenciarEstoqueCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Estoque";
+                $scope.medidas = [
+                    {id: 1, descricao: "Litro(s)"},
+                    {id: 2, descricao: "Ml(s)"},
+                    {id: 3, descricao: "Unidade(s)"},
+                    {id: 4, descricao: "Kilo(s)"},
+                    {id: 5, descricao: "Grama(s)"}
+                ];
 
                 $scope.sair = function () {
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
+                };
+
+                $scope.montarPagina = function() {
+                    $scope.consultar();
+
+                    $.ajax({
+                        url: "/marmitex/categoria",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"
+                        },
+                        success: function (data) {
+                            $scope.categorias = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
                 };
 
                 $scope.consultar = function () {
@@ -71,7 +97,9 @@
                             quantidade: ingrediente.quantidade,
                             medida: ingrediente.medida.descricao,
                             vencimento: ingrediente.vencimento,
-                            categoria: ingrediente.categoria.descricao
+                            categoria: ingrediente.categoria.nome,
+                            id_categoria: ingrediente.categoria.id,
+                            valor: ingrediente.valor
                         },
                         success: function () {
                             $scope.consultar();
@@ -84,33 +112,29 @@
 
                 $scope.visualizar = function (ingrediente) {
                     document.getElementById("txtNome").value = ingrediente.nome;
-                    //document.getElementById("categoria").value = ingrediente.categoria.descricao;
-                    $("select#categoria").val(ingrediente.categoria.id);
+                    var cats = document.getElementById("categoria");
+                    for (var i = 0; i < cats.length; i++) {
+                        if(cats[i].innerText === ingrediente.categoria.nome){
+                            cats[i].selected = true;
+                            break;
+                        }
+                    }
+                    var meds = document.getElementById("medida");
+                    for (var i = 0; i < meds.length; i++) {
+                        if(meds[i].innerText === ingrediente.medida){
+                            meds[i].selected = true;
+                            break;
+                        }
+                    }
                     document.getElementById("txtQuantidade").value = ingrediente.quantidade;
-                    document.getElementById("medida").value = ingrediente.medida.descricao;
-                    document.getElementById("txtVencimento").value = ingrediente.vencimento;
-
+                    document.getElementById("txtValor").value = ingrediente.valor;
+                    //document.getElementById("txtVencimento").value = ingrediente.vencimento;
                 };
-
-                $scope.categorias = [
-                    {id: 1, descricao: "Mistura"},
-                    {id: 2, descricao: "Guarnição"},
-                    {id: 3, descricao: "Acompanhamento"},
-                    {id: 4, descricao: "Outros"}
-                ];
-
-                $scope.medidas = [
-                    {id: 1, descricao: "Litro(s)"},
-                    {id: 2, descricao: "Ml(s)"},
-                    {id: 3, descricao: "Unidade(s)"},
-                    {id: 4, descricao: "Kilo(s)"},
-                    {id: 5, descricao: "Grama(s)"}
-                ];
             });
         </script>
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="gerenciarEstoqueCtrl">
-        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="consultar()">
+        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="montarPagina()">
             <div class="wrapper">
                 <div ng-include="'templates/template_admin.html'"></div>
 
@@ -135,7 +159,7 @@
                                         <div class="form-group col-md-3">
                                             <label for="categoria">Categoria:</label>
                                             <select class="form-control" id="categoria" ng-model="recurso.categoria"
-                                                    ng-options="categoria.descricao for categoria in categorias">
+                                                    ng-options="categoria.nome for categoria in categorias">
                                                 <option value="">Selecione uma categoria</option>
                                             </select>
                                         </div>
@@ -157,12 +181,16 @@
                                             <label for="txtVencimento">Data de validade:</label>
                                             <input type="date" id="txtVencimento" ng-model="recurso.vencimento" class="form-control"/>
                                         </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="txtQuantidade">Valor</label>
+                                            <input type="text" class="form-control" ng-model="recurso.valor" name="txtValor" id="txtValor" placeholder="Valor">
+                                        </div>
                                     </div>
 
                                     <!-- SEGUNDA LINHA -->
                                     <div class="row">
                                         <div class="form-group col-md-11">
-                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" ng-disabled="!(recurso.nome && recurso.categoria && recurso.quantidade && recurso.medida && recurso.vencimento)" value="SALVAR" ng-click="salvar(recurso)">Cadastrar</button>
+                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" ng-disabled="!(recurso.nome && recurso.categoria && recurso.quantidade && recurso.medida && recurso.vencimento && recurso.valor)" value="SALVAR" ng-click="salvar(recurso)">Cadastrar</button>
                                             <button type="submit" class="btn btn-warning pull-right" style="display: none" id="alterar" name="operacao" value="ALTERAR" onclick="alterar()">Alterar</button>
                                         </div>
                                     </div>
@@ -188,6 +216,7 @@
                                             <th>Quantidade</th>
                                             <th>Medida</th>
                                             <th>Data de validade</th>
+                                            <th>Valor</th>
                                             <th>Opções</th>
                                         </tr>
                                         <tr ng-repeat="r in recursos">
@@ -201,6 +230,7 @@
                                             <td>{{r.quantidade}}</td>
                                             <td>{{r.medida}}</td>
                                             <td>{{r.dtVencimento}}</td>
+                                            <td>{{r.valor}}</td>
                                             <td>
                                                 <button type='button' class='btn btn-warning' ng-click='visualizar(r)'>Alterar</button>
                                                 <button type='button' class='btn btn-danger' ng-click='excluir(r)'>Excluir</button>

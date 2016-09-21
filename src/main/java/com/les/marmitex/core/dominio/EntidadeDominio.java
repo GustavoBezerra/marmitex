@@ -11,6 +11,7 @@ public class EntidadeDominio implements IEntidade {
 
     private int id;
     private Date dtCriacao;
+    private boolean ativo;
 
     /**
      * @return the id
@@ -38,5 +39,19 @@ public class EntidadeDominio implements IEntidade {
      */
     public void setDtCriacao(Date dtCriacao) {
         this.dtCriacao = dtCriacao;
+    }
+
+    /**
+     * @return the ativo
+     */
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    /**
+     * @param ativo the ativo to set
+     */
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 }
