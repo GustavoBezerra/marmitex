@@ -25,13 +25,14 @@
                     {id: 4, descricao: "Kilo(s)"},
                     {id: 5, descricao: "Grama(s)"}
                 ];
+                $scope.opAlterar = false;
 
                 $scope.sair = function () {
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
 
-                $scope.montarPagina = function() {
+                $scope.montarPagina = function () {
                     $scope.consultar();
 
                     $.ajax({
@@ -111,26 +112,68 @@
                 };
 
                 $scope.visualizar = function (ingrediente) {
+                    $scope.opAlterar = true;
                     document.getElementById("txtNome").value = ingrediente.nome;
                     var cats = document.getElementById("categoria");
                     for (var i = 0; i < cats.length; i++) {
-                        if(cats[i].innerText === ingrediente.categoria.nome){
+                        if (cats[i].innerText === ingrediente.categoria.nome) {
                             cats[i].selected = true;
                             break;
                         }
                     }
                     var meds = document.getElementById("medida");
                     for (var i = 0; i < meds.length; i++) {
-                        if(meds[i].innerText === ingrediente.medida){
+                        if (meds[i].innerText === ingrediente.medida) {
                             meds[i].selected = true;
                             break;
                         }
                     }
                     document.getElementById("txtQuantidade").value = ingrediente.quantidade;
                     document.getElementById("txtValor").value = ingrediente.valor;
-                    //document.getElementById("txtVencimento").value = ingrediente.vencimento;
+                    document.getElementById("txtVencimento").value = converterData(ingrediente.dtVencimento);                    
+                };
+                
+                $scope.alterar = function(ingrediente){
+                    //TODO terminar o alterar
+//                    $.ajax({
+//                        url: "/marmitex/ingrediente",
+//                        type: "POST",
+//                        async: false,
+//                        data: {
+//                            operacao: "ALTERAR",
+//                            nome: ingrediente.nome,
+//                            quantidade: ingrediente.quantidade,
+//                            medida: ingrediente.medida,
+//                            vencimento: ingrediente.vencimento,
+//                            categoria: ingrediente.categoria.nome,
+//                            id_categoria: ingrediente.categoria.id,
+//                            valor: ingrediente.valor,
+//                            id: ingrediente.id
+//                        },
+//                        success: function () {
+//                            $scope.consultar();
+//                        },
+//                        error: function (err) {
+//                            console.log(err.statusText);
+//                        }
+//                    });
+                };
+                
+                $scope.cancelar = function () {
+                    document.getElementById("txtNome").value = ""; 
+                    document.getElementById("categoria")[0].selected=true;
+                    document.getElementById("medida")[0].selected=true;
+                    document.getElementById("txtQuantidade").value = "";
+                    document.getElementById("txtValor").value = "";
+                    document.getElementById("txtVencimento").value = "";
+                    $scope.opAlterar = false;
                 };
             });
+
+            function converterData(data) {
+                var newdate = data.split("/").reverse().join("-");
+                return newdate;
+            }
         </script>
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="gerenciarEstoqueCtrl">
@@ -149,7 +192,7 @@
                                     <div class="box-header with-border" style="text-align: center;">
                                         <i class="glyphicon glyphicon-apple"></i>
                                         <h3 class="box-title">Cadastrar novo recurso</h3>
-                                        <button type="button" class="btn btn-info pull-right" name="cancelar" id="cancelar" disabled>Cancelar</button>
+                                        <button type="button" class="btn btn-info pull-right" ng-if="opAlterar" name="cancelar" ng-click="cancelar()" id="cancelar">Cancelar</button>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
@@ -190,8 +233,8 @@
                                     <!-- SEGUNDA LINHA -->
                                     <div class="row">
                                         <div class="form-group col-md-11">
-                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" ng-disabled="!(recurso.nome && recurso.categoria && recurso.quantidade && recurso.medida && recurso.vencimento && recurso.valor)" value="SALVAR" ng-click="salvar(recurso)">Cadastrar</button>
-                                            <button type="submit" class="btn btn-warning pull-right" style="display: none" id="alterar" name="operacao" value="ALTERAR" onclick="alterar()">Alterar</button>
+                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" ng-if="!opAlterar" ng-disabled="!(recurso.nome && recurso.categoria && recurso.quantidade && recurso.medida && recurso.vencimento && recurso.valor)" value="SALVAR" ng-click="salvar(recurso)">Cadastrar</button>
+                                            <button type="submit" class="btn btn-warning pull-right" ng-if="opAlterar" id="alterar" name="operacao" value="ALTERAR" ng-click="alterar(recurso)">Alterar</button>
                                         </div>
                                     </div>
                                 </div>

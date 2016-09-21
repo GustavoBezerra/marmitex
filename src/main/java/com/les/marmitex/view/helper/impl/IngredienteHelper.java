@@ -1,6 +1,7 @@
 package com.les.marmitex.view.helper.impl;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.les.marmitex.core.dominio.Categoria;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Ingrediente;
@@ -8,12 +9,7 @@ import com.les.marmitex.core.dominio.Resultado;
 import com.les.marmitex.view.helper.IViewHelper;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -73,7 +69,27 @@ public class IngredienteHelper implements IViewHelper {
             i.setId(Integer.valueOf(id));
 
         } else if (("ALTERAR").equals(operacao)) {
+            i = new Ingrediente();
+            c = new Categoria();
+            nome = request.getParameter("nome");
+            quantidade = Double.valueOf(request.getParameter("quantidade"));
+            medida = request.getParameter("medida");
+            dtVencimento = request.getParameter("vencimento");
+            categoria = request.getParameter("categoria");
+            id_categoria = request.getParameter("id_categoria");
+            valor = Double.valueOf(request.getParameter("valor"));
 
+            c.setNome(categoria);
+            c.setId(Integer.valueOf(id_categoria));
+            i.setCategoria(c);
+            i.setNome(nome);
+            i.setQuantidade(quantidade);
+            i.setMedida(medida);
+            i.setDtCriacao(new Date());
+            i.setDtVencimento(new Date(dtVencimento));
+            i.setValor(valor);
+            i.setAtivo(true);
+            i.setId(Integer.valueOf(request.getParameter("id")));
         }
 
         return i;
@@ -83,7 +99,9 @@ public class IngredienteHelper implements IViewHelper {
     public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String operacao = request.getParameter("operacao");
         String retorno = null;
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .setDateFormat("dd/MM/yyyy").create();
 
         if (("SALVAR").equals(operacao)) {
 
