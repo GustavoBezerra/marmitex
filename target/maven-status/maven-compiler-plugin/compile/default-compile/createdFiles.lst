@@ -23,6 +23,7 @@ com\les\marmitex\core\dominio\Endereco.class
 com\les\marmitex\core\dominio\IEntidade.class
 com\les\marmitex\core\dominio\Marmitex.class
 com\les\marmitex\core\dominio\Beneficios.class
+com\les\marmitex\util\teste\TestaGsonDate.class
 com\les\marmitex\view\command\ICommand.class
 com\les\marmitex\util\teste\TestaCategoriaDAO.class
 com\les\marmitex\view\helper\impl\MarmitexHelper.class

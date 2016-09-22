@@ -8,8 +8,11 @@ import com.les.marmitex.core.dominio.Ingrediente;
 import com.les.marmitex.core.dominio.Resultado;
 import com.les.marmitex.view.helper.IViewHelper;
 import java.io.IOException;
-import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,7 +59,17 @@ public class IngredienteHelper implements IViewHelper {
             i.setQuantidade(quantidade);
             i.setMedida(medida);
             i.setDtCriacao(new Date());
-            i.setDtVencimento(new Date(dtVencimento));
+            if (dtVencimento.contains("/")) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date date = sdf.parse(dtVencimento);
+                    i.setDtVencimento(date);
+                } catch (ParseException ex) {
+                    Logger.getLogger(IngredienteHelper.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                i.setDtVencimento(new Date(dtVencimento));
+            }
             i.setValor(valor);
             i.setAtivo(true);
 
@@ -85,8 +98,20 @@ public class IngredienteHelper implements IViewHelper {
             i.setNome(nome);
             i.setQuantidade(quantidade);
             i.setMedida(medida);
+
             i.setDtCriacao(new Date());
-            i.setDtVencimento(new Date(dtVencimento));
+            if (dtVencimento.contains("/")) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date date = sdf.parse(dtVencimento);
+                    i.setDtVencimento(date);
+                } catch (ParseException ex) {
+                    Logger.getLogger(IngredienteHelper.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                i.setDtVencimento(new Date(dtVencimento));
+            }
+
             i.setValor(valor);
             i.setAtivo(true);
             i.setId(Integer.valueOf(request.getParameter("id")));

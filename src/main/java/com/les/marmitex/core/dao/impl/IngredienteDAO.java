@@ -97,7 +97,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             pst.setString(3, ingrediente.getMedida());
             Timestamp timeVenc = new Timestamp(ingrediente.getDtVencimento().getTime());
             pst.setTimestamp(4, timeVenc);
-            pst.setString(5, ingrediente.getCategoria().getNome());
+            pst.setInt(5, ingrediente.getCategoria().getId());
             pst.setDouble(6, ingrediente.getValor());
             pst.setInt(7, ingrediente.getId());
 
