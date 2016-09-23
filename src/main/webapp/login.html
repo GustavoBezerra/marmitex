@@ -18,7 +18,21 @@
             var app = angular.module("login", []);
             app.controller("loginCtrl", function ($scope) {
                 $scope.titulo = "Login";
-
+                
+                $scope.redirecionar = function (data) {
+                    window.sessionStorage.setItem("usuario", data);
+                    var usuario = JSON.parse(data);
+                    if (usuario.id === 1) { // é o admin?
+                        window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
+                    } else {
+                        if (window.sessionStorage["marmitex"] !== undefined) {
+                            window.location.href = "http://localhost:8084/marmitex/escolhas_pedido.html";
+                        } else {
+                            window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html";
+                        }
+                    }
+                }
+                
                 $scope.consultar = function (login) {
                     $.ajax({
                         url: "/marmitex/cliente",
@@ -33,14 +47,7 @@
                             if (data === "[]") {
                                 alert("Nenhum usuário encontrado com o login e a senha informados!");
                             } else {
-                                window.sessionStorage.setItem("usuario", data);
-                                var parseObj = JSON.parse(window.sessionStorage["usuario"]);
-                                var usuario = parseObj;
-                                if (usuario.id === 1) {
-                                    window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
-                                } else {
-                                    window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html";
-                                }
+                                $scope.redirecionar(data);
                             }
                         },
                         error: function () {
@@ -65,8 +72,7 @@
                                 nome: usuario.nome
                             },
                             success: function (data) {
-                                window.sessionStorage.setItem("usuario", data);
-                                window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html";
+                                $scope.redirecionar(data);
                             },
                             error: function () {
                                 alert("Erro ao cadastrar!");
@@ -74,6 +80,7 @@
                         });
                     }
                 };
+
             });
         </script>
     </head>

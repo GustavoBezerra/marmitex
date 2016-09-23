@@ -15,12 +15,15 @@
 
         <script>
             var ingredientes = document.getElementsByName("ingredientes");
-            var ingredientesCheckados;
+            var ingredientesCheckados = new Array();
+            var test = window.sessionStorage["teste"];
+            //alert(test);
             var app = angular.module("montarMarmitex", []);
             app.controller("marmitexCtrl", function ($scope) {
                 $scope.titulo = "Montar marmitex";
+                $scope.preco = 0;
 
-                $scope.consultarTudo = function() {
+                $scope.consultarTudo = function () {
                     $scope.consultarCategorias();
                     $scope.consultarIngredientes();
                 };
@@ -59,6 +62,41 @@
                     });
                 };
 
+                $scope.verificar = function () {
+                    var checks = new Array();
+
+                    for (var i = 0; i < $scope.categorias.length; i++) {
+                        var teste = document.getElementsByName($scope.categorias[i].nome);
+                        for (var j = 0; j < teste.length; j++) {
+                            if (teste[j].checked === true) {
+                                checks.push(teste[j]);
+                            }
+                        }
+                    }
+
+                    if ($scope.preco !== 0) {
+                        window.sessionStorage.clear();
+                        window.sessionStorage.setItem("marmitex", JSON.stringify(ingredientesCheckados));
+                        window.sessionStorage.setItem("preco", angular.copy($scope.preco));
+                        window.location.href = "http://localhost:8084/marmitex/login.html";
+                    }
+                };
+
+                $scope.clicou = function (recurso) {
+                    var r = document.getElementById(recurso.nome);
+                    if (r.checked === true) {
+                        ingredientesCheckados.push(recurso);
+                        $scope.preco += recurso.valor;
+                    } else {
+                        for (var i = ingredientesCheckados.length - 1; i >= 0; i--) {
+                            if (ingredientesCheckados[i] === recurso) {
+                                ingredientesCheckados.splice(i, 1);
+                                break;
+                            }
+                        }
+                        $scope.preco -= recurso.valor;
+                    }
+                };
 
             });
         </script>
@@ -94,10 +132,11 @@
                                         <button type="button" class="btn btn-primary col-md-1 pull-left col-md-push-4">Opção 4</button>
                                         <button type="button" class="btn btn-primary col-md-1 pull-left col-md-push-5">Opção 5</button>
                                     </div>
-                                    <br>
-
-                                    <br>
-                                    <div class="row" ng-repeat="categoria in categorias">
+                                    <br/>
+                                    <div class="row">
+                                        <label class="text-green text-bold col-md-12 col-md-offset-5"><h3>Valor do pedido: R${{preco| number: 2}}</h3></label>
+                                    </div>
+                                    <div id="escolhas" class="row" ng-repeat="categoria in categorias">
                                         <div class="form-group col-md-6" >
                                             <div class="box-header with-border">
                                                 <i class="glyphicon glyphicon-asterisk"></i>
@@ -106,7 +145,7 @@
                                             <div class="form-group">
                                                 <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
                                                     <label>
-                                                        <input type="checkbox">
+                                                        <input type="checkbox" ng-click="clicou(recurso)" name="{{categoria.nome}}" id="{{recurso.nome}}">
                                                         {{recurso.nome}}
                                                     </label>
                                                 </div>
@@ -116,9 +155,7 @@
 
                                     <br>
                                     <div class="row">
-                                        <a href="login.html">
-                                            <button type="button" class="btn btn-google col-md-2 col-md-offset-5"><h4>Pedir marmitex</h4></button>
-                                        </a>
+                                        <button type="button" ng-click="verificar()" class="btn btn-google col-md-2 col-md-offset-5"><h4>Pedir marmitex</h4></button>
                                     </div>
                                 </div>
                             </div>
