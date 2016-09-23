@@ -97,127 +97,23 @@
                                     <br>
 
                                     <br>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
+                                    <div class="row" ng-repeat="categoria in categorias">
+                                        <div class="form-group col-md-6" >
                                             <div class="box-header with-border">
-                                                <i class="glyphicon glyphicon-cutlery"></i>
-                                                <h3 class="box-title">Guarnição</h3>
+                                                <i class="glyphicon glyphicon-asterisk"></i>
+                                                <h3 class="box-title">{{categoria.nome}}</h3>
                                             </div><!-- /.box-header -->
                                             <div class="form-group">
-                                                <div class="checkbox">
+                                                <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
                                                     <label>
                                                         <input type="checkbox">
-                                                        Arroz
-                                                    </label>
-                                                </div>
-
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        Feijão
-                                                    </label>
-                                                </div>
-
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" disabled="">
-                                                        Macarrão
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-                                            <div class="box-header with-border">
-                                                <i class="glyphicon glyphicon-fire"></i>
-                                                <h3 class="box-title">Mistura</h3>
-                                            </div><!-- /.box-header -->
-                                            <div class="form-group">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        Filé de frango
-                                                    </label>
-                                                </div>
-
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        Filé mignon
-                                                    </label>
-                                                </div>
-
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" disabled="">
-                                                        Calabresa
+                                                        {{recurso.nome}}
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-
-
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <div class="box-header with-border">
-                                                <i class="glyphicon glyphicon-ok"></i>
-                                                <h3 class="box-title">Acompanhamento</h3>
-                                            </div><!-- /.box-header -->
-                                            <div class="form-group">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        Batata frita
-                                                    </label>
-                                                </div>
-
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        Mandioca frita
-                                                    </label>
-                                                </div>
-
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" disabled="">
-                                                        Pure de batata
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-                                            <div class="box-header with-border">
-                                                <i class="glyphicon glyphicon-glass"></i>
-                                                <h3 class="box-title">Outros</h3>
-                                            </div><!-- /.box-header -->
-                                            <div class="form-group">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        Coca-cola lata
-                                                    </label>
-                                                </div>
-
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        Guaraná Antartica lata
-                                                    </label>
-                                                </div>
-
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" disabled="">
-                                                        H2HO
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <br>
                                     <div class="row">
                                         <a href="login.html">

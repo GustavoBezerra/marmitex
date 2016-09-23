@@ -52,7 +52,9 @@ public class FrontControllerServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // para aceitar acentuacao
-        request.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");        
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
         //Obtém a uri que invocou esta servlet
         String uri = request.getRequestURI();
@@ -72,13 +74,13 @@ public class FrontControllerServlet extends HttpServlet {
         /*Executa o command que chamará a fachada para executar a operação requisitada
         * o retorno é uma instância da classe resultado que pode conter mensagens derro
         * ou entidades de retorno
-        */
+         */
         Resultado resultado = command.execute(entidade);
 
         /*
         * Executa o método setView do view helper específico para definir como deverá ser apresentado
         * o resultado para o usuário
-        */
+         */
         vh.setView(resultado, request, response);
 
     }

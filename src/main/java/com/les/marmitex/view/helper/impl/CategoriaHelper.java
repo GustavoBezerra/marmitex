@@ -13,34 +13,35 @@ import org.springframework.stereotype.Component;
 
 /**
  * TODO descrição da classe
+ *
  * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
  * @date 12/09/2016
  */
 @Component("/marmitex/categoria")
-public class CategoriaHelper implements IViewHelper{
+public class CategoriaHelper implements IViewHelper {
 
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         String operacao = request.getParameter("operacao");
-        String nome;       
+        String nome;
         int id;
         Categoria c = null;
 
-        if(("SALVAR").equals(operacao)){
+        if (("SALVAR").equals(operacao)) {
             c = new Categoria();
-            nome = request.getParameter("nome");            
-            c.setNome(nome);            
-        } else if(("ALTERAR").equals(operacao)){
+            nome = request.getParameter("nome");
+            c.setNome(nome);
+        } else if (("ALTERAR").equals(operacao)) {
             c = new Categoria();
             id = Integer.valueOf(request.getParameter("id"));
             c.setId(id);
             nome = request.getParameter("nome");
             c.setNome(nome);
-        } else if(("EXCLUIR").equals(operacao)){
+        } else if (("EXCLUIR").equals(operacao)) {
             c = new Categoria();
             id = Integer.valueOf(request.getParameter("id"));
             c.setId(id);
-        } else if(("CONSULTAR").equals(operacao)){
+        } else if (("CONSULTAR").equals(operacao)) {
             c = new Categoria();
         }
 
@@ -57,7 +58,7 @@ public class CategoriaHelper implements IViewHelper{
 
         } else if (("CONSULTAR").equals(operacao)) {
             retorno = gson.toJson(resultado.getEntidades());
-            try {
+            try {                
                 response.getWriter().write(retorno);
             } catch (IOException ex) {
                 System.out.println("ERRO!");
