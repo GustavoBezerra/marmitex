@@ -15,6 +15,7 @@ public class Pedido extends EntidadeDominio{
     private String status;
     private Endereco endereco;
     private Entregador entregador;
+    private List<Pagamento> pagamento;
 
     /**
      * @return the marmitex
@@ -99,5 +100,20 @@ public class Pedido extends EntidadeDominio{
     public void setEntregador(Entregador entregador) {
         this.entregador = entregador;
     }
+
+    /**
+     * @return the pagamento
+     */
+    public List<Pagamento> getPagamento() {
+        return pagamento;
+    }
+
+    /**
+     * @param pagamento the pagamento to set
+     */
+    public void setPagamento(List<Pagamento> pagamento) {
+        this.pagamento = pagamento;
+    }
+ 
 
 }

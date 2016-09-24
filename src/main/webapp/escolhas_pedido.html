@@ -12,12 +12,13 @@
         <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
-        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>        
+        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
             var parseObj = JSON.parse(window.sessionStorage["usuario"]);
             var m = JSON.parse(window.sessionStorage["marmitex"]);
             var p = window.sessionStorage["preco"];
+
         </script>
 
         <script>
@@ -27,10 +28,54 @@
                 $scope.usuario = parseObj;
                 $scope.marmitex = m;
                 $scope.preco = p;
+                $scope.enderecos;
+                $scope.outroEndereco = false;
+                $scope.troco = false;
+
+                $scope.buscarCEP = function (pd) {
+                    var cep = document.getElementById("txtCep").value;
+                    if (cep !== null && cep !== undefined && cep !== "") {
+                        $.ajax({
+                            url: "https://viacep.com.br/ws/" + cep + "/json/",
+                            async: false,
+                            data: {
+                            },
+                            success: function (data) {
+                                pd.cidade = data.localidade;
+                                pd.rua = data.logradouro;
+                                pd.bairro = data.bairro;                                
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                }
 
                 $scope.sair = function () {
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
+                };
+
+                $scope.consultarEndereco = function () {
+                    $.ajax({
+                        url: "/marmitex/endereco",
+                        type: "POST",
+                        data: {
+                            operacao: "CONSULTAR",
+                            id: $scope.usuario.id
+                        },
+                        success: function (data) {
+                            $scope.enderecos = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.consultarTudo = function () {
+                    $scope.consultarEndereco();
                 };
 
                 $scope.cancelar = function () {
@@ -41,11 +86,27 @@
                         $scope.sair();
                     }
                 };
+
+                $scope.novoEndereco = function () {
+                    if ($scope.outroEndereco === true) {
+                        $scope.outroEndereco = false;
+                    } else {
+                        $scope.outroEndereco = true;
+                    }
+                };
+
+                $scope.pagamentoDinheiro = function () {
+                    if ($scope.troco === true) {
+                        $scope.troco = false;
+                    } else {
+                        $scope.troco = true;
+                    }
+                };
             });
         </script>
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="DadosCtrl">
-        <div id="body" class="hold-transition skin-blue sidebar-mini">
+        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="consultarTudo()">
             <div class="wrapper">
                 <div ng-include="'templates/template_pedido.html'"></div>
 
@@ -64,16 +125,111 @@
 
                                     </div>
                                     <br>
-                                    <!-- PRIMEIRA LINHA -->
+                                    <!-- INFORMAÇÕES -->
                                     <div class="row">
                                         <div class="form-group col-md-12">
-                                            <h4 class="pull-right text-bold text-green">Valor do pedido:R${{preco | number:2}}</h4>                                            
+                                            <h4 class="pull-right text-bold text-green">Valor do pedido:<br/>R${{preco| number:2}}</h4>
                                             <h4 class="text-bold text-warning">{{usuario.nome}}, estes são os itens do pedido:</h4>
                                             <ul>
-                                                <li ng-repeat="mar in marmitex">{{mar.nome}}</li>                                                
+                                                <li ng-repeat="mar in marmitex">{{mar.nome}}</li>
                                             </ul>
                                         </div>
-                                    </div>                                    
+                                    </div>
+                                    <!-- DADOS DA ENTREGA -->
+                                    <div id="dados_do_endereco" class="box-body">
+                                        <div class="box-header with-border">
+                                            <i class="glyphicon glyphicon-road"></i>
+                                            <h3 class="box-title">Endereço de entrega</h3>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <div class="col-md-6">
+                                                    <label for="enderecos" class="text-bold">Escolha o endereço de entrega:</label>
+                                                    <select class="form-control" id="enderecos" ng-model="pedido.endereco">
+                                                        <option value="">Selecione um endereço</option>
+                                                        <option value="{{endereco.id}}" ng-repeat="endereco in enderecos">
+                                                            {{endereco.rua}}, {{endereco.numero}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div ng-if="!pedido.endereco">
+                                                    <label for="other" class="text-bold">Ou utilize um novo endereço:</label>
+                                                    <button id="other" ng-click="novoEndereco()" class="btn btn-warning">Utilizar outro endereço</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" ng-if="outroEndereco && !pedido.endereco">
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label>CEP</label>
+                                                    <input type="text" class="form-control" name="txtCep" id="txtCep" placeholder="CEP" ng-blur="buscarCEP(pedido.outro_endereco)" ng-model="pedido.outro_endereco.cep">
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>Cidade</label>
+                                                    <input type="text" class="form-control" name="txtCidade" id="txtCidade" placeholder="Cidade" ng-model="pedido.outro_endereco.cidade">
+                                                </div>
+                                            </div>
+                                            <!-- TERCEIRA LINHA -->
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label for="exampleInput">Endereço</label>
+                                                    <input type="text" name="txtEndereco" id="txtEndereco" class="form-control" placeholder="Endereço (Somente nome da rua)" ng-model="pedido.outro_endereco.rua">
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="exampleInput">Número</label>
+                                                    <input type="tel" class="form-control" name="txtNumero" id="txtNumero" placeholder="Número" ng-model="pedido.outro_endereco.numero">
+                                                </div>
+                                            </div>
+                                            <!-- SEGUNDA LINHA -->
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label>Complemento</label>
+                                                    <input type="text" class="form-control" name="txtComplemento" id="txtComplemento" placeholder="Complemento" ng-model="pedido.outro_endereco.complemento">
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>Bairro</label>
+                                                    <input type="text" class="form-control" name="txtBairro" id="txtBairro" placeholder="Bairro" ng-model="pedido.outro_endereco.bairro">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DADOS DO PAGAMENTO -->
+                                    <div id="dados_do_pagamento" class="box-body">
+                                        <div class="box-header with-border">
+                                            <i class="glyphicon glyphicon-usd"></i>
+                                            <h3 class="box-title">Forma de pagamento</h3>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <div class="col-md-12" style="font-size: medium;">
+                                                    <label class="col-md-3">
+                                                        <input type="checkbox" id="cartao" name="pagamento" ng-model="pedido.pagamento.cartao">
+                                                        Cartão
+                                                    </label>
+                                                    <label class="col-md-4">
+                                                        <input type="checkbox" ng-click="pagamentoDinheiro()" ng-model="pedido.pagamento.dinheiro" id="dinheiro" name="pagamento">
+                                                        Dinheiro
+                                                        <label for="troco" ng-if="troco">Quanto de troco?</label>
+                                                        <input type="text" ng-if="troco" id="troco" class="" placeholder="R$0.00"/>
+                                                    </label>
+                                                    <label class="col-md-5">
+                                                        <input type="checkbox" id="credito" name="pagamento" ng-model="pedido.pagamento.credito">
+                                                        Créditos no sistema
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <button type="button" 
+                                                ng-disabled="!((pedido.pagamento.credito || pedido.pagamento.dinheiro || pedido.pagamento.cartao)
+                                                                    && (pedido.endereco ||
+                                                                            (outroEndereco &&
+                                                                                    (pedido.outro_endereco.cep && pedido.outro_endereco.numero && pedido.outro_endereco.complemento && pedido.outro_endereco.numero && pedido.outro_endereco.complemento && pedido.outro_endereco.bairro))))" 
+                                                class="btn btn-success col-md-2 col-md-offset-5"><h4>Confirmar</h4></button>
+                                    </div>
                                 </div>
                             </div><!-- /.box-body -->
                         </div>

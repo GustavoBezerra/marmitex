@@ -174,10 +174,10 @@ public class EnderecoDAO extends AbstractJdbcDAO {
 
             sql.append("SELECT * FROM tb_cliente_endereco c inner join tb_endereco e");
             if (endereco.getId() != 0) {
-                sql.append(" WHERE e.id_endereco=?;");
+                sql.append(" WHERE e.id_endereco=? and e.ativo=true;");
                 enderecoEspecifico = true;
             } else {
-                sql.append(" WHERE c.id_cliente = ? and c.id_endereco = e.id_endereco;");
+                sql.append(" WHERE c.id_cliente = ? and c.id_endereco = e.id_endereco and e.ativo=true;");
             }
 
             pst = connection.prepareStatement(sql.toString());
