@@ -18,7 +18,6 @@
             var parseObj = JSON.parse(window.sessionStorage["usuario"]);
             var m = JSON.parse(window.sessionStorage["marmitex"]);
             var p = window.sessionStorage["preco"];
-
         </script>
 
         <script>
@@ -28,6 +27,7 @@
                 $scope.usuario = parseObj;
                 $scope.marmitex = m;
                 $scope.preco = p;
+                $scope.entrega = 2;
                 $scope.enderecos;
                 $scope.outroEndereco = false;
                 $scope.troco = false;
@@ -43,7 +43,7 @@
                             success: function (data) {
                                 pd.cidade = data.localidade;
                                 pd.rua = data.logradouro;
-                                pd.bairro = data.bairro;                                
+                                pd.bairro = data.bairro;
                             },
                             error: function (err) {
                                 console.log(err);
@@ -51,11 +51,6 @@
                         });
                     }
                 }
-
-                $scope.sair = function () {
-                    window.sessionStorage.clear();
-                    window.location.href = "http://localhost:8084/marmitex/login.html";
-                };
 
                 $scope.consultarEndereco = function () {
                     $.ajax({
@@ -102,6 +97,26 @@
                         $scope.troco = true;
                     }
                 };
+
+                $scope.finalizar = function (data) {
+                    if ($scope.pedido.endereco === undefined || $scope.pedido.endereco === "") {
+                        window.sessionStorage.setItem("endereco", JSON.stringify(data.outro_endereco));
+                    } else { // escolheu um endereço cadastrado
+                        for (var i = 0; i < $scope.enderecos.length; i++) {
+                            if ($scope.enderecos[i].id === parseInt($scope.pedido.endereco)) {
+                                window.sessionStorage.setItem("endereco", JSON.stringify($scope.enderecos[i]));
+                                break;
+                            }
+                        }
+                    }
+                    window.sessionStorage.setItem("pedido", JSON.stringify(data));
+                    window.sessionStorage.setItem("total", JSON.stringify($scope.total()));
+                    window.location.href = "http://localhost:8084/marmitex/resumo_pedido.html";
+                };
+
+                $scope.total = function () {
+                    return parseFloat($scope.preco) + parseFloat($scope.entrega)
+                }
             });
         </script>
     </head>
@@ -128,7 +143,11 @@
                                     <!-- INFORMAÇÕES -->
                                     <div class="row">
                                         <div class="form-group col-md-12">
-                                            <h4 class="pull-right text-bold text-green">Valor do pedido:<br/>R${{preco| number:2}}</h4>
+                                            <h4 class="pull-right text-bold text-warning">
+                                                <label>Valor do pedido:<br/>R${{preco| number:2}}</label><br/>
+                                                <label class="text-info">Valor da entrega:<br/>R${{entrega| number:2}}</label>
+                                            </h4>
+                                            <br/>                                            
                                             <h4 class="text-bold text-warning">{{usuario.nome}}, estes são os itens do pedido:</h4>
                                             <ul>
                                                 <li ng-repeat="mar in marmitex">{{mar.nome}}</li>
@@ -172,12 +191,12 @@
                                             <!-- TERCEIRA LINHA -->
                                             <div class="row">
                                                 <div class="form-group col-md-6">
-                                                    <label for="exampleInput">Endereço</label>
+                                                    <label>Endereço</label>
                                                     <input type="text" name="txtEndereco" id="txtEndereco" class="form-control" placeholder="Endereço (Somente nome da rua)" ng-model="pedido.outro_endereco.rua">
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label for="exampleInput">Número</label>
-                                                    <input type="tel" class="form-control" name="txtNumero" id="txtNumero" placeholder="Número" ng-model="pedido.outro_endereco.numero">
+                                                    <label>Número</label>
+                                                    <input type="text" class="form-control" name="txtNumero" id="txtNumero" placeholder="Número" ng-model="pedido.outro_endereco.numero">
                                                 </div>
                                             </div>
                                             <!-- SEGUNDA LINHA -->
@@ -211,7 +230,7 @@
                                                         <input type="checkbox" ng-click="pagamentoDinheiro()" ng-model="pedido.pagamento.dinheiro" id="dinheiro" name="pagamento">
                                                         Dinheiro
                                                         <label for="troco" ng-if="troco">Quanto de troco?</label>
-                                                        <input type="text" ng-if="troco" id="troco" class="" placeholder="R$0.00"/>
+                                                        <input type="text" ng-if="troco" id="troco" class="" ng-model="pedido.pagamento.troco" placeholder="R$0.00"/>
                                                     </label>
                                                     <label class="col-md-5">
                                                         <input type="checkbox" id="credito" name="pagamento" ng-model="pedido.pagamento.credito">
@@ -221,14 +240,30 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- TOTAL -->
                                     
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <div class="col-md-8" style="font-size: medium;">
+                                                    <h3 class="pull-right text-bold text-success center">
+                                                        Total: R${{total()}}
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                    {{pedido}}
                                     <div class="row">
                                         <button type="button" 
                                                 ng-disabled="!((pedido.pagamento.credito || pedido.pagamento.dinheiro || pedido.pagamento.cartao)
                                                                     && (pedido.endereco ||
                                                                             (outroEndereco &&
                                                                                     (pedido.outro_endereco.cep && pedido.outro_endereco.numero && pedido.outro_endereco.complemento && pedido.outro_endereco.numero && pedido.outro_endereco.complemento && pedido.outro_endereco.bairro))))" 
-                                                class="btn btn-success col-md-2 col-md-offset-5"><h4>Confirmar</h4></button>
+                                                ng-click="finalizar(pedido)" 
+                                                class="btn btn-success col-md-2 col-md-offset-5">
+                                            <h4>Confirmar</h4>
+                                        </button>
                                     </div>
                                 </div>
                             </div><!-- /.box-body -->
