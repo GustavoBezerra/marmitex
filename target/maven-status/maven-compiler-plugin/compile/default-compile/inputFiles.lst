@@ -20,6 +20,7 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\EntregadorHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\EnderecoHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Regras.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Pagamento.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Cliente.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\command\impl\AbstractCommand.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Marmitex.java
@@ -38,6 +39,7 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestaGsonDate.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\command\ICommand.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\EntregadorDAO.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TesteGson.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Categoria.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestarConexao.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Endereco.java
@@ -50,10 +52,12 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\fachada\IFachada.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\command\impl\ExcluirCommand.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\ConverteDate.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\PedidoHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Ingrediente.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\controller\FrontControllerServlet.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\EnderecoDAO.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\MarmitexHelper.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Status.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestarEndereco.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Resultado.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\CampanhaHelper.java

@@ -31,6 +31,7 @@
                 $scope.enderecos;
                 $scope.outroEndereco = false;
                 $scope.troco = false;
+                var endereco;
 
                 $scope.buscarCEP = function (pd) {
                     var cep = document.getElementById("txtCep").value;
@@ -99,21 +100,44 @@
                 };
 
                 $scope.finalizar = function (data) {
-                    if ($scope.pedido.endereco === undefined || $scope.pedido.endereco === "") {
+                    if ($scope.pedido.endereco === undefined || $scope.pedido.endereco === "") {                        
                         window.sessionStorage.setItem("endereco", JSON.stringify(data.outro_endereco));
+                        endereco = JSON.stringify(data.outro_endereco);
                     } else { // escolheu um endereço cadastrado
                         for (var i = 0; i < $scope.enderecos.length; i++) {
                             if ($scope.enderecos[i].id === parseInt($scope.pedido.endereco)) {
+                                $scope.enderecos[i].dtCriacao = null;
                                 window.sessionStorage.setItem("endereco", JSON.stringify($scope.enderecos[i]));
+                                endereco = JSON.stringify($scope.enderecos[i]);
                                 break;
                             }
                         }
                     }
-                    window.sessionStorage.setItem("pedido", JSON.stringify(data));
-                    window.sessionStorage.setItem("total", JSON.stringify($scope.total()));
-                    window.location.href = "http://localhost:8084/marmitex/resumo_pedido.html";
-                };
 
+                    $.ajax({
+                        url: "/marmitex/pedido",
+                        type: "POST",
+                        data: {
+                            operacao: "SALVAR",
+                            endereco: endereco,
+                            pedido: data,
+                            total: $scope.total(),
+                            ingredientes: JSON.stringify($scope.marmitex),
+                            dinheiro: data.pagamento.dinheiro,
+                            troco: data.pagamento.troco,
+                            cartao: data.pagamento.cartao,
+                            credito: data.pagamento.credito
+                        },
+                        success: function (data) {
+                            window.sessionStorage.setItem("pedido", JSON.stringify(data));
+                            window.sessionStorage.setItem("total", JSON.stringify($scope.total()));
+                            //window.location.href = "http://localhost:8084/marmitex/resumo_pedido.html";
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
                 $scope.total = function () {
                     return parseFloat($scope.preco) + parseFloat($scope.entrega)
                 }
@@ -242,17 +266,17 @@
                                     </div>
 
                                     <!-- TOTAL -->
-                                    
-                                        <div class="row">
-                                            <div class="form-group col-md-12">
-                                                <div class="col-md-8" style="font-size: medium;">
-                                                    <h3 class="pull-right text-bold text-success center">
-                                                        Total: R${{total()}}
-                                                    </h3>
-                                                </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-md-12">
+                                            <div class="col-md-8" style="font-size: medium;">
+                                                <h3 class="pull-right text-bold text-success center">
+                                                    Total: R${{total()}}
+                                                </h3>
                                             </div>
                                         </div>
-                                    
+                                    </div>
+
                                     {{pedido}}
                                     <div class="row">
                                         <button type="button" 

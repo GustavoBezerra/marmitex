@@ -1,6 +1,8 @@
+com\les\marmitex\core\dominio\Pagamento.class
 com\les\marmitex\view\helper\impl\EnderecoHelper.class
 com\les\marmitex\core\dao\impl\ClienteDAO.class
 com\les\marmitex\util\teste\TestaDate.class
+com\les\marmitex\view\helper\impl\PedidoHelper.class
 com\les\marmitex\core\fachada\impl\Fachada.class
 com\les\marmitex\util\ConverteDate.class
 com\les\marmitex\util\teste\TestarSpring.class
@@ -18,6 +20,8 @@ com\les\marmitex\util\teste\TestarIngredienteDAO.class
 com\les\marmitex\view\command\impl\AbstractCommand.class
 com\les\marmitex\core\dominio\Campanha.class
 com\les\marmitex\core\strategy\impl\ValidarCamposEndereco.class
+com\les\marmitex\view\helper\impl\PedidoHelper$1.class
+com\les\marmitex\util\teste\TesteGson$1.class
 com\les\marmitex\core\dao\IDAO.class
 com\les\marmitex\core\dominio\Endereco.class
 com\les\marmitex\core\dominio\IEntidade.class
@@ -49,7 +53,9 @@ com\les\marmitex\core\dao\impl\CategoriaDAO.class
 com\les\marmitex\core\fachada\IFachada.class
 com\les\marmitex\view\command\impl\ExcluirCommand.class
 com\les\marmitex\core\dominio\Entregador.class
+com\les\marmitex\core\dominio\Status.class
 com\les\marmitex\util\teste\TestarCliente.class
+com\les\marmitex\util\teste\TesteGson.class
 com\les\marmitex\util\teste\TestaEntregadorDAO.class
 com\les\marmitex\core\dominio\Cliente.class
 com\les\marmitex\core\dao\impl\AbstractJdbcDAO.class
