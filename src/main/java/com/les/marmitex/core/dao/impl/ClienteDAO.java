@@ -39,7 +39,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
         try {
             Cliente cliente = (Cliente) entidade;
             connection.setAutoCommit(false);
-
+            
             StringBuilder sql = new StringBuilder();
             sql.append("INSERT INTO tb_cliente(nome, telefone, login, senha, ");
             sql.append("dt_criacao, credito) VALUES (?,?,?,?,?,?)");
@@ -226,6 +226,46 @@ public class ClienteDAO extends AbstractJdbcDAO {
             }
         }
         return clientes;
+    }
+    
+    public boolean verificarDuplicidade(Cliente c){
+        openConnection();
+        PreparedStatement pst = null;
+        
+        try {            
+            connection.setAutoCommit(false);
+
+            StringBuilder sql = new StringBuilder();
+
+            sql.append("SELECT * FROM tb_cliente WHERE login like ?;");
+            
+            pst = connection.prepareStatement(sql.toString());            
+            pst.setString(1, c.getUsuario().getLogin());
+                
+            ResultSet rs = pst.executeQuery();            
+            while (rs.next()) {
+                return false;
+            }
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
+            }
+            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+        } catch (ClassCastException ce) {
+            System.out.println(ANSI_RED + "[ERROR] - Entidade " + c.getClass().getSimpleName() + " não é um Cliente!" + ANSI_RESET);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+            }
+        }
+        return true;
     }
 
 }

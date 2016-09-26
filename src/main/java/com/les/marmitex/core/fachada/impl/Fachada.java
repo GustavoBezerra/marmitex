@@ -1,6 +1,7 @@
 package com.les.marmitex.core.fachada.impl;
 
 import com.les.marmitex.core.dao.IDAO;
+import com.les.marmitex.core.dominio.Cliente;
 import com.les.marmitex.core.dominio.Endereco;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Marmitex;
@@ -12,6 +13,7 @@ import com.les.marmitex.core.strategy.impl.EfetuarDevolucao;
 import com.les.marmitex.core.strategy.impl.ValidarCamposEmBranco;
 import com.les.marmitex.core.strategy.impl.ValidarCamposEndereco;
 import com.les.marmitex.core.strategy.impl.ValidarEstoque;
+import com.les.marmitex.core.strategy.impl.VerificarEmailRepetido;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +42,7 @@ public class Fachada implements IFachada {
         ValidarCamposEndereco vCamposEndereco = new ValidarCamposEndereco();
         ValidarEstoque vEstoque = new ValidarEstoque();
         EfetuarDevolucao efetuarDevolucao = new EfetuarDevolucao();
+        VerificarEmailRepetido verificarEmailRepetido = new VerificarEmailRepetido();
 
 
         /* ------- DECLARAÇÃO DAS RNS POR OPERAÇÃO/ENTIDADE -------  */
@@ -49,18 +52,21 @@ public class Fachada implements IFachada {
         List<IStrategy> rnsConsultarEndereco = new ArrayList<IStrategy>();
         List<IStrategy> rnsMontarMarmitex = new ArrayList<>();
         List<IStrategy> rnsAlterarPedido = new ArrayList<>();
+        List<IStrategy> rnsSalvarCliente = new ArrayList<IStrategy>();
 
 
         /* ------- ADD STRATEGIES EM SUAS RESPECTIVAS OPERAÇÕES -------  */
 //        rnsSalvarEndereco.add(vCamposEndereco);
         rnsMontarMarmitex.add(vEstoque);
         rnsAlterarPedido.add(efetuarDevolucao);
+        rnsSalvarCliente.add(verificarEmailRepetido);
 
 
         /* ------- DECLARAÇÃO DOS RNS POR ENTIDADE -------  */
         Map<String, List<IStrategy>> rnsEndereco = new HashMap<String, List<IStrategy>>();
         Map<String, List<IStrategy>> rnsMarmitex = new HashMap<String, List<IStrategy>>();
         Map<String, List<IStrategy>> rnsPedido = new HashMap<String, List<IStrategy>>();
+        Map<String, List<IStrategy>> rnsCliente = new HashMap<String, List<IStrategy>>();
 
 
         /* ------- ADD OS MAPS POR OPERAÇÃO EM SUAS ENTIDADES -------  */
@@ -68,13 +74,14 @@ public class Fachada implements IFachada {
         rnsEndereco.put("CONSULTAR", rnsSalvarEndereco);
         rnsMarmitex.put("ALTERAR", rnsMontarMarmitex);
         rnsPedido.put("ALTERAR", rnsAlterarPedido);
+        rnsCliente.put("SALVAR", rnsSalvarCliente);
 
 
         /* ------- ADD OS MAPS POR ENTIDADES NO MAP GERAL -------  */
         rns.put(Endereco.class.getName(), rnsEndereco);
         rns.put(Marmitex.class.getName(), rnsMarmitex);
         rns.put(Pedido.class.getName(), rnsPedido);
-
+        rns.put(Cliente.class.getName(), rnsCliente);
     }
 
     @Override

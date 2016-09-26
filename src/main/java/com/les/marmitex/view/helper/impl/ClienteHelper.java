@@ -2,6 +2,7 @@ package com.les.marmitex.view.helper.impl;
 
 import com.google.gson.Gson;
 import com.les.marmitex.core.dominio.Cliente;
+import com.les.marmitex.core.dominio.Credito;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Resultado;
 import com.les.marmitex.core.dominio.Usuario;
@@ -26,6 +27,7 @@ public class ClienteHelper implements IViewHelper {
 
     Cliente c = null;
     Usuario u = null;
+    Credito cr = null;
 
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
@@ -50,6 +52,7 @@ public class ClienteHelper implements IViewHelper {
         } else if (("SALVAR").equals(operacao)) {
             u = new Usuario();
             c = new Cliente();
+            cr = new Credito();
 
             login = request.getParameter("login");
             senha = request.getParameter("senha");
@@ -62,6 +65,7 @@ public class ClienteHelper implements IViewHelper {
             c.setNome(nome);
             c.setDtCriacao(new Date());
             c.setTelefone(telefone);
+            c.setCredito(cr);
         } else if (("ALTERAR").equals(operacao)) {
             u = new Usuario();
             c = new Cliente();
@@ -98,7 +102,7 @@ public class ClienteHelper implements IViewHelper {
         l.add(c);
 
         if (("SALVAR").equals(operacao)) {
-            retorno = gson.toJson(c);
+            retorno = gson.toJson(resultado);
             try {
                 response.getWriter().write(retorno);
             } catch (IOException ex) {

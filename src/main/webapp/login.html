@@ -18,10 +18,10 @@
             var app = angular.module("login", []);
             app.controller("loginCtrl", function ($scope) {
                 $scope.titulo = "Login";
-                
+
                 $scope.redirecionar = function (data) {
                     window.sessionStorage.setItem("usuario", data);
-                    var usuario = JSON.parse(data);
+                    var usuario = data;
                     if (usuario.id === 1) { // é o admin?
                         window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
                     } else {
@@ -32,7 +32,7 @@
                         }
                     }
                 }
-                
+
                 $scope.consultar = function (login) {
                     $.ajax({
                         url: "/marmitex/cliente",
@@ -72,7 +72,13 @@
                                 nome: usuario.nome
                             },
                             success: function (data) {
-                                $scope.redirecionar(data);
+                                var resultado = JSON.parse(data);
+                                if (resultado.mensagem !== undefined && resultado.mensagem !== null) {
+                                    alert(resultado.mensagem);
+                                } else {
+                                    $scope.redirecionar(resultado.entidades[0]);
+                                }
+                                
                             },
                             error: function () {
                                 alert("Erro ao cadastrar!");
