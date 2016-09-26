@@ -167,6 +167,15 @@
                     $scope.opAlterar = false;
                     delete $scope.recurso;
                 };
+                
+                $scope.getQtde = function(r){
+                    if(r.medida === 'Unidade(s)'){
+                        return r.quantidade;
+                    }
+                    else{
+                        return r.quantidade.toFixed(3);
+                    }
+                };
             });
 
             function converterData(data) {
@@ -264,16 +273,16 @@
                                         </tr>
                                         <tr ng-repeat="r in recursos">
                                             <td>
-                                                <a ng-click="verDetalhes(r);">
+                                                <a ng-click="visualizar(r)">
                                                     {{r.id}}
                                                 </a>
                                             </td>
                                             <td>{{r.nome}}</td>
                                             <td>{{r.categoria.nome}}</td>
-                                            <td>{{r.quantidade}}</td>
+                                            <td>{{getQtde(r)}}</td>
                                             <td>{{r.medida}}</td>
                                             <td>{{r.dtVencimento}}</td>
-                                            <td>{{r.valor}}</td>
+                                            <td>R${{r.valor | number:2}}</td>
                                             <td>
                                                 <button type='button' class='btn btn-warning' ng-click='visualizar(r)'>Alterar</button>
                                                 <button type='button' class='btn btn-danger' ng-click='excluir(r)'>Excluir</button>

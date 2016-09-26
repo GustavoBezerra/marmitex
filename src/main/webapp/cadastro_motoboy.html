@@ -54,6 +54,7 @@
                             id: motoboy.id
                         },
                         success: function () {
+                            motoboy.nome="";
                             $scope.consultar();
                         },
                         error: function (err) {
@@ -72,6 +73,7 @@
                             nome: motoboy.nome
                         },
                         success: function () {
+                            $scope.cancelar();
                             $scope.consultar();
                         },
                         error: function (err) {
@@ -136,7 +138,7 @@
                                     <div class="row">
                                         <div class="form-group col-md-5">
                                             <label for="txtNome">Nome do motoboy</label>
-                                            <input type="text" class="form-control" ng-model="motoboy.nome" name="txtNome" id="txtNome" placeholder="Nome da categoria">
+                                            <input type="text" class="form-control" ng-model="motoboy.nome" name="txtNome" id="txtNome" placeholder="Nome do motoboy">
                                         </div>
                                     </div>
                                     <!-- SEGUNDA LINHA -->
