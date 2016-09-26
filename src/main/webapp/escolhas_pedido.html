@@ -100,7 +100,7 @@
                 };
 
                 $scope.finalizar = function (data) {
-                    if ($scope.pedido.endereco === undefined || $scope.pedido.endereco === "") {                        
+                    if ($scope.pedido.endereco === undefined || $scope.pedido.endereco === "") {
                         window.sessionStorage.setItem("endereco", JSON.stringify(data.outro_endereco));
                         endereco = JSON.stringify(data.outro_endereco);
                     } else { // escolheu um endereço cadastrado
@@ -113,7 +113,8 @@
                             }
                         }
                     }
-
+                    window.sessionStorage.setItem("pedido", JSON.stringify(data));
+                    window.sessionStorage.setItem("total", JSON.stringify($scope.total()));
                     $.ajax({
                         url: "/marmitex/pedido",
                         type: "POST",
@@ -126,12 +127,11 @@
                             dinheiro: data.pagamento.dinheiro,
                             troco: data.pagamento.troco,
                             cartao: data.pagamento.cartao,
-                            credito: data.pagamento.credito
+                            credito: data.pagamento.credito,
+                            id_cliente: $scope.usuario.id
                         },
                         success: function (data) {
-                            window.sessionStorage.setItem("pedido", JSON.stringify(data));
-                            window.sessionStorage.setItem("total", JSON.stringify($scope.total()));
-                            //window.location.href = "http://localhost:8084/marmitex/resumo_pedido.html";
+                            window.location.href = "http://localhost:8084/marmitex/resumo_pedido.html";
                         },
                         error: function (err) {
                             console.log(err.statusText);

@@ -8,6 +8,7 @@ com\les\marmitex\util\ConverteDate.class
 com\les\marmitex\util\teste\TestarSpring.class
 com\les\marmitex\core\dao\impl\IngredienteDAO.class
 com\les\marmitex\view\helper\IViewHelper.class
+com\les\marmitex\core\dao\impl\PagamentoDAO.class
 com\les\marmitex\core\strategy\impl\ValidarCamposEmBranco.class
 com\les\marmitex\core\dao\impl\PedidoDAO.class
 com\les\marmitex\core\dominio\Regras.class
@@ -45,6 +46,7 @@ com\les\marmitex\util\teste\TestarEnum.class
 com\les\marmitex\view\command\impl\AlterarCommand.class
 com\les\marmitex\util\teste\TestarConexao.class
 com\les\marmitex\util\teste\TestarEndereco.class
+com\les\marmitex\util\teste\TestarSalvarPedido.class
 com\les\marmitex\core\dao\impl\EntregadorDAO.class
 com\les\marmitex\core\dominio\Pedido.class
 com\les\marmitex\view\helper\impl\IngredienteHelper.class

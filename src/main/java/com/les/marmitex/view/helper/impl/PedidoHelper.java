@@ -3,6 +3,7 @@ package com.les.marmitex.view.helper.impl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.les.marmitex.core.dominio.Cliente;
 import com.les.marmitex.core.dominio.Endereco;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Entregador;
@@ -12,6 +13,7 @@ import com.les.marmitex.core.dominio.Pagamento;
 import com.les.marmitex.core.dominio.Pedido;
 import com.les.marmitex.core.dominio.Resultado;
 import com.les.marmitex.core.dominio.Status;
+import com.les.marmitex.core.dominio.Usuario;
 import com.les.marmitex.view.helper.IViewHelper;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,16 +33,16 @@ import org.springframework.stereotype.Component;
 @Component("/marmitex/pedido")
 public class PedidoHelper implements IViewHelper {
 
+    Pedido pedido = null;
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
-        String operacao = request.getParameter("operacao");
-        Pedido pedido = null;
+        String operacao = request.getParameter("operacao");        
         List<Marmitex> marmitexs;
         Marmitex marmitex;
         List<Pagamento> pagamento;
         Endereco endereco = null;
         Entregador entregador = null;
-        String total;        
+        String total;
         String dinheiro;
         String troco;
         String cartao;
@@ -52,16 +54,25 @@ public class PedidoHelper implements IViewHelper {
             marmitex = new Marmitex();
             pagamento = new ArrayList<>();
             marmitexs = new ArrayList<>();
+            Cliente c = new Cliente();
+            double valor_marmitex = 0;
 
             String json = request.getParameter("ingredientes");
             Gson gson = new GsonBuilder()
                     .setDateFormat("dd/MM/yyyy").create();
             endereco = gson.fromJson(request.getParameter("endereco"), Endereco.class);
+            c.setId(Integer.valueOf(request.getParameter("id_cliente")));
+            pedido.setCliente(c);
             Ingrediente in;
-            List<Ingrediente> ingredientes = gson.fromJson(json, new TypeToken<List<Ingrediente>>(){}.getType());
+            List<Ingrediente> ingredientes = gson.fromJson(json, new TypeToken<List<Ingrediente>>() {
+            }.getType());
             marmitex.setIngredientes(ingredientes);
+            for (int i = 0; i < marmitex.getIngredientes().size(); i++) {
+                valor_marmitex += marmitex.getIngredientes().get(i).getValor();
+            }
+            marmitex.setValor(valor_marmitex);
             marmitexs.add(marmitex);
-            
+
             pedido.setMarmitex(marmitexs);
             pedido.setValorFrete(2.00);
             pedido.setDtCriacao(new Date());
@@ -98,7 +109,30 @@ public class PedidoHelper implements IViewHelper {
 
     @Override
     public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String operacao = request.getParameter("operacao");
+        String retorno = null;
+        //Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .setDateFormat("dd/MM/yyyy").create();
+
+        if (("SALVAR").equals(operacao)) {
+            try {
+                response.getWriter().write(gson.toJson(pedido));
+            } catch (IOException ex) {
+                System.out.println("ERRO!");
+            }
+        } else if (("CONSULTAR").equals(operacao)) {
+            retorno = gson.toJson(resultado.getEntidades());
+            try {
+                response.getWriter().write(retorno);
+            } catch (IOException ex) {
+                System.out.println("ERRO!");
+            }
+        } else if (("EXCLUIR").equals(operacao)) {
+
+        } else if (("ALTERAR").equals(operacao)) {
+
+        }
     }
 
 }
