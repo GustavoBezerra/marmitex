@@ -186,6 +186,27 @@
                     var ano = data.getFullYear();
                     return dia + "/" + mes + "/" + ano;
                 };
+                
+                $scope.Devolver = function (pedido) {
+                    $.ajax({
+                        url: "/marmitex/pedido",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "ALTERAR",
+                            valor_total: pedido.valorTotal,
+                            id_pedido: pedido.id,
+                            status: "Devolvido",
+                            cliente: JSON.stringify(pedido.cliente)
+                        },
+                        success: function (data) {
+                            $scope.getPedidos();
+                        },
+                        error: function (err) {
+                            alert("Erro ao alterar o pedido!\n" + err);
+                        }
+                    });
+                };
             });
         </script>
     </head>
@@ -285,7 +306,7 @@
                                                 <label class='label btn-danger' ng-if="pedido.status === 'Devolvido'">Devolvido</label>
                                             </td>
                                             <td>
-                                                <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="alterar(pedido, 'Devolvido')">Devolver</button>
+                                                <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="Devolver(pedido);">Devolver</button>
                                             </td>
                                         </tr>
                                     </table>
