@@ -1,41 +1,9 @@
 <!DOCTYPE html>
 <!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com> -->
-<!-- Data de criação: 03/09/2016 -->
-<!--
-    OBSERVAÇÕES IMPORTANTES:
-
-    Status possíveis dos pedidos:
-
-    Aberto - Código: 1
-    Cor label: primary
-    -----------------------------------
-    Em preparo - Código: 2
-    Cor label: warning
-    Cor botão "Preparar": warning
-    -----------------------------------
-    Pronto - Código: 3
-    Cor label: btn-foursquare
-    Cor botão "Pronto": btn-foursquare
-    -----------------------------------
-    A caminho - Código: 4
-    Cor label: info
-    Cor botão "Entregar": info
-    -----------------------------------
-    Entregue - Código: 5
-    Cor label: success
-    Cor botão "Entregue": success
-    -----------------------------------
-    Cancelado - Código: 6
-    Cor label: btn-github
-    Cor botão "Cancelar": btn-github
-    -----------------------------------
-    Devolvido - Código: 7
-    Cor label: danger
-    Cor botão "Devolver": danger
--->
-<html ng-app="pedidosAbertos">
+<!-- Data de criação: 26/09/2016 -->
+<html ng-app="pedidosFinalizados">
     <head>
-        <title>Home - Admin</title>
+        <title>Todos os pedidos finalizados</title>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -51,8 +19,8 @@
         </script>
 
         <script>
-            var app = angular.module("pedidosAbertos", []);
-            app.controller("PedidosAbertosCtrl", function ($scope) {
+            var app = angular.module("pedidosFinalizados", []);
+            app.controller("PedidosFinalizadosCtrl", function ($scope) {
                 $scope.titulo = "Pedidos Abertos";
                 $scope.usuario = parseObj;
                 $scope.entregar = false;
@@ -170,69 +138,14 @@
             });
         </script>
     </head>
-    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="PedidosAbertosCtrl">
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="PedidosFinalizadosCtrl">
         <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="getPedidos()">
             <div class="wrapper">
                 <div ng-include="'templates/template_admin.html'"></div>
 
                 <!-- Content Wrapper. Contains page content -->
                 <div class="content-wrapper">
-                    <!-- Main content -->
-                    <!-- form start -->
-                    <div class="box-body">
-                        <div class="col-md-12">
-                            <div class="box box-warning">
-                                <div class="box-body">
-                                    <div class="box-header with-border" style="text-align: center;">
-                                        <i class="glyphicon glyphicon-fire"></i>
-                                        <h3 class="box-title">Pedidos em espera</h3>
-                                    </div>
-                                    <table class="table table-striped" ng-show="pedidos.length > 0">
-                                        <tr>
-                                            <th>ID do pedido</th>
-                                            <th>Data do pedido</th>
-                                            <th>Descrição do pedido</th>
-                                            <th>Endereço de entrega</th>
-                                            <th>Status</th>
-                                            <th></th>
-                                        </tr>
-                                        <tr ng-repeat="pedido in pedidos" ng-if="pedido.status !== 'Entregue' && pedido.status !== 'Cancelado' && pedido.status !== 'Devolvido' && pedido.dtCriacao === dataAtualFormatada()">
-                                            <td>
-                                                <a ng-click="verDetalhes(pedido);">
-                                                    {{pedido.id}}
-                                                </a>
-                                            </td>
-                                            <td>{{pedido.dtCriacao}}</td>
-                                            <td>{{getDescricao(pedido)}}</td>
-                                            <td>{{getEndereco(pedido)}}</td>
-                                            <td>
-                                                <label class='label label-primary' ng-if="pedido.status === 'Aberto'">Aberto</label>
-                                                <label class='label label-warning' ng-if="pedido.status === 'Em preparo'">Em preparo</label>
-                                                <label class='label btn-foursquare' ng-if="pedido.status === 'Pronto'">Pronto</label>
-                                                <label class='label label-info' ng-if="pedido.status === 'A caminho'">A caminho</label>
-                                                <label class='label label-success' ng-if="pedido.status === 'Entregue'">Entregue</label>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-danger" ng-if="pedido.status === 'Entregue'" ng-click="Devolver(pedido);">Devolver</button>
-                                                <button class="btn btn-warning" ng-if="pedido.status === 'Aberto'" ng-click="alterar(pedido, 'Em preparo')">Preparar</button>
-                                                <button class="btn btn-foursquare" ng-if="pedido.status === 'Em preparo'" ng-click="alterar(pedido, 'Pronto')">Pronto</button>
-                                                <button class="btn btn-info" ng-if="pedido.status === 'Pronto'" ng-click="buscarEntregadores(pedido)">Entregar</button>
-                                                <div ng-if="entregar && (id_pedido_entregar === pedido.id)">
-                                                    <label for="categoria">Selecione o entregador:</label>
-                                                    <select class="form-control" id="categoria" ng-model="pedido.entregador"> 
-                                                        <option value="{{entregador.id}}" ng-repeat="entregador in entregadores">{{entregador.nome}}</option>
-                                                    </select>
-                                                </div>
-                                                <button class="btn btn-success" ng-if="pedido.status === 'A caminho'" ng-click="alterar(pedido, 'Entregue')">Entregue</button>
-                                                <button class="btn btn-github" ng-click="alterar(pedido, 'Cancelado')" ng-if="pedido.status === 'Aberto' || pedido.status === 'Em preparo' || pedido.status === 'Pronto' || pedido.status === 'A caminho'">Cancelar</button>
-                                                <button class="btn btn-success" ng-disabled="!pedido.entregador" ng-if="entregar && (id_pedido_entregar === pedido.id)" ng-click="alterar(pedido, 'A caminho')">Entregar!</button>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div><!-- /.box-body -->
-                        </div>
-                    </div><!-- /.box-body -->
+                    <!-- Main content -->                    
 
                     <div class="box-body">
                         <div class="col-md-12">
@@ -251,7 +164,7 @@
                                             <th>Status</th>
                                             <th></th>
                                         </tr>
-                                        <tr ng-repeat="pedido in pedidos" ng-if="(pedido.status === 'Entregue' || pedido.status === 'Cancelado' || pedido.status === 'Devolvido') && pedido.dtCriacao === dataAtualFormatada()">
+                                        <tr ng-repeat="pedido in pedidos" ng-if="(pedido.status === 'Entregue' || pedido.status === 'Cancelado' || pedido.status === 'Devolvido')">
                                             <td>
                                                 <a ng-click="verDetalhes(pedido);">
                                                     {{pedido.id}}
