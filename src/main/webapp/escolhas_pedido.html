@@ -30,14 +30,18 @@
                 $scope.entrega = 2;
                 $scope.enderecos;
                 $scope.outroEndereco = false;
-                $scope.troco = false;
+                $scope.troco = false;     
                 var endereco;
 
+                $scope.sair = function () {
+                    window.sessionStorage.clear();
+                    window.location.href = "http://localhost:8084/marmitex/login.html";
+                };
+
                 $scope.buscarCEP = function (pd) {
-                    var cep = document.getElementById("txtCep").value;
-                    if (cep !== null && cep !== undefined && cep !== "") {
+                    if (pd.cep !== null && pd.cep !== undefined && pd.cep !== "") {
                         $.ajax({
-                            url: "https://viacep.com.br/ws/" + cep + "/json/",
+                            url: "https://viacep.com.br/ws/" + pd.cep + "/json/",
                             async: false,
                             data: {
                             },
@@ -138,6 +142,7 @@
                         }
                     });
                 };
+                
                 $scope.total = function () {
                     return (parseFloat($scope.preco) + parseFloat($scope.entrega)).toFixed(2);
                 };
@@ -195,13 +200,13 @@
                                                         </option>
                                                     </select>
                                                 </div>
-                                                <div ng-if="!pedido.endereco">
+                                                <div ng-show="!pedido.endereco">
                                                     <label for="other" class="text-bold">Ou utilize um novo endereço:</label>
                                                     <button id="other" ng-click="novoEndereco()" class="btn btn-warning">Utilizar outro endereço</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row" ng-if="outroEndereco && !pedido.endereco">
+                                        <div class="row" ng-show="outroEndereco && !pedido.endereco">
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label>CEP</label>
