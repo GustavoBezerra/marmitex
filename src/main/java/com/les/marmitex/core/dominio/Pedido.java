@@ -17,6 +17,7 @@ public class Pedido extends EntidadeDominio{
     private Entregador entregador;
     private List<Pagamento> pagamento;
     private double troco;
+    private Cliente cliente;
 
     /**
      * @return the marmitex
@@ -128,6 +129,20 @@ public class Pedido extends EntidadeDominio{
      */
     public void setTroco(double troco) {
         this.troco = troco;
+    }
+
+    /**
+     * @return the cliente
+     */
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    /**
+     * @param cliente the cliente to set
+     */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
  
 

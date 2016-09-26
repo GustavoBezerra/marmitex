@@ -11,7 +11,7 @@ public class Conexao {
             SQLException {
 //		String driver = "org.mysql.Driver";
         String driver = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/marmitex";
+        String url = "jdbc:mysql://localhost:3306/marmitex?autoReconnect=true&useSSL=false";
         String user = "root";
         String password = "fatec123";
         Class.forName(driver);
