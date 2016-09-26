@@ -38,6 +38,7 @@ com\les\marmitex\view\helper\impl\CampanhaHelper.class
 com\les\marmitex\core\dominio\Usuario.class
 com\les\marmitex\view\controller\FrontControllerServlet.class
 com\les\marmitex\core\dominio\Administrador.class
+com\les\marmitex\util\teste\TestaConsultarPedido.class
 com\les\marmitex\core\dominio\Categoria.class
 com\les\marmitex\core\dao\impl\CampanhaDAO.class
 com\les\marmitex\core\dominio\Credito.class

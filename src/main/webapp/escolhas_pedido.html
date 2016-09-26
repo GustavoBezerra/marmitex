@@ -139,7 +139,7 @@
                     });
                 };
                 $scope.total = function () {
-                    return parseFloat($scope.preco) + parseFloat($scope.entrega)
+                    return (parseFloat($scope.preco) + parseFloat($scope.entrega)).toFixed(2);
                 }
             });
         </script>
@@ -277,7 +277,6 @@
                                         </div>
                                     </div>
 
-                                    {{pedido}}
                                     <div class="row">
                                         <button type="button" 
                                                 ng-disabled="!((pedido.pagamento.credito || pedido.pagamento.dinheiro || pedido.pagamento.cartao)

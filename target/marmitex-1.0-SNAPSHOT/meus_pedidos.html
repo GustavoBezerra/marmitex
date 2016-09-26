@@ -47,24 +47,36 @@
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
+            var parseObj = JSON.parse(window.sessionStorage["usuario"]);
+        </script>
+        <script>
             var app = angular.module("meusPedidos", []);
             app.controller("MeusPedidosCtrl", function ($scope) {
                 $scope.titulo = "Meus Pedidos";
+                $scope.usuario = parseObj;
 
                 $scope.sair = function () {
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
 
-                $scope.pedidos = [
-                    {id: '6', data: '25/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '1'},
-                    {id: '7', data: '23/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '2'},
-                    {id: '8', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '3'},
-                    {id: '9', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '4'},
-                    {id: '10', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '5'},
-                    {id: '2', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '6'},
-                    {id: '5', data: '22/08/2016', descricao: 'Arroz, Feijão, Salada e Frango', status: '7'}
-                ];
+                $scope.getPedidos = function () {
+                    $.ajax({
+                        url: "/marmitex/pedido",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR",
+                            id_cliente: $scope.usuario.id
+                        },
+                        success: function (data) {
+                            $scope.pedidos = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            alert("Erro ao consultar seus pedidos!\n" + err);
+                        }
+                    });
+                };
 
                 $scope.Devolver = function (pedido) {
                     alert("Devolver o pedido de ID " + pedido.id);
@@ -73,11 +85,31 @@
                 $scope.verDetalhes = function (pedido) {
                     alert("Ver detalhes do pedido " + pedido.id);
                 };
+
+                $scope.getDescricao = function (pedido) {
+                    var desc = "";
+                    for (var i = 0; i < pedido.marmitex[0].ingredientes.length; i++) {
+                        desc += pedido.marmitex[0].ingredientes[i].nome+", ";
+                    }
+                    return desc.slice(0, -2);
+                };
+                
+                $scope.dataAtualFormatada = function() {
+                    var data = new Date();
+                    var dia = data.getDate();
+                    if (dia.toString().length == 1)
+                        dia = "0" + dia;
+                    var mes = data.getMonth() + 1;
+                    if (mes.toString().length == 1)
+                        mes = "0" + mes;
+                    var ano = data.getFullYear();
+                    return dia + "/" + mes + "/" + ano;
+                };
             });
         </script>
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray" ng-controller="MeusPedidosCtrl">
-        <div id="body" class="hold-transition skin-blue sidebar-mini">
+        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="getPedidos()">
             <div class="wrapper">
                 <div ng-include="'templates/template_cliente.html'"></div>
 
@@ -107,19 +139,19 @@
                                                     {{pedido.id}}
                                                 </a>
                                             </td>
-                                            <td>{{pedido.data}}</td>
-                                            <td>{{pedido.descricao}}</td>
+                                            <td>{{pedido.dtCriacao}}</td>
+                                            <td>{{getDescricao(pedido)}}</td>
                                             <td>
-                                                <label class='label label-primary' ng-if="pedido.status === '1'">Aberto</label>
-                                                <label class='label label-warning' ng-if="pedido.status === '2'">Em preparo</label>
-                                                <label class='label btn-foursquare' ng-if="pedido.status === '3'">Pronto</label>
-                                                <label class='label label-info' ng-if="pedido.status === '4'">A caminho</label>
-                                                <label class='label label-success' ng-if="pedido.status === '5'">Entregue</label>
-                                                <label class='label btn-github' ng-if="pedido.status === '6'">Cancelado</label>
-                                                <label class='label btn-danger' ng-if="pedido.status === '7'">Devolvido</label>
+                                                <label class='label label-primary' ng-if="pedido.status === 'Aberto'">Aberto</label>
+                                                <label class='label label-warning' ng-if="pedido.status === 'Em preparo'">Em preparo</label>
+                                                <label class='label btn-foursquare' ng-if="pedido.status === 'Pronto'">Pronto</label>
+                                                <label class='label label-info' ng-if="pedido.status === 'A caminho'">A caminho</label>
+                                                <label class='label label-success' ng-if="pedido.status === 'Entregue'">Entregue</label>
+                                                <label class='label btn-github' ng-if="pedido.status === 'Cancelado'">Cancelado</label>
+                                                <label class='label btn-danger' ng-if="pedido.status === 'Devolvido'">Devolvido</label>
                                             </td>
                                             <td>
-                                                <button class="btn btn-danger" ng-if="pedido.status === '5'" ng-click="Devolver(pedido);">Devolver</button>
+                                                <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="Devolver(pedido);">Devolver</button>
                                             </td>
                                         </tr>
                                     </table>

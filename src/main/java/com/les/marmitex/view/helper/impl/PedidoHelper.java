@@ -13,15 +13,22 @@ import com.les.marmitex.core.dominio.Pagamento;
 import com.les.marmitex.core.dominio.Pedido;
 import com.les.marmitex.core.dominio.Resultado;
 import com.les.marmitex.core.dominio.Status;
-import com.les.marmitex.core.dominio.Usuario;
+import com.les.marmitex.util.teste.TestaConsultarPedido;
 import com.les.marmitex.view.helper.IViewHelper;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import static jdk.nashorn.internal.objects.NativeMath.round;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,9 +41,11 @@ import org.springframework.stereotype.Component;
 public class PedidoHelper implements IViewHelper {
 
     Pedido pedido = null;
+
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
-        String operacao = request.getParameter("operacao");        
+        String operacao = request.getParameter("operacao");
+        Cliente c;
         List<Marmitex> marmitexs;
         Marmitex marmitex;
         List<Pagamento> pagamento;
@@ -54,7 +63,7 @@ public class PedidoHelper implements IViewHelper {
             marmitex = new Marmitex();
             pagamento = new ArrayList<>();
             marmitexs = new ArrayList<>();
-            Cliente c = new Cliente();
+            c = new Cliente();
             double valor_marmitex = 0;
 
             String json = request.getParameter("ingredientes");
@@ -67,10 +76,16 @@ public class PedidoHelper implements IViewHelper {
             List<Ingrediente> ingredientes = gson.fromJson(json, new TypeToken<List<Ingrediente>>() {
             }.getType());
             marmitex.setIngredientes(ingredientes);
+
             for (int i = 0; i < marmitex.getIngredientes().size(); i++) {
                 valor_marmitex += marmitex.getIngredientes().get(i).getValor();
             }
-            marmitex.setValor(valor_marmitex);
+
+            Double truncatedDouble = new BigDecimal(valor_marmitex)
+                    .setScale(3, BigDecimal.ROUND_HALF_UP)
+                    .doubleValue();
+
+            marmitex.setValor(truncatedDouble);
             marmitexs.add(marmitex);
 
             pedido.setMarmitex(marmitexs);
@@ -103,6 +118,12 @@ public class PedidoHelper implements IViewHelper {
             pedido.setEndereco(endereco);
             pedido.setValorTotal(Double.valueOf(total));
 
+        }
+        else if(("CONSULTAR").equals(operacao)){
+            pedido = new Pedido();
+            c = new Cliente();
+            c.setId(Integer.valueOf(request.getParameter("id_cliente")));
+            pedido.setCliente(c);            
         }
         return pedido;
     }
