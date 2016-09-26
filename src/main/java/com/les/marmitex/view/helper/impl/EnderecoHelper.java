@@ -41,7 +41,7 @@ public class EnderecoHelper implements IViewHelper {
             bairro = request.getParameter("bairro");
 
             e = new Endereco();
-            e.setId_cliente(1);
+            e.setId_cliente(Integer.valueOf(request.getParameter("id_cliente")));
             e.setCep(cep);
             e.setCidade(cidade);
             e.setRua(endereco);

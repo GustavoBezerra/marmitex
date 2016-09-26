@@ -11,6 +11,7 @@ import com.les.marmitex.core.dominio.Ingrediente;
 import com.les.marmitex.core.dominio.Marmitex;
 import com.les.marmitex.core.dominio.Pagamento;
 import com.les.marmitex.core.dominio.Pedido;
+import com.les.marmitex.core.dominio.Status;
 import com.les.marmitex.core.dominio.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -113,17 +114,29 @@ public class PedidoDAO extends AbstractJdbcDAO {
     public void alterar(EntidadeDominio entidade) throws SQLException {
         openConnection();
         PreparedStatement pst = null;
-
+        boolean entregador = false;
+        
         try {
             Pedido pedido = (Pedido) entidade;
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE tb_pedido SET status=? WHERE id_pedido=?;");
+            sql.append("UPDATE tb_pedido SET status=?");
+            if(pedido.getStatus().equals(Status.A_CAMINHO.getDescricao())){
+                sql.append(", id_entregador=?");
+                entregador = true;
+            }
+            sql.append(" WHERE id_pedido=?;");
 
             pst = connection.prepareStatement(sql.toString());
-            pst.setString(1, pedido.getStatus());            
-            pst.setInt(2, pedido.getId());
+            pst.setString(1, pedido.getStatus());
+            if(entregador){
+                pst.setInt(2, pedido.getEntregador().getId());
+                pst.setInt(3, pedido.getId());
+            }
+            else{
+                pst.setInt(2, pedido.getId());
+            }
             pst.executeUpdate();
             connection.commit();
         } catch (SQLException e) {

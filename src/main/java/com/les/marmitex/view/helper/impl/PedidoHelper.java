@@ -56,6 +56,8 @@ public class PedidoHelper implements IViewHelper {
         String troco;
         String cartao;
         String credito;
+        Gson gson = new GsonBuilder()
+                    .setDateFormat("dd/MM/yyyy").create();
 
         if (("SALVAR").equals(operacao)) {
             pedido = new Pedido();
@@ -67,8 +69,7 @@ public class PedidoHelper implements IViewHelper {
             double valor_marmitex = 0;
 
             String json = request.getParameter("ingredientes");
-            Gson gson = new GsonBuilder()
-                    .setDateFormat("dd/MM/yyyy").create();
+            
             endereco = gson.fromJson(request.getParameter("endereco"), Endereco.class);
             c.setId(Integer.valueOf(request.getParameter("id_cliente")));
             pedido.setCliente(c);
@@ -129,6 +130,11 @@ public class PedidoHelper implements IViewHelper {
             pedido = new Pedido();
             pedido.setId(Integer.valueOf(request.getParameter("id_pedido")));
             pedido.setStatus(request.getParameter("status"));
+            if(pedido.getStatus().equals("A caminho")){
+                entregador = new Entregador();
+                entregador.setId(Integer.valueOf(request.getParameter("entregador")));
+                pedido.setEntregador(entregador);
+            }            
         }
         return pedido;
     }
