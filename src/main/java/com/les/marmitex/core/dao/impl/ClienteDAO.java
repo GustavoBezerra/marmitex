@@ -94,20 +94,31 @@ public class ClienteDAO extends AbstractJdbcDAO {
     public void alterar(EntidadeDominio entidade) {
         openConnection();
         PreparedStatement pst = null;
+        boolean creditar = false;
 
         try {
             Cliente cliente = (Cliente) entidade;
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE tb_cliente SET nome=?, telefone=?, login=?, senha=? WHERE id_cliente=?;");
+            if (cliente.getId() != 0 && cliente.getCredito() != null && cliente.getEnderecos() == null) {
+                sql.append("UPDATE tb_cliente SET credito=? WHERE id_cliente=?;");
+                creditar = true;
+            } else {
+                sql.append("UPDATE tb_cliente SET nome=?, telefone=?, login=?, senha=? WHERE id_cliente=?;");
+            }
 
             pst = connection.prepareStatement(sql.toString());
-            pst.setString(1, cliente.getNome());
-            pst.setString(2, cliente.getTelefone());
-            pst.setString(3, cliente.getUsuario().getLogin());
-            pst.setString(4, cliente.getUsuario().getSenha());
-            pst.setInt(5, cliente.getId());
+            if (creditar) {
+                pst.setDouble(1, cliente.getCredito().getValor());
+                pst.setInt(2, cliente.getId());
+            } else {
+                pst.setString(1, cliente.getNome());
+                pst.setString(2, cliente.getTelefone());
+                pst.setString(3, cliente.getUsuario().getLogin());
+                pst.setString(4, cliente.getUsuario().getSenha());
+                pst.setInt(5, cliente.getId());
+            }
             pst.executeUpdate();
             connection.commit();
         } catch (SQLException e) {

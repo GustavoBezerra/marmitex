@@ -115,14 +115,14 @@ public class PedidoDAO extends AbstractJdbcDAO {
         openConnection();
         PreparedStatement pst = null;
         boolean entregador = false;
-        
+
         try {
             Pedido pedido = (Pedido) entidade;
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE tb_pedido SET status=?");
-            if(pedido.getStatus().equals(Status.A_CAMINHO.getDescricao())){
+            if (pedido.getStatus().equals(Status.A_CAMINHO.getDescricao())) {
                 sql.append(", id_entregador=?");
                 entregador = true;
             }
@@ -130,11 +130,10 @@ public class PedidoDAO extends AbstractJdbcDAO {
 
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, pedido.getStatus());
-            if(entregador){
+            if (entregador) {
                 pst.setInt(2, pedido.getEntregador().getId());
                 pst.setInt(3, pedido.getId());
-            }
-            else{
+            } else {
                 pst.setInt(2, pedido.getId());
             }
             pst.executeUpdate();
@@ -164,10 +163,12 @@ public class PedidoDAO extends AbstractJdbcDAO {
     public List<EntidadeDominio> consultar(EntidadeDominio entidade) throws SQLException {
         openConnection();
         PreparedStatement pst = null;
+        ClienteDAO cDAO = new ClienteDAO();
         Ingrediente i;
         Endereco e;
         Marmitex m;
         Pedido p;
+        Cliente c;
         List<Ingrediente> ingredientes;
         List<EntidadeDominio> pedidos = new ArrayList<>();
         List<Marmitex> marmitexs;
@@ -179,7 +180,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
 
             StringBuilder sql = new StringBuilder();
 
-            sql.append("select p.id_pedido, p.id_entregador, p.status, p.valor_total, p.valor_frete, p.troco, p.dt_criacao,\n"
+            sql.append("select p.id_pedido, p.id_entregador, p.status, p.valor_total, p.valor_frete, p.troco, p.dt_criacao, p.id_cliente, \n"
                     + "       m.id_marmitex, i.id_ingrediente, i.nome, i.valor as valor_ingrediente,\n"
                     + "       e.id_endereco, e.cep, e.bairro, e.cidade, e.complemento, e.logradouro, e.numero from tb_pedido p\n"
                     + "inner join tb_marmitex m on m.id_pedido=p.id_pedido\n"
@@ -229,6 +230,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
                         marmitexs.add(m);
                         p.setMarmitex(marmitexs);
                         p.setPagamento(getPagamentos(p));
+                        p.setCliente((Cliente) cDAO.consultar(p.getCliente()).get(0));
                         pedidos.add(p);
                     }
                     anterior = id;
@@ -236,10 +238,13 @@ public class PedidoDAO extends AbstractJdbcDAO {
                     m = new Marmitex();
                     i = new Ingrediente();
                     e = new Endereco();
+                    c = new Cliente();
                     ingredientes = new ArrayList<>();
                     marmitexs = new ArrayList<>();
                     // settar valores basicos do pedido
                     p.setId(id);
+                    c.setId(rs.getInt("id_cliente"));
+                    p.setCliente(c);
                     p.setStatus(rs.getString("status"));
                     p.setValorTotal(rs.getDouble("valor_total"));
                     p.setValorFrete(rs.getDouble("valor_frete"));
@@ -270,6 +275,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
                 marmitexs.add(m);
                 p.setMarmitex(marmitexs);
                 p.setPagamento(getPagamentos(p));
+                p.setCliente((Cliente) cDAO.consultar(p.getCliente()).get(0));
                 pedidos.add(p);
             }
         } catch (SQLException ex) {

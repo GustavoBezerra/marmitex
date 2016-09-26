@@ -78,12 +78,34 @@
                     });
                 };
 
-                $scope.getEndereco = function(pedido){
-                    return pedido.endereco.rua+", "+pedido.endereco.numero+" - "+pedido.endereco.bairro;
+                $scope.alterar = function (pedido, status) {
+
+                };
+
+                $scope.getEndereco = function (pedido) {
+                    return pedido.endereco.rua + ", " + pedido.endereco.numero + " - " + pedido.endereco.bairro;
                 };
 
                 $scope.Devolver = function (pedido) {
-                    alert("Devolver o pedido de ID " + pedido.id);
+                    alert("teste");
+                    $.ajax({
+                        url: "/marmitex/pedido",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "ALTERAR",
+                            valor_total: pedido.valorTotal,
+                            id_pedido: pedido.id,
+                            status: "Devolvido",
+                            cliente: JSON.stringify(pedido.cliente)
+                        },
+                        success: function (data) {
+                            $scope.getPedidos();
+                        },
+                        error: function (err) {
+                            alert("Erro ao alterar o pedido!\n" + err);
+                        }
+                    });
                 };
 
                 $scope.verDetalhes = function (pedido) {
@@ -93,12 +115,12 @@
                 $scope.getDescricao = function (pedido) {
                     var desc = "";
                     for (var i = 0; i < pedido.marmitex[0].ingredientes.length; i++) {
-                        desc += pedido.marmitex[0].ingredientes[i].nome+", ";
+                        desc += pedido.marmitex[0].ingredientes[i].nome + ", ";
                     }
                     return desc.slice(0, -2);
                 };
-                
-                $scope.dataAtualFormatada = function() {
+
+                $scope.dataAtualFormatada = function () {
                     var data = new Date();
                     var dia = data.getDate();
                     if (dia.toString().length === 1)

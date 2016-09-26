@@ -130,11 +130,16 @@ public class PedidoHelper implements IViewHelper {
             pedido = new Pedido();
             pedido.setId(Integer.valueOf(request.getParameter("id_pedido")));
             pedido.setStatus(request.getParameter("status"));
-            if(pedido.getStatus().equals("A caminho")){
+            if(pedido.getStatus().equals(Status.A_CAMINHO.getDescricao())){
                 entregador = new Entregador();
                 entregador.setId(Integer.valueOf(request.getParameter("entregador")));
                 pedido.setEntregador(entregador);
-            }            
+            }
+            else if(pedido.getStatus().equals(Status.DEVOLVIDO.getDescricao())){
+                pedido.setValorTotal(Double.valueOf(request.getParameter("valor_total")));
+                c = gson.fromJson(request.getParameter("cliente"), Cliente.class);                
+                pedido.setCliente(c);
+            }
         }
         return pedido;
     }

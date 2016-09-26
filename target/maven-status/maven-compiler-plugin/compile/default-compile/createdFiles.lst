@@ -12,6 +12,7 @@ com\les\marmitex\view\helper\IViewHelper.class
 com\les\marmitex\core\dao\impl\PagamentoDAO.class
 com\les\marmitex\core\strategy\impl\ValidarCamposEmBranco.class
 com\les\marmitex\core\dao\impl\PedidoDAO.class
+com\les\marmitex\core\strategy\impl\EfetuarDevolucao.class
 com\les\marmitex\core\dominio\Regras.class
 com\les\marmitex\view\command\impl\SalvarCommand.class
 com\les\marmitex\util\Conexao.class

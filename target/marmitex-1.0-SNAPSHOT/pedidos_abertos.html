@@ -100,24 +100,43 @@
                 $scope.alterar = function (pedido, status) {
                     if (status === 'A caminho') {
                         $.ajax({
-                        url: "/marmitex/pedido",
-                        type: "POST",
-                        async: false,
-                        data: {
-                            operacao: "ALTERAR",
-                            id_pedido: pedido.id,
-                            status: status,
-                            entregador: pedido.entregador
-                        },
-                        success: function (data) {
-                            $scope.id_pedido_entregar=0;
-                            $scope.entregar = false;
-                            $scope.getPedidos();
-                        },
-                        error: function (err) {
-                            alert("Erro ao alterar o pedido!\n" + err);
-                        }
-                    });
+                            url: "/marmitex/pedido",
+                            type: "POST",
+                            async: false,
+                            data: {
+                                operacao: "ALTERAR",
+                                id_pedido: pedido.id,
+                                status: status,
+                                entregador: pedido.entregador
+                            },
+                            success: function (data) {
+                                $scope.id_pedido_entregar = 0;
+                                $scope.entregar = false;
+                                $scope.getPedidos();
+                            },
+                            error: function (err) {
+                                alert("Erro ao alterar o pedido!\n" + err);
+                            }
+                        });
+                    } else if (status === 'Devolvido') {
+                        $.ajax({
+                            url: "/marmitex/pedido",
+                            type: "POST",
+                            async: false,
+                            data: {
+                                operacao: "ALTERAR",
+                                valor_total: pedido.valor_total,
+                                id_pedido: pedido.id,
+                                status: status,
+                                id_cliente: $scope.usuario.id
+                            },
+                            success: function (data) {
+                                $scope.getPedidos();
+                            },
+                            error: function (err) {
+                                alert("Erro ao alterar o pedido!\n" + err);
+                            }
+                        });
                     } else {
                         $.ajax({
                             url: "/marmitex/pedido",
@@ -146,9 +165,9 @@
                     }
                     return desc.slice(0, -2);
                 };
-                
-                $scope.getEndereco = function(pedido){
-                    return pedido.endereco.rua+", "+pedido.endereco.numero+" - "+pedido.endereco.bairro;
+
+                $scope.getEndereco = function (pedido) {
+                    return pedido.endereco.rua + ", " + pedido.endereco.numero + " - " + pedido.endereco.bairro;
                 };
 
                 $scope.sair = function () {
@@ -266,7 +285,7 @@
                                                 <label class='label btn-danger' ng-if="pedido.status === 'Devolvido'">Devolvido</label>
                                             </td>
                                             <td>
-                                                <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="Devolver(pedido);">Devolver</button>
+                                                <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="alterar(pedido, 'Devolvido')">Devolver</button>
                                             </td>
                                         </tr>
                                     </table>

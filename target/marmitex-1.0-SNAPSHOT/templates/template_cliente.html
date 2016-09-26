@@ -5,14 +5,24 @@
     <head>
 
         <script>
+            var parseObj = JSON.parse(window.sessionStorage["usuario"]);
+        </script>
+        
+        <script>
             var app = angular.module("template_cliente", []);
             app.controller("TemplateClienteCtrl", function ($scope) {
                 $scope.titulo = "Template Cliente";
+                
+                $scope.getCreditos = function(){
+                    //$scope.creditos_template = parseObj.credito.valor;
+                    alert(parseObj);
+                };
+               
             });
         </script>
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="TemplateClienteCtrl">
-        <div id="body" class="hold-transition skin-blue sidebar-mini">
+        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="getCreditos()">
             <div class="wrapper">
                 <header class="main-header">
                     <!--Logo-->
@@ -26,6 +36,7 @@
                             <ul class="nav navbar-nav">
                                 <!-- Notifications: style can be found in dropdown.less -->
                                 <li class="dropdown user user-menu">
+                                    R${{creditos_template}}
                                     <button class="btn btn-danger" ng-click="sair()">
                                         Sair
                                     </button>
