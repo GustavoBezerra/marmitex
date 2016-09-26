@@ -78,6 +78,10 @@
                     });
                 };
 
+                $scope.getEndereco = function(pedido){
+                    return pedido.endereco.rua+", "+pedido.endereco.numero+" - "+pedido.endereco.bairro;
+                };
+
                 $scope.Devolver = function (pedido) {
                     alert("Devolver o pedido de ID " + pedido.id);
                 };
@@ -130,6 +134,7 @@
                                             <th>ID do pedido</th>
                                             <th>Data do pedido</th>
                                             <th>Descrição do pedido</th>
+                                            <th>Endereço de entrega</th>
                                             <th>Status</th>
                                             <th></th>
                                         </tr>
@@ -141,6 +146,7 @@
                                             </td>
                                             <td>{{pedido.dtCriacao}}</td>
                                             <td>{{getDescricao(pedido)}}</td>
+                                            <td>{{getEndereco(pedido)}}</td>
                                             <td>
                                                 <label class='label label-primary' ng-if="pedido.status === 'Aberto'">Aberto</label>
                                                 <label class='label label-warning' ng-if="pedido.status === 'Em preparo'">Em preparo</label>

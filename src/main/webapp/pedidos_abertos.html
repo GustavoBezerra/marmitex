@@ -137,7 +137,7 @@
                         });
                     }
 
-                }
+                };
 
                 $scope.getDescricao = function (pedido) {
                     var desc = "";
@@ -145,6 +145,10 @@
                         desc += pedido.marmitex[0].ingredientes[i].nome + ", ";
                     }
                     return desc.slice(0, -2);
+                };
+                
+                $scope.getEndereco = function(pedido){
+                    return pedido.endereco.rua+", "+pedido.endereco.numero+" - "+pedido.endereco.bairro;
                 };
 
                 $scope.sair = function () {
@@ -188,6 +192,7 @@
                                             <th>ID do pedido</th>
                                             <th>Data do pedido</th>
                                             <th>Descrição do pedido</th>
+                                            <th>Endereço de entrega</th>
                                             <th>Status</th>
                                             <th></th>
                                         </tr>
@@ -199,6 +204,7 @@
                                             </td>
                                             <td>{{pedido.dtCriacao}}</td>
                                             <td>{{getDescricao(pedido)}}</td>
+                                            <td>{{getEndereco(pedido)}}</td>
                                             <td>
                                                 <label class='label label-primary' ng-if="pedido.status === 'Aberto'">Aberto</label>
                                                 <label class='label label-warning' ng-if="pedido.status === 'Em preparo'">Em preparo</label>
@@ -219,7 +225,7 @@
                                                 </div>
                                                 <button class="btn btn-success" ng-if="pedido.status === 'A caminho'" ng-click="alterar(pedido, 'Entregue')">Entregue</button>
                                                 <button class="btn btn-github" ng-click="alterar(pedido, 'Cancelado')" ng-if="pedido.status === 'Aberto' || pedido.status === 'Em preparo' || pedido.status === 'Pronto' || pedido.status === 'A caminho'">Cancelar</button>
-                                                <button class="btn btn-success" ng-if="entregar && (id_pedido_entregar === pedido.id)" ng-click="alterar(pedido, 'A caminho')">Entregar!</button>
+                                                <button class="btn btn-success" ng-disabled="!pedido.entregador" ng-if="entregar && (id_pedido_entregar === pedido.id)" ng-click="alterar(pedido, 'A caminho')">Entregar!</button>
                                             </td>
                                         </tr>
                                     </table>
@@ -241,6 +247,7 @@
                                             <th>ID do pedido</th>
                                             <th>Data do pedido</th>
                                             <th>Descrição do pedido</th>
+                                            <th>Endereço de entrega</th>
                                             <th>Status</th>
                                             <th></th>
                                         </tr>
@@ -252,6 +259,7 @@
                                             </td>
                                             <td>{{pedido.dtCriacao}}</td>
                                             <td>{{getDescricao(pedido)}}</td>
+                                            <td>{{getEndereco(pedido)}}</td>
                                             <td>                                                
                                                 <label class='label label-success' ng-if="pedido.status === 'Entregue'">Entregue</label>
                                                 <label class='label btn-github' ng-if="pedido.status === 'Cancelado'">Cancelado</label>

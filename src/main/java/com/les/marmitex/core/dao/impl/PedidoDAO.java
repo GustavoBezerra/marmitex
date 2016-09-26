@@ -235,6 +235,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
                     p = new Pedido();
                     m = new Marmitex();
                     i = new Ingrediente();
+                    e = new Endereco();
                     ingredientes = new ArrayList<>();
                     marmitexs = new ArrayList<>();
                     // settar valores basicos do pedido
