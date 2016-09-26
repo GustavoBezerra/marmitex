@@ -77,9 +77,9 @@
                     if ($scope.preco !== 0) {
                         window.sessionStorage.clear();
                         window.sessionStorage.setItem("marmitex", JSON.stringify(ingredientesCheckados));
-                        window.sessionStorage.setItem("preco", angular.copy($scope.preco));
-                        window.location.href = "http://localhost:8084/marmitex/login.html";
+                        window.sessionStorage.setItem("preco", angular.copy($scope.preco));                        
                     }
+                    window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
 
                 $scope.clicou = function (recurso) {
@@ -145,7 +145,7 @@
                                             <div class="form-group">
                                                 <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
                                                     <label>
-                                                        <input type="checkbox" ng-click="clicou(recurso)" name="{{categoria.nome}}" id="{{recurso.nome}}">
+                                                        <input type="checkbox" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))" ng-click="clicou(recurso)" name="{{categoria.nome}}" id="{{recurso.nome}}">
                                                         {{recurso.nome}}
                                                     </label>
                                                 </div>

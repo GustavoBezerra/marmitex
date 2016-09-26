@@ -33,6 +33,7 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\command\impl\SalvarCommand.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\Conexao.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\CampanhaDAO.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\strategy\impl\ValidarEstoque.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestarSalvarPedido.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestarSpring.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\PedidoDAO.java

@@ -88,7 +88,7 @@
                         $scope.outroEndereco = false;
                     } else {
                         $scope.outroEndereco = true;
-                    }
+                    }                    
                 };
 
                 $scope.pagamentoDinheiro = function () {
@@ -140,7 +140,7 @@
                 };
                 $scope.total = function () {
                     return (parseFloat($scope.preco) + parseFloat($scope.entrega)).toFixed(2);
-                }
+                };
             });
         </script>
     </head>
@@ -265,8 +265,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- TOTAL -->
-
+                                    <!-- TOTAL -->                                    
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <div class="col-md-8" style="font-size: medium;">
@@ -275,8 +274,7 @@
                                                 </h3>
                                             </div>
                                         </div>
-                                    </div>
-
+                                    </div>                                    
                                     <div class="row">
                                         <button type="button" 
                                                 ng-disabled="!((pedido.pagamento.credito || pedido.pagamento.dinheiro || pedido.pagamento.cartao)

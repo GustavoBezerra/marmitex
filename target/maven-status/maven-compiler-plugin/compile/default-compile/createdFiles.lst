@@ -2,6 +2,7 @@ com\les\marmitex\core\dominio\Pagamento.class
 com\les\marmitex\view\helper\impl\EnderecoHelper.class
 com\les\marmitex\core\dao\impl\ClienteDAO.class
 com\les\marmitex\util\teste\TestaDate.class
+com\les\marmitex\core\strategy\impl\ValidarEstoque.class
 com\les\marmitex\view\helper\impl\PedidoHelper.class
 com\les\marmitex\core\fachada\impl\Fachada.class
 com\les\marmitex\util\ConverteDate.class

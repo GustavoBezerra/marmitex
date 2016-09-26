@@ -3,12 +3,13 @@ package com.les.marmitex.core.fachada.impl;
 import com.les.marmitex.core.dao.IDAO;
 import com.les.marmitex.core.dominio.Endereco;
 import com.les.marmitex.core.dominio.EntidadeDominio;
-import com.les.marmitex.core.dominio.IEntidade;
+import com.les.marmitex.core.dominio.Marmitex;
 import com.les.marmitex.core.dominio.Resultado;
 import com.les.marmitex.core.fachada.IFachada;
 import com.les.marmitex.core.strategy.IStrategy;
 import com.les.marmitex.core.strategy.impl.ValidarCamposEmBranco;
 import com.les.marmitex.core.strategy.impl.ValidarCamposEndereco;
+import com.les.marmitex.core.strategy.impl.ValidarEstoque;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ public class Fachada implements IFachada {
         /* ------- DECLARAÇÃO DE TODOS OS STRATEGIES -------  */
         ValidarCamposEmBranco vCamposEmBranco = new ValidarCamposEmBranco();
         ValidarCamposEndereco vCamposEndereco = new ValidarCamposEndereco();
+        ValidarEstoque vEstoque = new ValidarEstoque();
 
 
         /* ------- DECLARAÇÃO DAS RNS POR OPERAÇÃO/ENTIDADE -------  */
@@ -42,23 +44,28 @@ public class Fachada implements IFachada {
         List<IStrategy> rnsAlterarEndereco = new ArrayList<IStrategy>();
         List<IStrategy> rnsExcluirEndereco = new ArrayList<IStrategy>();
         List<IStrategy> rnsConsultarEndereco = new ArrayList<IStrategy>();
+        List<IStrategy> rnsMontarMarmitex = new ArrayList<>();
 
 
         /* ------- ADD STRATEGIES EM SUAS RESPECTIVAS OPERAÇÕES -------  */
 //        rnsSalvarEndereco.add(vCamposEndereco);
+        rnsMontarMarmitex.add(vEstoque);
 
 
         /* ------- DECLARAÇÃO DOS RNS POR ENTIDADE -------  */
         Map<String, List<IStrategy>> rnsEndereco = new HashMap<String, List<IStrategy>>();
+        Map<String, List<IStrategy>> rnsMarmitex = new HashMap<String, List<IStrategy>>();
 
 
         /* ------- ADD OS MAPS POR OPERAÇÃO EM SUAS ENTIDADES -------  */
         rnsEndereco.put("SALVAR", rnsSalvarEndereco);
         rnsEndereco.put("CONSULTAR", rnsSalvarEndereco);
+        rnsMarmitex.put("ALTERAR", rnsMontarMarmitex);
 
 
         /* ------- ADD OS MAPS POR ENTIDADES NO MAP GERAL -------  */
         rns.put(Endereco.class.getName(), rnsEndereco);
+        rns.put(Marmitex.class.getName(), rnsMarmitex);
 
     }
 

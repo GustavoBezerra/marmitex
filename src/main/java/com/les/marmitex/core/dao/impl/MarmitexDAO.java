@@ -5,23 +5,27 @@ import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RESET;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Ingrediente;
 import com.les.marmitex.core.dominio.Marmitex;
+import com.les.marmitex.core.strategy.impl.ValidarEstoque;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe responsável pelas ações na tb_marmitex
+ *
  * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
  * @date 27/08/2016
  */
-public class MarmitexDAO extends AbstractJdbcDAO
-{
+public class MarmitexDAO extends AbstractJdbcDAO {
 
-    public MarmitexDAO(){
-        super("tb_marmitex", "id_marmitex");    }
+    public MarmitexDAO() {
+        super("tb_marmitex", "id_marmitex");
+    }
 
     @Override
     public void salvar(EntidadeDominio entidade) throws SQLException {
@@ -85,7 +89,7 @@ public class MarmitexDAO extends AbstractJdbcDAO
 
     }
 
-    public void salvarIngredientes(Ingrediente i, int id_marmitex){
+    public void salvarIngredientes(Ingrediente i, int id_marmitex) {
         openConnection();
         PreparedStatement pst = null;
 
@@ -102,6 +106,7 @@ public class MarmitexDAO extends AbstractJdbcDAO
 
             pst.executeUpdate();
             connection.commit();
+            darBaixaNoEstoque(i);
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -121,5 +126,28 @@ public class MarmitexDAO extends AbstractJdbcDAO
                 System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
             }
         }
+    }
+
+    private void darBaixaNoEstoque(Ingrediente i) {
+        double qtde;
+        IngredienteDAO iDAO = new IngredienteDAO();
+        if (!("Unidade(s)").equals(i.getMedida())) {
+            try {
+                qtde = i.getQuantidade();
+                i.setQuantidade(qtde - 0.150);
+                iDAO.alterar(i);
+            } catch (SQLException ex) {
+                Logger.getLogger(ValidarEstoque.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            try {
+                qtde = i.getQuantidade();
+                i.setQuantidade(qtde - 1);
+                iDAO.alterar(i);
+            } catch (SQLException ex) {
+                Logger.getLogger(ValidarEstoque.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return;
     }
 }

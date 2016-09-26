@@ -125,6 +125,11 @@ public class PedidoHelper implements IViewHelper {
             c.setId(Integer.valueOf(request.getParameter("id_cliente")));
             pedido.setCliente(c);            
         }
+        else if(("ALTERAR").equals(operacao)){
+            pedido = new Pedido();
+            pedido.setId(Integer.valueOf(request.getParameter("id_pedido")));
+            pedido.setStatus(request.getParameter("status"));
+        }
         return pedido;
     }
 
