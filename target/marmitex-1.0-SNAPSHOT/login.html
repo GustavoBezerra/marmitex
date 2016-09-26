@@ -21,7 +21,7 @@
 
                 $scope.redirecionar = function (data) {
                     window.sessionStorage.setItem("usuario", data);
-                    var usuario = data;
+                    var usuario = JSON.parse(data);
                     if (usuario.id === 1) { // é o admin?
                         window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
                     } else {
@@ -76,7 +76,7 @@
                                 if (resultado.mensagem !== undefined && resultado.mensagem !== null) {
                                     alert(resultado.mensagem);
                                 } else {
-                                    $scope.redirecionar(resultado.entidades[0]);
+                                    $scope.redirecionar(JSON.stringify(resultado.entidades[0]));
                                 }
                                 
                             },

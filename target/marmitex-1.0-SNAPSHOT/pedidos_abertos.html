@@ -170,6 +170,14 @@
                     return pedido.endereco.rua + ", " + pedido.endereco.numero + " - " + pedido.endereco.bairro;
                 };
 
+                $scope.getPagamento = function (pedido) {
+                    var txt = "";
+                    for (var i = 0; i < pedido.pagamento.length; i++) {
+                        txt += pedido.pagamento[i] + ", ";
+                    }
+                    return txt.slice(0, -2);
+                };
+
                 $scope.sair = function () {
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
@@ -186,7 +194,7 @@
                     var ano = data.getFullYear();
                     return dia + "/" + mes + "/" + ano;
                 };
-                
+
                 $scope.Devolver = function (pedido) {
                     $.ajax({
                         url: "/marmitex/pedido",
@@ -233,6 +241,8 @@
                                             <th>Data do pedido</th>
                                             <th>Descrição do pedido</th>
                                             <th>Endereço de entrega</th>
+                                            <th>Pagamento</th>
+                                            <th>Troco</th>
                                             <th>Status</th>
                                             <th></th>
                                         </tr>
@@ -245,6 +255,8 @@
                                             <td>{{pedido.dtCriacao}}</td>
                                             <td>{{getDescricao(pedido)}}</td>
                                             <td>{{getEndereco(pedido)}}</td>
+                                            <td>{{getPagamento(pedido)}}</td>
+                                            <td>{{pedido.troco| number:2}}</td>
                                             <td>
                                                 <label class='label label-primary' ng-if="pedido.status === 'Aberto'">Aberto</label>
                                                 <label class='label label-warning' ng-if="pedido.status === 'Em preparo'">Em preparo</label>
@@ -288,6 +300,8 @@
                                             <th>Data do pedido</th>
                                             <th>Descrição do pedido</th>
                                             <th>Endereço de entrega</th>
+                                            <th>Pagamento</th>
+                                            <th>Troco</th>
                                             <th>Status</th>
                                             <th></th>
                                         </tr>
@@ -300,6 +314,8 @@
                                             <td>{{pedido.dtCriacao}}</td>
                                             <td>{{getDescricao(pedido)}}</td>
                                             <td>{{getEndereco(pedido)}}</td>
+                                            <td>{{getPagamento(pedido)}}</td>
+                                            <td>{{pedido.troco| number:2}}</td>
                                             <td>                                                
                                                 <label class='label label-success' ng-if="pedido.status === 'Entregue'">Entregue</label>
                                                 <label class='label btn-github' ng-if="pedido.status === 'Cancelado'">Cancelado</label>
