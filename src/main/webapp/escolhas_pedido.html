@@ -7,11 +7,11 @@
         <meta charset="UTF-8">
 
         <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">        
         <script src="angularJS/angular.js" type="text/javascript"></script>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
-        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">   
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
@@ -30,7 +30,7 @@
                 $scope.entrega = 2;
                 $scope.enderecos;
                 $scope.outroEndereco = false;
-                $scope.troco = false;     
+                $scope.troco = false;
                 var endereco;
 
                 $scope.sair = function () {
@@ -55,7 +55,7 @@
                             }
                         });
                     }
-                }
+                };
 
                 $scope.consultarEndereco = function () {
                     $.ajax({
@@ -92,14 +92,20 @@
                         $scope.outroEndereco = false;
                     } else {
                         $scope.outroEndereco = true;
-                    }                    
+                    }
                 };
 
-                $scope.pagamentoDinheiro = function () {
-                    if ($scope.troco === true) {
-                        $scope.troco = false;
+                $scope.pagamentoDinheiro = function (obj) {
+                    if (obj.dinheiro === true) {
+                        if (confirm("Precisa de troco?")) {
+                            obj.troco = "";
+                            $scope.troco = true;
+                        } else {
+                            obj.troco = 0;
+                            $scope.troco = false;
+                        }
                     } else {
-                        $scope.troco = true;
+                        $scope.troco = false;
                     }
                 };
 
@@ -142,10 +148,11 @@
                         }
                     });
                 };
-                
+
                 $scope.total = function () {
                     return (parseFloat($scope.preco) + parseFloat($scope.entrega)).toFixed(2);
                 };
+
             });
         </script>
     </head>
@@ -176,7 +183,7 @@
                                                 <label>Valor do pedido:<br/>R${{preco| number:2}}</label><br/>
                                                 <label class="text-info">Valor da entrega:<br/>R${{entrega| number:2}}</label>
                                             </h4>
-                                            <br/>                                            
+                                            <br/>
                                             <h4 class="text-bold text-warning">{{usuario.nome}}, estes são os itens do pedido:</h4>
                                             <ul>
                                                 <li ng-repeat="mar in marmitex">{{mar.nome}}</li>
@@ -256,7 +263,7 @@
                                                         Cartão
                                                     </label>
                                                     <label class="col-md-4">
-                                                        <input type="checkbox" ng-click="pagamentoDinheiro()" ng-model="pedido.pagamento.dinheiro" id="dinheiro" name="pagamento">
+                                                        <input type="checkbox" ng-click="pagamentoDinheiro(pedido.pagamento)" ng-model="pedido.pagamento.dinheiro" id="dinheiro" name="pagamento">
                                                         Dinheiro
                                                         <label for="troco" ng-if="troco">Quanto de troco?</label>
                                                         <input type="text" ng-if="troco" id="troco" class="" ng-model="pedido.pagamento.troco" placeholder="R$0.00"/>
@@ -270,7 +277,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- TOTAL -->                                    
+                                    <!-- TOTAL -->
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <div class="col-md-8" style="font-size: medium;">
@@ -279,14 +286,14 @@
                                                 </h3>
                                             </div>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                     <div class="row">
-                                        <button type="button" 
+                                        <button type="button"
                                                 ng-disabled="!((pedido.pagamento.credito || pedido.pagamento.dinheiro || pedido.pagamento.cartao)
                                                                     && (pedido.endereco ||
                                                                             (outroEndereco &&
-                                                                                    (pedido.outro_endereco.cep && pedido.outro_endereco.numero && pedido.outro_endereco.complemento && pedido.outro_endereco.numero && pedido.outro_endereco.complemento && pedido.outro_endereco.bairro))))" 
-                                                ng-click="finalizar(pedido)" 
+                                                                                    (pedido.outro_endereco.cep && pedido.outro_endereco.numero && pedido.outro_endereco.complemento && pedido.outro_endereco.numero && pedido.outro_endereco.complemento && pedido.outro_endereco.bairro))))"
+                                                ng-click="finalizar(pedido)"
                                                 class="btn btn-success col-md-2 col-md-offset-5">
                                             <h4>Confirmar</h4>
                                         </button>
@@ -294,6 +301,7 @@
                                 </div>
                             </div><!-- /.box-body -->
                         </div>
+
                     </div><!-- /.box-body -->
                 </div><!-- /.content-wrapper -->
             </div>
