@@ -7,17 +7,11 @@
         <script>
             var parseObj = JSON.parse(window.sessionStorage["usuario"]);
         </script>
-        
+
         <script>
             var app = angular.module("template_cliente", []);
             app.controller("TemplateClienteCtrl", function ($scope) {
                 $scope.titulo = "Template Cliente";
-                
-                $scope.getCreditos = function(){
-                    //$scope.creditos_template = parseObj.credito.valor;
-                    alert(parseObj);
-                };
-               
             });
         </script>
     </head>
@@ -32,11 +26,16 @@
                     <!-- Header Navbar: style can be found in header.less -->
                     <nav class="navbar navbar-static-top" role="navigation">
                         <!-- LEFT -->
-                        <div class="navbar-custom-menu">
+                        <label class="col-md-4" style="font-size: 20px; text-align: center; color: white;">
+                            Créditos no sistema: 
+                            <label style="color: #00c0ef;">
+                                R${{getCreditos()}}
+                            </label>
+                        </label>
+                        <div class="navbar-custom-menu">                            
                             <ul class="nav navbar-nav">
-                                <!-- Notifications: style can be found in dropdown.less -->
-                                <li class="dropdown user user-menu">
-                                    R${{creditos_template}}
+                                <!-- Notifications: style can be found in dropdown.less -->                                
+                                <li class="dropdown user user-menu">                                    
                                     <button class="btn btn-danger" ng-click="sair()">
                                         Sair
                                     </button>

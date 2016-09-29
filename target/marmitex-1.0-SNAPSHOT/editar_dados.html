@@ -28,6 +28,10 @@
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
+                
+                $scope.getCreditos = function(){
+                    return $scope.usuario.credito.valor.toFixed(2);
+                };
 
                 $scope.alterar = function (usuario) {
                     if (usuario.usuario.senha === document.getElementById("txtConfirmarSenha").value) {

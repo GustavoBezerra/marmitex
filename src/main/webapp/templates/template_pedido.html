@@ -12,11 +12,17 @@
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="TemplatePedidoCtrl">
         <div id="body" class="hold-transition skin-red sidebar-mini">
-                <header class="main-header">
+            <header class="main-header">
                 <a href="index.html" class="logo"> <span class="logo-lg">Marmitex
                         do dia</span>
                 </a>
                 <nav class="navbar navbar-static-top" role="navigation">
+                    <label class="col-md-4" style="font-size: 20px; text-align: center; color: white;">
+                        Créditos no sistema: 
+                        <label style="color: #00c0ef;">
+                            R${{getCreditos()}}
+                        </label>
+                    </label>
                     <div class="navbar-custom-menu">
 
                     </div>
