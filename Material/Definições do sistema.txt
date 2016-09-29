@@ -1,13 +1,4 @@
-DEFINIÇÃO DE CATEGORIAS:
-Mistura
-Guarnição
-Acompanhamento
-Sobremesa
-Bebida
-Outros
-
-
-DEFINIÇÃO DO FIDELIDADE:
+﻿DEFINIÇÃO DO FIDELIDADE:
 Campos:
 - Nome da campanha
 - Descrição da campanha
