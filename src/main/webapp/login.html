@@ -78,7 +78,7 @@
                                 } else {
                                     $scope.redirecionar(JSON.stringify(resultado.entidades[0]));
                                 }
-                                
+
                             },
                             error: function () {
                                 alert("Erro ao cadastrar!");
@@ -98,7 +98,12 @@
                 </a>
                 <nav class="navbar navbar-static-top" role="navigation">
                     <div class="navbar-custom-menu">
-
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown user user-menu">
+                                <a href="/marmitex">
+                                    <span class="hidden-xs">Inicio</span>
+                                </a></li>
+                        </ul>
                     </div>
                 </nav>
             </header>
