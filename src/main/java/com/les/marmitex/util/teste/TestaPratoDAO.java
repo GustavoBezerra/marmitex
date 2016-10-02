@@ -45,7 +45,7 @@ public class TestaPratoDAO {
         p.setValor(valor);
         p.setId(4);
         
-        pDAO.alterar(p);        
+        pDAO.excluir(p);        
         
     }
 

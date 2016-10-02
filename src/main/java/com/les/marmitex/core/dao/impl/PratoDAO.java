@@ -193,6 +193,54 @@ public class PratoDAO extends AbstractJdbcDAO{
         return ingredientes;
     }
     
+    @Override
+    public void excluir(EntidadeDominio entidade){
+        openConnection();
+        PreparedStatement pst = null;
+
+        try {
+            Prato p = (Prato)entidade;
+            connection.setAutoCommit(false);
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("DELETE FROM tb_prato_ingrediente WHERE id_prato=?;");
+
+            pst = connection.prepareStatement(sql.toString());
+            pst.setInt(1, p.getId());
+
+            pst.executeUpdate();
+            connection.commit();
+            
+            StringBuilder sql2 = new StringBuilder();
+            sql2.append("DELETE FROM tb_prato WHERE id_prato=?;");
+
+            pst=null;
+            pst = connection.prepareStatement(sql2.toString());
+            pst.setInt(1, p.getId());
+
+            pst.executeUpdate();
+            connection.commit();            
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
+            }
+            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+        } catch (ClassCastException ce) {
+            System.out.println(ANSI_RED + "[ERROR] - Entidade não é um Ingrediente!" + ANSI_RESET);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+            }
+        }
+    }
+    
     private void salvarIngredientes(Ingrediente i, int id_prato) {
         openConnection();
         PreparedStatement pst = null;
