@@ -15,28 +15,162 @@
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
+            var ingredientes = document.getElementsByName("ingredientes");
+            var ingredientesCheckados = new Array();
+
             var app = angular.module("gerenciarCardapio", []);
             app.controller("gerenciarCardapioCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Cardapio";
+                $scope.preco = 0;
 
                 $scope.sair = function () {
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
+
+                $scope.consultarTudo = function () {
+                    $scope.consultarCategorias();
+                    $scope.consultarIngredientes();
+                };
+
+                $scope.consultarCategorias = function () {
+                    $.ajax({
+                        url: "/marmitex/categoria",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"
+                        },
+                        success: function (data) {
+                            $scope.categorias = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.consultarIngredientes = function () {
+                    $.ajax({
+                        url: "/marmitex/ingrediente",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"
+                        },
+                        success: function (data) {
+                            $scope.recursos = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.clicou = function (recurso) {
+                    var r = document.getElementById(recurso.nome);
+                    if (r.checked === true) {
+                        ingredientesCheckados.push(recurso);
+                        $scope.preco += recurso.valor;
+                    } else {
+                        for (var i = ingredientesCheckados.length - 1; i >= 0; i--) {
+                            if (ingredientesCheckados[i] === recurso) {
+                                ingredientesCheckados.splice(i, 1);
+                                break;
+                            }
+                        }
+                        $scope.preco -= recurso.valor;
+                    }
+                };
             });
         </script>
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="gerenciarCardapioCtrl">
-        <div id="body" class="hold-transition skin-blue sidebar-mini">
+        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="consultarTudo()">
             <div class="wrapper">
                 <div ng-include="'templates/template_admin.html'"></div>
 
                 <!-- Content Wrapper. Contains page content -->
                 <div class="content-wrapper">
-                    <!-- Main content -->
-                    <!-- form start -->
                     <div class="box-body">
-                        Gerenciar cardápio
+                        <div class="col-md-12">
+                            <div class="box box-success">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-road"></i>
+                                        <h3 class="box-title">Cadastrar prato</h3>
+                                        <button type="button" class="btn btn-info pull-right" name="cancelar" id="cancelar">Cancelar</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-5">
+                                            <label for="txtNome">Nome do prato</label>
+                                            <input type="text" class="form-control" name="txtNome" id="txtNome" placeholder="Nome do prato">
+                                            <label class="text-green text-bold"><h3>Valor do prato: R${{preco| number: 2}}</h3></label>
+                                        </div>
+                                        
+                                    </div>
+                                    <div id="escolhas" class="row" ng-repeat="categoria in categorias">
+                                        <div class="form-group col-md-6" >
+                                            <div class="box-header with-border">
+                                                <i class="glyphicon glyphicon-asterisk"></i>
+                                                <h3 class="box-title">{{categoria.nome}}</h3>
+                                            </div><!-- /.box-header -->
+                                            <div class="form-group">
+                                                <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
+                                                    <label>
+                                                        <input type="checkbox" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))" ng-click="clicou(recurso)" name="{{categoria.nome}}" id="{{recurso.nome}}">
+                                                        {{recurso.nome}} (R${{recurso.valor| number:2}} )
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- SEGUNDA LINHA -->
+
+                                    <div class="row">
+                                        <div class="form-group col-md-11">
+                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" >Cadastrar</button>
+                                            <button type="submit" class="btn btn-warning pull-right" id="alterar" name="operacao" value="ALTERAR" >Alterar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CONSULTAR -->
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="box box-info">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-road"></i>
+                                        <h3 class="box-title">Pratos cadastrados</h3>
+                                    </div>
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>ID do prato</th>
+                                            <th>Nome</th>
+                                            <th>Dia</th>
+                                            <th>Ingredientes</th>
+                                            <th>Preço</th>
+                                        </tr>
+                                        <tr ng-repeat="e in entregadores">
+                                            <td>
+                                                <a ng-click="visualizar(e);">
+                                                    {{e.id}}
+                                                </a>
+                                            </td>
+                                            <td>{{e.nome}}</td>
+                                            <td>
+                                                <button type='button' class='btn btn-warning' ng-click='visualizar(e)'>Alterar</button>
+                                                <button type='button' class='btn btn-danger' ng-click='excluir(e)'>Excluir</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
