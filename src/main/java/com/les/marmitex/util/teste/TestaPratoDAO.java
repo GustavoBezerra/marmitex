@@ -24,8 +24,8 @@ public class TestaPratoDAO {
         Ingrediente i2 = new Ingrediente();
         double valor=0;
         
-        i1.setId(10);
-        i1.setValor(8);
+        i1.setId(14);
+        i1.setValor(14);
         
         i2.setId(13);
         i2.setValor(6);
@@ -43,8 +43,9 @@ public class TestaPratoDAO {
         p.setDtDisponivel(new Date());
         p.setIngredientes(ingredientes);
         p.setValor(valor);
+        p.setId(4);
         
-        pDAO.salvar(p);        
+        pDAO.alterar(p);        
         
     }
 
