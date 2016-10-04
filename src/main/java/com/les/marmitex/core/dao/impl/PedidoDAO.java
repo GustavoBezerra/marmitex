@@ -2,9 +2,7 @@ package com.les.marmitex.core.dao.impl;
 
 import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RED;
 import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RESET;
-import com.les.marmitex.core.dominio.Categoria;
 import com.les.marmitex.core.dominio.Cliente;
-import com.les.marmitex.core.dominio.Credito;
 import com.les.marmitex.core.dominio.Endereco;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Ingrediente;
@@ -12,7 +10,7 @@ import com.les.marmitex.core.dominio.Marmitex;
 import com.les.marmitex.core.dominio.Pagamento;
 import com.les.marmitex.core.dominio.Pedido;
 import com.les.marmitex.core.dominio.Status;
-import com.les.marmitex.core.dominio.Usuario;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -87,6 +85,9 @@ public class PedidoDAO extends AbstractJdbcDAO {
             }
 
             // salvar os tipos de pagamento
+            if(pedido.getPagamento().contains(Pagamento.CREDITO)){
+                alterarCreditos(pedido.getCliente().getId(), pedido.getValorTotal());
+            }
             pagamentoDAO.salvar(pedido);
 
         } catch (SQLException e) {
@@ -353,6 +354,30 @@ public class PedidoDAO extends AbstractJdbcDAO {
             }
         }
         return pagamentos;
+    }
+    
+    private void alterarCreditos(int id_cliente, double valor_pedido){
+        ClienteDAO cDAO = new ClienteDAO();
+        Cliente cliente = new Cliente();
+        cliente.setId(id_cliente);
+        double aux;
+        Double truncatedDouble;
+        
+        Cliente cli = (Cliente)cDAO.consultar(cliente).get(0);
+        aux = cli.getCredito().getValor();
+        if(aux >= valor_pedido){
+            truncatedDouble = new BigDecimal(aux - valor_pedido)
+                    .setScale(3, BigDecimal.ROUND_HALF_UP)
+                    .doubleValue();
+            cli.getCredito().setValor(truncatedDouble);
+        }
+        else{
+            truncatedDouble = new BigDecimal(valor_pedido - aux)
+                    .setScale(3, BigDecimal.ROUND_HALF_UP)
+                    .doubleValue();
+            cli.getCredito().setValor(truncatedDouble);
+        }
+        cDAO.alterar(cli);
     }
 
 }

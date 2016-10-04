@@ -7,11 +7,11 @@
         <meta charset="UTF-8">
 
         <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
-        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">        
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
         <script src="angularJS/angular.js" type="text/javascript"></script>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
-        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">   
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
@@ -32,7 +32,7 @@
                 $scope.outroEndereco = false;
                 $scope.troco = false;
                 var endereco;
-                
+
                 $scope.getCreditos = function(){
                     return $scope.usuario.credito.valor.toFixed(2);
                 };
@@ -108,6 +108,15 @@
                     }
                 };
 
+                $scope.pagamentoCreditos = function (obj) {
+                    if (obj.credito === true) {
+                        if($scope.usuario.credito.valor < $scope.total()){
+                            alert("Você não possui a quantidade necessária de créditos!\n"+
+                                    "Favor escolher mais uma forma de pagamento.");
+                        }
+                    }
+                };
+
                 $scope.finalizar = function (data) {
                     if ($scope.pedido.endereco === undefined || $scope.pedido.endereco === "") {
                         window.sessionStorage.setItem("endereco", JSON.stringify(data.outro_endereco));
@@ -120,6 +129,15 @@
                                 endereco = JSON.stringify($scope.enderecos[i]);
                                 break;
                             }
+                        }
+                    }
+                    if (data.pagamento.credito === true && 
+                            (data.pagamento.dinheiro === false || data.pagamento.dinheiro === undefined) && 
+                            (data.pagamento.cartao === false || data.pagamento.cartao === undefined)) {
+                        if($scope.usuario.credito.valor < $scope.total()){
+                            alert("Você não possui a quantidade necessária de créditos!\n"+
+                                    "Favor escolher mais uma forma de pagamento.");
+                            return; 
                         }
                     }
                     window.sessionStorage.setItem("pedido", JSON.stringify(data));
@@ -268,7 +286,7 @@
                                                         <input type="text" ng-if="troco" id="troco" class="" ng-model="pedido.pagamento.troco" placeholder="R$0.00"/>
                                                     </label>
                                                     <label class="col-md-5">
-                                                        <input type="checkbox" id="credito" name="pagamento" ng-model="pedido.pagamento.credito">
+                                                        <input type="checkbox" ng-click="pagamentoCreditos(pedido.pagamento)" id="credito" name="pagamento" ng-model="pedido.pagamento.credito">
                                                         Créditos no sistema
                                                     </label>
                                                 </div>

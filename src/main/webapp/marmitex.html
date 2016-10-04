@@ -84,9 +84,9 @@
 
                 $scope.clicou = function (recurso) {
                     var r = document.getElementById(recurso.nome);
-                    if (r.checked === true) {
+                    if (r.value !== 0) {
                         ingredientesCheckados.push(recurso);
-                        $scope.preco += recurso.valor;
+                        $scope.preco += (recurso.valor * r.value);
                     } else {
                         for (var i = ingredientesCheckados.length - 1; i >= 0; i--) {
                             if (ingredientesCheckados[i] === recurso) {
@@ -145,7 +145,7 @@
                                             <div class="form-group">
                                                 <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
                                                     <label>
-                                                        <input type="checkbox" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))" ng-click="clicou(recurso)" name="{{categoria.nome}}" id="{{recurso.nome}}">
+                                                        <input type="number" style="width: 40px" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))" ng-click="clicou(recurso)" name="{{categoria.nome}}" id="{{recurso.nome}}">
                                                         {{recurso.nome}} (R${{recurso.valor | number:2}} )
                                                     </label>
                                                 </div>
