@@ -129,6 +129,7 @@ public class PratoDAO extends AbstractJdbcDAO{
     @Override
     public List<EntidadeDominio> consultar(EntidadeDominio entidade) throws SQLException {
         //TODO pensar melhor no consultar
+    	// teste de commit
         openConnection();
         PreparedStatement pst = null;
         Ingrediente i;
