@@ -85,7 +85,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
             }
 
             // salvar os tipos de pagamento
-            if(pedido.getPagamento().contains(Pagamento.CREDITO)){
+            if (pedido.getPagamento().contains(Pagamento.CREDITO)) {
                 alterarCreditos(pedido.getCliente().getId(), pedido.getValorTotal());
             }
             pagamentoDAO.salvar(pedido);
@@ -181,23 +181,25 @@ public class PedidoDAO extends AbstractJdbcDAO {
 
             StringBuilder sql = new StringBuilder();
 
-            sql.append("select p.id_pedido, p.id_entregador, p.status, p.valor_total, p.valor_frete, p.troco, p.dt_criacao, p.id_cliente, \n"
-                    + "       m.id_marmitex, i.id_ingrediente, i.nome, i.valor as valor_ingrediente,\n"
-                    + "       e.id_endereco, e.cep, e.bairro, e.cidade, e.complemento, e.logradouro, e.numero from tb_pedido p\n"
-                    + "inner join tb_marmitex m on m.id_pedido=p.id_pedido\n"
-                    + "inner join tb_marmitex_ingrediente mi on mi.id_marmitex = m.id_marmitex\n"
+            sql.append("select\n"
+                    + "p.id_pedido, p.id_entregador, p.status, p.valor_total, p.valor_frete, p.troco, p.dt_criacao, p.id_cliente,\n"
+                    + "                    m.id_marmitex, i.id_ingrediente, i.nome, i.valor as valor_ingrediente,\n"
+                    + "                    e.id_endereco, e.cep, e.bairro, e.cidade, e.complemento, e.logradouro, e.numero\n"
+                    + "from tb_marmitex m\n"
+                    + "inner join tb_marmitex_ingrediente mi on m.id_marmitex=mi.id_marmitex\n"
+                    + "inner join tb_pedido p on p.id_pedido=m.id_pedido\n"
+                    + "inner join tb_cliente c on c.id_cliente=p.id_cliente\n"
                     + "inner join tb_ingredientes i on mi.id_ingrediente=i.id_ingrediente\n"
-                    + "inner join tb_endereco e on e.id_endereco=p.id_endereco\n"
-                    + "inner join tb_cliente c on c.id_cliente=p.id_cliente\n");
+                    + "inner join tb_endereco e on e.id_endereco=p.id_endereco\n"   );
 
             if (pedido.getId() != 0) {
-                sql.append("where p.id_pedido=? \n");
+                sql.append("where p.id_pedido=?;");
 
             } else if (pedido.getCliente().getId() != 1) {
-                sql.append("where c.id_cliente=? \n");
+                sql.append("where c.id_cliente=?;");
 
             }
-            sql.append("GROUP BY p.id_pedido,i.id_ingrediente;");
+            //sql.append("GROUP BY p.id_pedido,i.id_ingrediente;");
 
             pst = connection.prepareStatement(sql.toString());
 
@@ -272,6 +274,11 @@ public class PedidoDAO extends AbstractJdbcDAO {
                 }
             }
             if (anterior != 0) { //vai perder o último registro do pedido anterior?
+//                i = new Ingrediente();
+//                i.setId(rs.getInt("id_ingrediente"));
+//                i.setNome(rs.getString("nome"));
+//                i.setValor(rs.getDouble("valor_ingrediente"));
+//                ingredientes.add(i);
                 m.setIngredientes(ingredientes);
                 marmitexs.add(m);
                 p.setMarmitex(marmitexs);
@@ -355,23 +362,22 @@ public class PedidoDAO extends AbstractJdbcDAO {
         }
         return pagamentos;
     }
-    
-    private void alterarCreditos(int id_cliente, double valor_pedido){
+
+    private void alterarCreditos(int id_cliente, double valor_pedido) {
         ClienteDAO cDAO = new ClienteDAO();
         Cliente cliente = new Cliente();
         cliente.setId(id_cliente);
         double aux;
         Double truncatedDouble;
-        
-        Cliente cli = (Cliente)cDAO.consultar(cliente).get(0);
+
+        Cliente cli = (Cliente) cDAO.consultar(cliente).get(0);
         aux = cli.getCredito().getValor();
-        if(aux >= valor_pedido){
+        if (aux >= valor_pedido) {
             truncatedDouble = new BigDecimal(aux - valor_pedido)
                     .setScale(3, BigDecimal.ROUND_HALF_UP)
                     .doubleValue();
             cli.getCredito().setValor(truncatedDouble);
-        }
-        else{
+        } else {
             truncatedDouble = new BigDecimal(valor_pedido - aux)
                     .setScale(3, BigDecimal.ROUND_HALF_UP)
                     .doubleValue();

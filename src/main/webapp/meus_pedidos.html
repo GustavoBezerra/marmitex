@@ -64,7 +64,8 @@
                     return $scope.usuario.credito.valor.toFixed(2);
                 };
                 
-
+                
+                
                 $scope.getPedidos = function () {
                     $.ajax({
                         url: "/marmitex/pedido",
@@ -121,7 +122,10 @@
                             cliente: JSON.stringify(pedido.cliente)
                         },
                         success: function (data) {
+                            $scope.usuario.credito.valor = ($scope.usuario.credito.valor + pedido.valorTotal);
+                            window.sessionStorage.setItem("usuario", JSON.stringify($scope.usuario));
                             $scope.getPedidos();
+                            $scope.getCreditos();
                         },
                         error: function (err) {
                             alert("Erro ao alterar o pedido!\n" + err);

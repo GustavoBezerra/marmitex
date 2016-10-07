@@ -17,7 +17,6 @@
             var ingredientes = document.getElementsByName("ingredientes");
             var ingredientesCheckados = new Array();
             var test = window.sessionStorage["teste"];
-            //alert(test);
             var app = angular.module("montarMarmitex", []);
             app.controller("marmitexCtrl", function ($scope) {
                 $scope.titulo = "Montar marmitex";
@@ -26,6 +25,27 @@
                 $scope.consultarTudo = function () {
                     $scope.consultarCategorias();
                     $scope.consultarIngredientes();
+                };
+
+                $scope.acrescentar = function (recurso) {
+                    var r = document.getElementById(recurso.nome);
+                    r.value++;
+                    $scope.preco += recurso.valor;                    
+                    ingredientesCheckados.push(angular.copy(recurso));
+                };
+
+                $scope.retirar = function (recurso) {
+                    var r = document.getElementById(recurso.nome);
+                    if (r.value > 0) {
+                        for (var i = ingredientesCheckados.length - 1; i >= 0; i--) {
+                            if (ingredientesCheckados[i] === recurso) {
+                                ingredientesCheckados.splice(i, 1);
+                                break;
+                            }
+                        }
+                        r.value--;
+                        $scope.preco -= recurso.valor;
+                    }
                 };
 
                 $scope.consultarCategorias = function () {
@@ -62,22 +82,11 @@
                     });
                 };
 
-                $scope.verificar = function () {
-                    var checks = new Array();
-
-                    for (var i = 0; i < $scope.categorias.length; i++) {
-                        var teste = document.getElementsByName($scope.categorias[i].nome);
-                        for (var j = 0; j < teste.length; j++) {
-                            if (teste[j].checked === true) {
-                                checks.push(teste[j]);
-                            }
-                        }
-                    }
-
-                    if ($scope.preco !== 0) {
+                $scope.verificar = function () {                    
+                    if (ingredientesCheckados.length !== 0) {
                         window.sessionStorage.clear();
                         window.sessionStorage.setItem("marmitex", JSON.stringify(ingredientesCheckados));
-                        window.sessionStorage.setItem("preco", angular.copy($scope.preco));                        
+                        window.sessionStorage.setItem("preco", angular.copy($scope.preco));
                     }
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
@@ -145,8 +154,12 @@
                                             <div class="form-group">
                                                 <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
                                                     <label>
-                                                        <input type="number" style="width: 40px" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))" ng-click="clicou(recurso)" name="{{categoria.nome}}" id="{{recurso.nome}}">
-                                                        {{recurso.nome}} (R${{recurso.valor | number:2}} )
+                                                        <input type="text" value="0" readonly="true" style="width: 40px" name="{{categoria.nome}}" id="{{recurso.nome}}" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+
+                                                        <img src="photos/plus.png" ng-click="acrescentar(recurso)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                                        <img src="photos/minus.png" ng-click="retirar(recurso)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+
+                                                        {{recurso.nome}} (R${{recurso.valor| number:2}} )
                                                     </label>
                                                 </div>
                                             </div>
