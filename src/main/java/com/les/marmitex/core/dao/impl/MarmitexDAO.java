@@ -131,23 +131,25 @@ public class MarmitexDAO extends AbstractJdbcDAO {
     private void darBaixaNoEstoque(Ingrediente i) {
         double qtde;
         IngredienteDAO iDAO = new IngredienteDAO();
-        if (!("Unidade(s)").equals(i.getMedida())) {
-            try {
-                qtde = i.getQuantidade();
-                i.setQuantidade(qtde - 0.150);
-                iDAO.alterar(i);
-            } catch (SQLException ex) {
-                Logger.getLogger(ValidarEstoque.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            Ingrediente ing = (Ingrediente) iDAO.consultar(i).get(0);
+            if (!("Unidade(s)").equals(i.getMedida())) {
+                try {
+                    i.setQuantidade(ing.getQuantidade() - 0.150);
+                    iDAO.alterar(i);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ValidarEstoque.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    i.setQuantidade(ing.getQuantidade() - 1);
+                    iDAO.alterar(i);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ValidarEstoque.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        } else {
-            try {
-                qtde = i.getQuantidade();
-                i.setQuantidade(qtde - 1);
-                iDAO.alterar(i);
-            } catch (SQLException ex) {
-                Logger.getLogger(ValidarEstoque.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return;
+        } catch (SQLException ex) {         
+            Logger.getLogger(MarmitexDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }            
     }
 }

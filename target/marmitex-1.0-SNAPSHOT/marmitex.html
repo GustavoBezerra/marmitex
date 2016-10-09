@@ -29,15 +29,21 @@
 
                 $scope.acrescentar = function (recurso) {
                     var r = document.getElementById(recurso.nome);
-                    r.value++;
-                    $scope.preco += recurso.valor;                    
-                    ingredientesCheckados.push(angular.copy(recurso));
+                    if (recurso.medida === "Unidade(s)" && (parseInt(r.value)) === (recurso.quantidade - 1)) {
+                        alert("Quantidade máxima de " + recurso.nome + " atingida!");
+                    } else if (recurso.medida !== "Unidade(s)" && ((r.value * 0.150) >= (recurso.quantidade - 0.150))) {
+                        alert("Quantidade máxima de " + recurso.nome + " atingida!");
+                    } else {
+                        r.value++;                        
+                        $scope.preco += recurso.valor;
+                        ingredientesCheckados.push(angular.copy(recurso));
+                    }
                 };
 
                 $scope.retirar = function (recurso) {
                     var r = document.getElementById(recurso.nome);
                     if (r.value > 0) {
-                        for (var i = ingredientesCheckados.length - 1; i >= 0; i--) {
+                        for (var i = ingredientesCheckados.length; i >= 0; i--) {
                             if (ingredientesCheckados[i] === recurso) {
                                 ingredientesCheckados.splice(i, 1);
                                 break;
@@ -82,7 +88,7 @@
                     });
                 };
 
-                $scope.verificar = function () {                    
+                $scope.verificar = function () {
                     if (ingredientesCheckados.length !== 0) {
                         window.sessionStorage.clear();
                         window.sessionStorage.setItem("marmitex", JSON.stringify(ingredientesCheckados));
@@ -154,7 +160,7 @@
                                             <div class="form-group">
                                                 <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
                                                     <label>
-                                                        <input type="text" value="0" readonly="true" style="width: 40px" name="{{categoria.nome}}" id="{{recurso.nome}}" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                                        <input type="number" value="0" readonly="true" style="width: 40px" name="{{categoria.nome}}" id="{{recurso.nome}}" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
 
                                                         <img src="photos/plus.png" ng-click="acrescentar(recurso)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
                                                         <img src="photos/minus.png" ng-click="retirar(recurso)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">

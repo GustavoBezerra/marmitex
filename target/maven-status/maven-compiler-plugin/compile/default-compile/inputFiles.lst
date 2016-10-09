@@ -1,4 +1,5 @@
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestaDate.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestaPratoDAO.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\CategoriaDAO.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\IViewHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\IDAO.java
@@ -10,6 +11,7 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\strategy\IStrategy.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Beneficios.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\MarmitexDAO.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\PratoDAO.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Credito.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\CategoriaHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\command\impl\ConsultarCommand.java
@@ -36,6 +38,7 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\strategy\impl\ValidarEstoque.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestarSalvarPedido.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\strategy\impl\EfetuarDevolucao.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\strategy\impl\VerificarEmailRepetido.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestarSpring.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\PedidoDAO.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestaCategoriaDAO.java
@@ -55,6 +58,7 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\ClienteDAO.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\fachada\IFachada.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\command\impl\ExcluirCommand.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Prato.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\ConverteDate.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\PedidoHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Ingrediente.java

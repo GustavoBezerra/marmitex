@@ -8,6 +8,7 @@ com\les\marmitex\core\fachada\impl\Fachada.class
 com\les\marmitex\util\ConverteDate.class
 com\les\marmitex\util\teste\TestarSpring.class
 com\les\marmitex\core\dao\impl\IngredienteDAO.class
+com\les\marmitex\util\teste\TestaPratoDAO.class
 com\les\marmitex\view\helper\IViewHelper.class
 com\les\marmitex\core\dao\impl\PagamentoDAO.class
 com\les\marmitex\core\strategy\impl\ValidarCamposEmBranco.class
@@ -18,6 +19,7 @@ com\les\marmitex\view\command\impl\SalvarCommand.class
 com\les\marmitex\util\Conexao.class
 com\les\marmitex\core\dao\impl\MarmitexDAO.class
 com\les\marmitex\view\helper\impl\EntregadorHelper.class
+com\les\marmitex\core\dominio\Prato.class
 com\les\marmitex\core\dominio\Pessoa.class
 com\les\marmitex\util\teste\TestarIngredienteDAO.class
 com\les\marmitex\view\command\impl\AbstractCommand.class
@@ -27,7 +29,9 @@ com\les\marmitex\view\helper\impl\PedidoHelper$1.class
 com\les\marmitex\util\teste\TesteGson$1.class
 com\les\marmitex\core\dao\IDAO.class
 com\les\marmitex\core\dominio\Endereco.class
+com\les\marmitex\core\dao\impl\PratoDAO.class
 com\les\marmitex\core\dominio\IEntidade.class
+com\les\marmitex\core\strategy\impl\VerificarEmailRepetido.class
 com\les\marmitex\core\dominio\Marmitex.class
 com\les\marmitex\core\dominio\Beneficios.class
 com\les\marmitex\util\teste\TestaGsonDate.class
