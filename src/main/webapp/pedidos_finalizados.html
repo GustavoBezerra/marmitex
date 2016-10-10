@@ -47,6 +47,11 @@
                     });
                 };
 
+                $scope.verDetalhes = function (pedido) {
+                    window.sessionStorage.setItem("pedido", JSON.stringify(pedido));
+                    window.location.href = "http://localhost:8084/marmitex/devolver_admin.html";
+                };
+
                 $scope.getPedidos = function () {
                     $.ajax({
                         url: "/marmitex/pedido",
@@ -68,24 +73,24 @@
                 $scope.alterar = function (pedido, status) {
                     if (status === 'A caminho') {
                         $.ajax({
-                        url: "/marmitex/pedido",
-                        type: "POST",
-                        async: false,
-                        data: {
-                            operacao: "ALTERAR",
-                            id_pedido: pedido.id,
-                            status: status,
-                            entregador: pedido.entregador
-                        },
-                        success: function (data) {
-                            $scope.id_pedido_entregar=0;
-                            $scope.entregar = false;
-                            $scope.getPedidos();
-                        },
-                        error: function (err) {
-                            alert("Erro ao alterar o pedido!\n" + err);
-                        }
-                    });
+                            url: "/marmitex/pedido",
+                            type: "POST",
+                            async: false,
+                            data: {
+                                operacao: "ALTERAR",
+                                id_pedido: pedido.id,
+                                status: status,
+                                entregador: pedido.entregador
+                            },
+                            success: function (data) {
+                                $scope.id_pedido_entregar = 0;
+                                $scope.entregar = false;
+                                $scope.getPedidos();
+                            },
+                            error: function (err) {
+                                alert("Erro ao alterar o pedido!\n" + err);
+                            }
+                        });
                     } else {
                         $.ajax({
                             url: "/marmitex/pedido",
@@ -110,18 +115,18 @@
                 $scope.getDescricao = function (pedido) {
                     var desc = "";
                     for (var i = 0; i < pedido.marmitex.length; i++) {
-                        desc += "Marmitex "+(i+1)+":";
+                        desc += "Marmitex " + (i + 1) + ":";
                         for (var j = 0; j < pedido.marmitex[i].ingredientes.length; j++) {
                             desc += pedido.marmitex[i].ingredientes[j].nome + ", ";
                         }
                         desc = desc.slice(0, -2);
                         desc += "; ";
-                    }                    
+                    }
                     return desc;
                 };
-                
-                $scope.getEndereco = function(pedido){
-                    return pedido.endereco.rua+", "+pedido.endereco.numero+" - "+pedido.endereco.bairro;
+
+                $scope.getEndereco = function (pedido) {
+                    return pedido.endereco.rua + ", " + pedido.endereco.numero + " - " + pedido.endereco.bairro;
                 };
 
                 $scope.sair = function () {
@@ -150,7 +155,7 @@
 
                 <!-- Content Wrapper. Contains page content -->
                 <div class="content-wrapper">
-                    <!-- Main content -->                    
+                    <!-- Main content -->
 
                     <div class="box-body">
                         <div class="col-md-12">
@@ -178,7 +183,7 @@
                                             <td>{{pedido.dtCriacao}}</td>
                                             <td>{{getDescricao(pedido)}}</td>
                                             <td>{{getEndereco(pedido)}}</td>
-                                            <td>                                                
+                                            <td>
                                                 <label class='label label-success' ng-if="pedido.status === 'Entregue'">Entregue</label>
                                                 <label class='label btn-github' ng-if="pedido.status === 'Cancelado'">Cancelado</label>
                                                 <label class='label btn-danger' ng-if="pedido.status === 'Devolvido'">Devolvido</label>

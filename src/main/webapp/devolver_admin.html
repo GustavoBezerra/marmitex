@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com> -->
+<!-- Data de criação: 10/10/2016 -->
+<html ng-app="dadosPedido">
+    <head>
+        <title>ADMIN - Devolução</title>
+        <meta charset="UTF-8">
+
+        <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
+        <script src="angularJS/angular.js" type="text/javascript"></script>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>        
+
+        <script>
+            var parseObj = JSON.parse(window.sessionStorage["usuario"]);
+            var parsePedido = JSON.parse(window.sessionStorage["pedido"]);
+        </script>
+
+        <script>
+            var app = angular.module("dadosPedido", []);
+            app.controller("DadosPedidoCtrl", function ($scope) {
+                $scope.usuario = parseObj;
+                $scope.pedido = parsePedido;
+
+                $scope.sair = function () {
+                    window.sessionStorage.clear();
+                    window.location.href = "http://localhost:8084/marmitex/login.html";
+                };
+                
+
+//retirar o parametro.
+                $scope.devolver = function (pedido) {
+                    $.ajax({
+                        url: "/marmitex/pedido",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "ALTERAR",
+                            valor_total: pedido.valorTotal,
+                            id_pedido: pedido.id,
+                            status: "Devolvido",
+                            cliente: JSON.stringify(pedido.cliente)
+                        },
+                        success: function (data) {
+                            window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html"
+                        },
+                        error: function (err) {
+                            alert("Erro ao alterar o pedido!\n" + err);
+                        }
+                    });
+                };
+
+                $scope.devolverMarmitex = function (marmitex) {
+                    var decisao = confirm("Deseja mesmo excluir sua conta?");
+                    if (decisao) {
+                        $.ajax({
+                            url: "/marmitex/cliente",
+                            type: "POST",
+                            async: false,
+                            data: {
+                                operacao: "EXCLUIR",
+                                id: usuario.id
+                            },
+                            success: function () {
+                                alert("Conta excluída!");
+                                $scope.sair();
+                            },
+                            error: function (err) {
+                                console.log(err.statusText);
+                            }
+                        });
+                    }
+                };
+
+                $scope.getPagamento = function (pedido) {
+                    var txt = "";
+                    for (var i = 0; i < pedido.pagamento.length; i++) {
+                        txt += pedido.pagamento[i] + ", ";
+                    }
+                    return txt.slice(0, -2);
+                };
+
+                $scope.getEndereco = function (pedido) {
+                    return pedido.endereco.rua + ", " + pedido.endereco.numero + " - " + pedido.endereco.bairro;
+                };
+
+                $scope.getDescricao = function (pedido) {
+                    var desc = "";
+                    for (var j = 0; j < pedido.ingredientes.length; j++) {
+                        desc += pedido.ingredientes[j].nome + ", ";
+                    }
+                    return desc.slice(0, -2);
+                };
+
+                $scope.dataAtualFormatada = function () {
+                    var data = new Date();
+                    var dia = data.getDate();
+                    if (dia.toString().length === 1)
+                        dia = "0" + dia;
+                    var mes = data.getMonth() + 1;
+                    if (mes.toString().length === 1)
+                        mes = "0" + mes;
+                    var ano = data.getFullYear();
+                    return dia + "/" + mes + "/" + ano;
+                };
+            });
+
+
+        </script>
+    </head>
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="DadosPedidoCtrl">
+        <div id="body" class="hold-transition skin-blue sidebar-mini">
+            <div class="wrapper">
+                <div ng-include="'templates/template_admin.html'"></div>
+
+                <!-- Content Wrapper. Contains page content -->
+                <div class="content-wrapper">
+                    <!-- Main content -->
+                    <!-- form start -->
+                    <div class="box-body">
+                        <div class="col-md-6 col-md-push-3">
+                            <div class="box box-default">
+                                <div class="box-body">
+                                    <div class="box-header with-border">
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                        <h3 class="box-title">Dados do pedido</h3>
+                                        <button type="button" class="btn btn-danger pull-right" name="devolver" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="devolver(pedido)" id="excluir">Devolver tudo</button>
+
+                                    </div>
+                                    <br>
+                                    <!-- PRIMEIRA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label for="txtId">ID do pedido</label>
+                                            <input readonly="true" type="text" class="form-control" ng-model="pedido.id" name="txtId" id="txtId" placeholder="ID">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="txtData">Data do pedido</label>
+                                            <input readonly="true" type="tel" class="form-control" ng-model="pedido.dtCriacao" name="txtData" id="txtData" placeholder="Data">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="txtValor">Valor</label>
+                                            <input readonly="true" type="text" class="form-control" ng-model="pedido.valorTotal" name="txtValor" id="txtValor" placeholder="Valor total">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="txtPagamento">Forma de pagamento</label>
+                                            <input readonly="true" type="text" class="form-control" value="{{getPagamento(pedido)}}" name="txtPagamento" id="txtPagamento" placeholder="Forma de pagamento">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="txtStatus">Status</label>
+                                            <input readonly="true" type="text" class="form-control" value="{{pedido.status}}" name="txtStatus" id="txtStatus" placeholder="Status">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="box-header with-border">
+                                        <i class="glyphicon glyphicon-log-in"></i>
+                                        <h3 class="box-title">Dados da entrega</h3>
+                                    </div>
+                                    <!-- QUARTA LINHA -->
+                                    <div class="row">
+                                        <div class="form-group col-md-10">
+                                            <label for="txtEmail">Endereço de entrega</label>
+                                            <input readonly="true" type="text" class="form-control" value="{{getEndereco(pedido)}}" name="txtEmail" id="txtEmail" placeholder="E-mail">
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="box-header with-border">
+                                        <i class="glyphicon glyphicon-log-in"></i>
+                                        <h3 class="box-title">Itens do pedido</h3>
+                                    </div>
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>ID da marmitex</th>
+                                            <th>Itens</th>                                            
+                                            <th></th>
+                                        </tr>
+                                        <tr ng-repeat="p in pedido.marmitex">
+                                            <td>
+                                                {{p.id}}
+                                            </td>
+                                            <td>{{getDescricao(p)}}</td>
+                                            <td>
+                                                <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="devolverMarmitex(p);">Devolver</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.content-wrapper -->
+            </div>
+        </div>
+    </body>
+</html>

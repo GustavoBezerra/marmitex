@@ -78,6 +78,11 @@
                         }
                     });
                 };
+                
+                $scope.verDetalhes = function (pedido) {
+                    window.sessionStorage.setItem("pedido", JSON.stringify(pedido));
+                    window.location.href = "http://localhost:8084/marmitex/devolver_admin.html";
+                };
 
                 $scope.getPedidos = function () {
                     $.ajax({
@@ -161,13 +166,13 @@
                 $scope.getDescricao = function (pedido) {
                     var desc = "";
                     for (var i = 0; i < pedido.marmitex.length; i++) {
-                        desc += "Marmitex "+(i+1)+":";
+                        desc += "Marmitex " + (i + 1) + ":";
                         for (var j = 0; j < pedido.marmitex[i].ingredientes.length; j++) {
                             desc += pedido.marmitex[i].ingredientes[j].nome + ", ";
                         }
                         desc = desc.slice(0, -2);
                         desc += "; ";
-                    }                    
+                    }
                     return desc;
                 };
 
@@ -201,24 +206,26 @@
                 };
 
                 $scope.Devolver = function (pedido) {
-                    $.ajax({
-                        url: "/marmitex/pedido",
-                        type: "POST",
-                        async: false,
-                        data: {
-                            operacao: "ALTERAR",
-                            valor_total: pedido.valorTotal,
-                            id_pedido: pedido.id,
-                            status: "Devolvido",
-                            cliente: JSON.stringify(pedido.cliente)
-                        },
-                        success: function (data) {
-                            $scope.getPedidos();
-                        },
-                        error: function (err) {
-                            alert("Erro ao alterar o pedido!\n" + err);
-                        }
-                    });
+//                    $.ajax({
+//                        url: "/marmitex/pedido",
+//                        type: "POST",
+//                        async: false,
+//                        data: {
+//                            operacao: "ALTERAR",
+//                            valor_total: pedido.valorTotal,
+//                            id_pedido: pedido.id,
+//                            status: "Devolvido",
+//                            cliente: JSON.stringify(pedido.cliente)
+//                        },
+//                        success: function (data) {
+//                            $scope.getPedidos();
+//                        },
+//                        error: function (err) {
+//                            alert("Erro ao alterar o pedido!\n" + err);
+//                        }
+//                    });
+                    window.sessionStorage.setItem("pedido", JSON.stringify(pedido));
+                    window.location.href = "http://localhost:8084/marmitex/devolver_admin.html";
                 };
             });
         </script>
