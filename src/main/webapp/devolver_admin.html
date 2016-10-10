@@ -29,9 +29,8 @@
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
-                
 
-//retirar o parametro.
+
                 $scope.devolver = function (pedido) {
                     $.ajax({
                         url: "/marmitex/pedido",
@@ -54,25 +53,22 @@
                 };
 
                 $scope.devolverMarmitex = function (marmitex) {
-                    var decisao = confirm("Deseja mesmo excluir sua conta?");
-                    if (decisao) {
-                        $.ajax({
-                            url: "/marmitex/cliente",
-                            type: "POST",
-                            async: false,
-                            data: {
-                                operacao: "EXCLUIR",
-                                id: usuario.id
-                            },
-                            success: function () {
-                                alert("Conta excluída!");
-                                $scope.sair();
-                            },
-                            error: function (err) {
-                                console.log(err.statusText);
-                            }
-                        });
-                    }
+//                    $.ajax({
+//                        url: "/marmitex/marmitex",
+//                        type: "POST",
+//                        async: false,
+//                        data: {
+//                            operacao: "EXCLUIR",
+//                            marmita: marmitex
+//                        },
+//                        success: function () {
+//                            alert("Marmitex devolvida!");                            
+//                        },
+//                        error: function (err) {
+//                            console.log(err.statusText);
+//                        }
+//                    });
+                    alert("Marmitex devolvida!");
                 };
 
                 $scope.getPagamento = function (pedido) {
@@ -152,6 +148,16 @@
                                         <div class="form-group col-md-6">
                                             <label for="txtStatus">Status</label>
                                             <input readonly="true" type="text" class="form-control" value="{{pedido.status}}" name="txtStatus" id="txtStatus" placeholder="Status">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label for="txtNome">Nome do cliente</label>
+                                            <input readonly="true" type="text" class="form-control" value="{{pedido.cliente.nome}}" name="txtNome" id="txtNome" placeholder="Nome">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="txtTelefone">Telefone</label>
+                                            <input readonly="true" type="text" class="form-control" value="{{pedido.cliente.telefone}}" name="txtTelefone" id="txtTelefone" placeholder="Telefone">
                                         </div>
                                     </div>
                                     <br>
