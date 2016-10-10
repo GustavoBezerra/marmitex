@@ -105,7 +105,14 @@
                                             <h4 class="pull-right text-bold text-green">Valor do pedido:<br/>R${{total| number:2}}</h4>
                                             <h4 class="text-bold text-warning">{{usuario.nome}}, estes são os itens do pedido:</h4>
                                             <ul>
-                                                <li ng-repeat="mar in marmitex">{{mar.nome}}</li>
+                                                <li ng-repeat="mar in marmitex">
+                                                    Marmitex:
+                                                    <ul>
+                                                        <li ng-repeat="rec in mar">
+                                                            {{rec.nome}}
+                                                        </li>                                                        
+                                                    </ul>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>

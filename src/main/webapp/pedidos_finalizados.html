@@ -109,10 +109,15 @@
 
                 $scope.getDescricao = function (pedido) {
                     var desc = "";
-                    for (var i = 0; i < pedido.marmitex[0].ingredientes.length; i++) {
-                        desc += pedido.marmitex[0].ingredientes[i].nome + ", ";
-                    }
-                    return desc.slice(0, -2);
+                    for (var i = 0; i < pedido.marmitex.length; i++) {
+                        desc += "Marmitex "+(i+1)+":";
+                        for (var j = 0; j < pedido.marmitex[i].ingredientes.length; j++) {
+                            desc += pedido.marmitex[i].ingredientes[j].nome + ", ";
+                        }
+                        desc = desc.slice(0, -2);
+                        desc += "; ";
+                    }                    
+                    return desc;
                 };
                 
                 $scope.getEndereco = function(pedido){

@@ -190,7 +190,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
                     + "inner join tb_pedido p on p.id_pedido=m.id_pedido\n"
                     + "inner join tb_cliente c on c.id_cliente=p.id_cliente\n"
                     + "inner join tb_ingredientes i on mi.id_ingrediente=i.id_ingrediente\n"
-                    + "inner join tb_endereco e on e.id_endereco=p.id_endereco\n"   );
+                    + "inner join tb_endereco e on e.id_endereco=p.id_endereco\n");
 
             if (pedido.getId() != 0) {
                 sql.append("where p.id_pedido=?;");
@@ -217,16 +217,36 @@ public class PedidoDAO extends AbstractJdbcDAO {
             marmitexs = new ArrayList<>();
             ingredientes = new ArrayList<>();
             int anterior = 0;
-            int id = 999999999;
+            int id;
             while (rs.next()) {
                 id = rs.getInt("id_pedido");
+                if(id == 55){
+                    System.out.println("Chegou!");
+                }
                 if (id == anterior) {
-                    //novo ingrediente                    
-                    i = new Ingrediente();
-                    i.setId(rs.getInt("id_ingrediente"));
-                    i.setNome(rs.getString("nome"));
-                    i.setValor(rs.getDouble("valor_ingrediente"));
-                    ingredientes.add(i);
+                    if (m.getId() == rs.getInt("id_marmitex")) {
+                        //novo ingrediente do mesmo pedido
+                        i = new Ingrediente();
+                        i.setId(rs.getInt("id_ingrediente"));
+                        i.setNome(rs.getString("nome"));
+                        i.setValor(rs.getDouble("valor_ingrediente"));
+                        ingredientes.add(i);
+                    } else { // é outra marmitex do mesmo pedido                        
+                        // salvar a marmitex anterior
+                        marmitexs.add(m);
+                        
+                        // nova marmitex
+                        m = new Marmitex();
+                        i = new Ingrediente();
+                        ingredientes = new ArrayList<>();
+                        
+                        m.setId(rs.getInt("id_marmitex"));
+                        i.setId(rs.getInt("id_ingrediente"));
+                        i.setNome(rs.getString("nome"));
+                        i.setValor(rs.getDouble("valor_ingrediente"));
+                        ingredientes.add(i);
+                        m.setIngredientes(ingredientes);
+                    }
                 } else { // novo pedido
                     if (anterior != 0) { //vai perder o último registro do pedido anterior?
                         m.setIngredientes(ingredientes);
