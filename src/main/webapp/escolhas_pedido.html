@@ -38,7 +38,7 @@
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
 
-                $scope.getCreditos = function(){
+                $scope.getCreditos = function () {
                     return $scope.usuario.credito.valor.toFixed(2);
                 };
 
@@ -115,8 +115,8 @@
 
                 $scope.pagamentoCreditos = function (obj) {
                     if (obj.credito === true) {
-                        if($scope.usuario.credito.valor < $scope.total()){
-                            alert("Você não possui a quantidade necessária de créditos!\n"+
+                        if ($scope.usuario.credito.valor < $scope.total()) {
+                            alert("Você não possui a quantidade necessária de créditos!\n" +
                                     "Favor escolher mais uma forma de pagamento.");
                         }
                     }
@@ -136,15 +136,16 @@
                             }
                         }
                     }
-                    if (data.pagamento.credito === true && 
-                            (data.pagamento.dinheiro === false || data.pagamento.dinheiro === undefined) && 
+                    if (data.pagamento.credito === true &&
+                            (data.pagamento.dinheiro === false || data.pagamento.dinheiro === undefined) &&
                             (data.pagamento.cartao === false || data.pagamento.cartao === undefined)) {
-                        if($scope.usuario.credito.valor < $scope.total()){
-                            alert("Você não possui a quantidade necessária de créditos!\n"+
+                        if ($scope.usuario.credito.valor < $scope.total()) {
+                            alert("Você não possui a quantidade necessária de créditos!\n" +
                                     "Favor escolher mais uma forma de pagamento.");
-                            return; 
+                            return;
                         }
                     }
+                    var testeJson = "[{'ingredientes':'"+$scope.marmitex[0].toString()+"'}]";
                     window.sessionStorage.setItem("pedido", JSON.stringify(data));
                     window.sessionStorage.setItem("total", JSON.stringify($scope.total()));
                     $.ajax({
@@ -208,7 +209,14 @@
                                             <br/>
                                             <h4 class="text-bold text-warning">{{usuario.nome}}, estes são os itens do pedido:</h4>
                                             <ul>
-                                                <li ng-repeat="mar in marmitex">{{mar.nome}}</li>
+                                                <li ng-repeat="mar in marmitex">
+                                                    Marmitex:
+                                                    <ul>
+                                                        <li ng-repeat="rec in mar">
+                                                            {{rec.nome}}
+                                                        </li>                                                        
+                                                    </ul>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>

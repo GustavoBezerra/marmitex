@@ -15,37 +15,47 @@
 
         <script>
             var ingredientes = document.getElementsByName("ingredientes");
+            var qtdeMarmitex = window.sessionStorage["qtde"];
             var ingredientesCheckados = new Array();
-            var test = window.sessionStorage["teste"];
             var app = angular.module("montarMarmitex", []);
             app.controller("marmitexCtrl", function ($scope) {
                 $scope.titulo = "Montar marmitex";
                 $scope.preco = 0;
+                $scope.qtdeMarmita = JSON.parse(qtdeMarmitex);
+                for (var i = 0; i < $scope.qtdeMarmita.length; i++) {
+                    $scope.qtdeMarmita[i] = (i + 1);
+                }
+                $scope.marmitas = new Array();
+                for (var i = 0; i < $scope.qtdeMarmita.length; i++) {
+                    $scope.marmitas.push(new Array());
+                }
+
 
                 $scope.consultarTudo = function () {
                     $scope.consultarCategorias();
                     $scope.consultarIngredientes();
                 };
 
-                $scope.acrescentar = function (recurso) {
-                    var r = document.getElementById(recurso.nome);
+                $scope.acrescentar = function (recurso, id) {
+                    var r = document.getElementById(recurso.nome + "_" + id);
                     if (recurso.medida === "Unidade(s)" && (parseInt(r.value)) === (recurso.quantidade - 1)) {
                         alert("Quantidade máxima de " + recurso.nome + " atingida!");
                     } else if (recurso.medida !== "Unidade(s)" && ((r.value * 0.150) >= (recurso.quantidade - 0.150))) {
                         alert("Quantidade máxima de " + recurso.nome + " atingida!");
                     } else {
-                        r.value++;                        
+                        r.value++;
                         $scope.preco += recurso.valor;
-                        ingredientesCheckados.push(angular.copy(recurso));
+                        $scope.marmitas[id - 1].push(angular.copy(recurso));
+                        //ingredientesCheckados.push(angular.copy(recurso));
                     }
                 };
 
-                $scope.retirar = function (recurso) {
-                    var r = document.getElementById(recurso.nome);
+                $scope.retirar = function (recurso, id) {
+                    var r = document.getElementById(recurso.nome + "_" + id);
                     if (r.value > 0) {
-                        for (var i = ingredientesCheckados.length; i >= 0; i--) {
-                            if (ingredientesCheckados[i] === recurso) {
-                                ingredientesCheckados.splice(i, 1);
+                        for (var i = $scope.marmitas[id - 1].length; i >= 0; i--) {
+                            if ($scope.marmitas[id - 1][i] === recurso) {
+                                $scope.marmitas[id - 1].splice(i, 1);
                                 break;
                             }
                         }
@@ -89,9 +99,9 @@
                 };
 
                 $scope.verificar = function () {
-                    if (ingredientesCheckados.length !== 0) {
+                    if ($scope.marmitas.length !== 0) {
                         window.sessionStorage.clear();
-                        window.sessionStorage.setItem("marmitex", JSON.stringify(ingredientesCheckados));
+                        window.sessionStorage.setItem("marmitex", JSON.stringify($scope.marmitas));
                         window.sessionStorage.setItem("preco", angular.copy($scope.preco));
                     }
                     window.location.href = "http://localhost:8084/marmitex/login.html";
@@ -151,26 +161,30 @@
                                     <div class="row">
                                         <label class="text-green text-bold col-md-12 col-md-offset-5"><h3>Valor do pedido: R${{preco| number: 2}}</h3></label>
                                     </div>
-                                    <div id="escolhas" class="row" ng-repeat="categoria in categorias">
-                                        <div class="form-group col-md-6" >
-                                            <div class="box-header with-border">
-                                                <i class="glyphicon glyphicon-asterisk"></i>
-                                                <h3 class="box-title">{{categoria.nome}}</h3>
-                                            </div><!-- /.box-header -->
-                                            <div class="form-group">
-                                                <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
-                                                    <label>
-                                                        <input type="number" value="0" readonly="true" style="width: 40px" name="{{categoria.nome}}" id="{{recurso.nome}}" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                    <div ng-repeat="qtde in qtdeMarmita">
+                                        <label class="text-blue"><h2>Marmitex {{qtde}}</h2></label>
+                                        <div id="escolhas" class="row" ng-repeat="categoria in categorias">
+                                            <div class="form-group col-md-6" >
+                                                <div class="box-header with-border">
+                                                    <i class="glyphicon glyphicon-asterisk"></i>
+                                                    <h3 class="box-title">{{categoria.nome}}</h3>
+                                                </div><!-- /.box-header -->
+                                                <div class="form-group">
+                                                    <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
+                                                        <label>
+                                                            <input type="number" value="0" readonly="true" style="width: 40px" name="{{categoria.nome}}" id="{{recurso.nome}}_{{qtde}}" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
 
-                                                        <img src="photos/plus.png" ng-click="acrescentar(recurso)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
-                                                        <img src="photos/minus.png" ng-click="retirar(recurso)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                                            <img src="photos/plus.png" ng-click="acrescentar(recurso, qtde)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                                            <img src="photos/minus.png" ng-click="retirar(recurso, qtde)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
 
-                                                        {{recurso.nome}} (R${{recurso.valor| number:2}} )
-                                                    </label>
+                                                            {{recurso.nome}} (R${{recurso.valor| number:2}} )
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <br>
                                     <div class="row">

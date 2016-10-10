@@ -136,14 +136,14 @@ public class MarmitexDAO extends AbstractJdbcDAO {
             if (!("Unidade(s)").equals(i.getMedida())) {
                 try {
                     i.setQuantidade(ing.getQuantidade() - 0.150);
-                    iDAO.alterar(i);
+                    iDAO.alterarQtde(i);
                 } catch (SQLException ex) {
                     Logger.getLogger(ValidarEstoque.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 try {
                     i.setQuantidade(ing.getQuantidade() - 1);
-                    iDAO.alterar(i);
+                    iDAO.alterarQtde(i);
                 } catch (SQLException ex) {
                     Logger.getLogger(ValidarEstoque.class.getName()).log(Level.SEVERE, null, ex);
                 }
