@@ -117,7 +117,8 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             try {
                 if (pst != null) {
                     pst.close();
-                }
+                    
+                }                
                 connection.close();
             } catch (SQLException e) {
                 System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
@@ -181,7 +182,8 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             try {
                 if (pst != null) {
                     pst.close();
-                }
+                    
+                }                
                 connection.close();
             } catch (SQLException ex) {
                 System.out.println(ANSI_RED + "[ERROR] - " + ex.getMessage() + ANSI_RESET);

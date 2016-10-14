@@ -103,8 +103,8 @@ public class PedidoDAO extends AbstractJdbcDAO {
             try {
                 if (pst != null) {
                     pst.close();
-                }
-                connection.close();
+                    connection.close();
+                }                
             } catch (SQLException e) {
                 System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
             }
@@ -115,6 +115,9 @@ public class PedidoDAO extends AbstractJdbcDAO {
     public void alterar(EntidadeDominio entidade) throws SQLException {
         openConnection();
         PreparedStatement pst = null;
+        IngredienteDAO iDAO = new IngredienteDAO();
+        Ingrediente i;
+        Pedido p;
         boolean entregador = false;
 
         try {
@@ -127,8 +130,28 @@ public class PedidoDAO extends AbstractJdbcDAO {
                 sql.append(", id_entregador=?");
                 entregador = true;
             }
+            else if (pedido.getStatus().equals(Status.CANCELADO.getDescricao())) {  
+                p = (Pedido)consultar(pedido).get(0);
+                if(p.getStatus().equals(Status.ABERTO.getDescricao())){
+                    for (Marmitex m : p.getMarmitex()) {
+                        for (Ingrediente ingrediente : m.getIngredientes()) {
+                            i = (Ingrediente)iDAO.consultar(ingrediente).get(0);
+                            if(i.getMedida().equals("Unidade(s)")){
+                                i.setQuantidade(i.getQuantidade() + 1);
+                            }
+                            else{
+                                i.setQuantidade(i.getQuantidade() + 0.150);
+                            }
+                            iDAO.alterar(i);
+                        }
+                    }
+                }
+            }
             sql.append(" WHERE id_pedido=?;");
 
+            if(connection.isClosed()){
+                openConnection();
+            }
             pst = connection.prepareStatement(sql.toString());
             pst.setString(1, pedido.getStatus());
             if (entregador) {
@@ -163,7 +186,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
     @Override
     public List<EntidadeDominio> consultar(EntidadeDominio entidade) throws SQLException {
         openConnection();
-        PreparedStatement pst = null;
+        PreparedStatement pst_consultar = null;
         ClienteDAO cDAO = new ClienteDAO();
         Ingrediente i;
         Endereco e;
@@ -201,15 +224,15 @@ public class PedidoDAO extends AbstractJdbcDAO {
             }
             //sql.append("GROUP BY p.id_pedido,i.id_ingrediente;");
 
-            pst = connection.prepareStatement(sql.toString());
+            pst_consultar = connection.prepareStatement(sql.toString());
 
             if (pedido.getId() != 0) {
-                pst.setInt(1, pedido.getId());
+                pst_consultar.setInt(1, pedido.getId());
             } else if (pedido.getCliente().getId() != 1) {
-                pst.setInt(1, pedido.getCliente().getId());
+                pst_consultar.setInt(1, pedido.getCliente().getId());
             }
 
-            ResultSet rs = pst.executeQuery();
+            ResultSet rs = pst_consultar.executeQuery();
             p = new Pedido();
             i = new Ingrediente();
             m = new Marmitex();
@@ -293,12 +316,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
                     p.setEndereco(e);
                 }
             }
-            if (anterior != 0) { //vai perder o último registro do pedido anterior?
-//                i = new Ingrediente();
-//                i.setId(rs.getInt("id_ingrediente"));
-//                i.setNome(rs.getString("nome"));
-//                i.setValor(rs.getDouble("valor_ingrediente"));
-//                ingredientes.add(i);
+            if (anterior != 0) {
                 m.setIngredientes(ingredientes);
                 marmitexs.add(m);
                 p.setMarmitex(marmitexs);
@@ -317,10 +335,10 @@ public class PedidoDAO extends AbstractJdbcDAO {
             System.out.println(ANSI_RED + "[ERROR] - Entidade " + entidade.getClass().getSimpleName() + " não é um Ingrediente!" + ANSI_RESET);
         } finally {
             try {
-                if (pst != null) {
-                    pst.close();
-                }
-                connection.close();
+                if (pst_consultar != null) {
+                    pst_consultar.close();
+                    connection.close();
+                }                                
             } catch (SQLException ex) {
                 System.out.println(ANSI_RED + "[ERROR] - " + ex.getMessage() + ANSI_RESET);
             }
