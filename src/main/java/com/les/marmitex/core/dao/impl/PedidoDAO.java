@@ -123,6 +123,9 @@ public class PedidoDAO extends AbstractJdbcDAO {
         try {
             Pedido pedido = (Pedido) entidade;
             connection.setAutoCommit(false);
+            if(pedido.getValorTotal() != 0){
+                alterarValor(pedido);
+            }
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE tb_pedido SET status=?");
@@ -422,6 +425,40 @@ public class PedidoDAO extends AbstractJdbcDAO {
             cli.getCredito().setValor(truncatedDouble);
         }
         cDAO.alterar(cli);
+    }
+
+    private void alterarValor(Pedido p) {
+        openConnection();
+        PreparedStatement pst = null;
+        
+        try {            
+            StringBuilder sql = new StringBuilder();
+            sql.append("UPDATE tb_pedido SET valor_total=?");
+            sql.append(" WHERE id_pedido=?;");
+
+            pst = connection.prepareStatement(sql.toString());
+            pst.setDouble(1, p.getValorTotal());
+            pst.setInt(2, p.getId());
+            pst.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
+            }
+            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+        } catch (ClassCastException ce) {
+            System.out.println(ANSI_RED + "[ERROR]!" + ANSI_RESET);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }                
+            } catch (SQLException e) {
+                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+            }
+        }
     }
 
 }

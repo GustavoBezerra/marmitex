@@ -11,6 +11,7 @@ public class Marmitex extends EntidadeDominio{
 
     private List<Ingrediente> ingredientes;
     private double valor;
+    private Status status;
 
     /**
      * @return the ingredientes
@@ -38,6 +39,20 @@ public class Marmitex extends EntidadeDominio{
      */
     public void setValor(double valor) {
         this.valor = valor;
+    }
+
+    /**
+     * @return the status
+     */
+    public Status getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
 }

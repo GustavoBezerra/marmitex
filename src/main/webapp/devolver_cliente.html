@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
-        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>        
+        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
             var parseObj = JSON.parse(window.sessionStorage["usuario"]);
@@ -32,6 +32,10 @@
                 $scope.getCreditos = function () {
                     return $scope.usuario.credito.valor.toFixed(2);
                 };
+                
+                $scope.getValorTotal = function(){
+                    return $scope.pedido.valorTotal.toFixed(2);
+                }
 
 //retirar o parametro.
                 $scope.devolver = function (pedido) {
@@ -59,25 +63,26 @@
                 };
 
                 $scope.devolverMarmitex = function (marmitex) {
-                    var decisao = confirm("Deseja mesmo excluir sua conta?");
-                    if (decisao) {
-                        $.ajax({
-                            url: "/marmitex/cliente",
-                            type: "POST",
-                            async: false,
-                            data: {
-                                operacao: "EXCLUIR",
-                                id: usuario.id
-                            },
-                            success: function () {
-                                alert("Conta excluída!");
-                                $scope.sair();
-                            },
-                            error: function (err) {
-                                console.log(err.statusText);
-                            }
-                        });
-                    }
+                    $.ajax({
+                        url: "/marmitex/marmitex",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "EXCLUIR",
+                            marmita: JSON.stringify(marmitex),
+                            status: "Devolvido"
+                        },
+                        success: function (data) {
+                            alert("Marmitex devolvida!");
+                            var m = JSON.parse(data);
+                            $scope.usuario.credito.valor = ($scope.usuario.credito.valor - m.valorTotal);
+                            window.sessionStorage.setItem("usuario", JSON.stringify($scope.usuario));
+                            $scope.getCreditos();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
                 };
 
                 $scope.getPagamento = function (pedido) {
@@ -148,7 +153,7 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="txtValor">Valor</label>
-                                            <input readonly="true" type="text" class="form-control" ng-model="pedido.valorTotal" name="txtValor" id="txtValor" placeholder="Valor total">
+                                            <input readonly="true" type="text" class="form-control" ng-value="{{getValorTotal()}}" name="txtValor" id="txtValor" placeholder="Valor total">
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="txtPagamento">Forma de pagamento</label>
@@ -158,10 +163,10 @@
                                             <label for="txtStatus">Status</label>
                                             <input readonly="true" type="text" class="form-control" value="{{pedido.status}}" name="txtStatus" id="txtStatus" placeholder="Status">
                                         </div>
-<!--                                        <div class="form-group col-md-6" ng-if="pedido.status === 'Entregue' || pedido.status === 'Devolvido'">
-                                            <label for="txtEntregador">Entregador</label>
-                                            <input readonly="true" type="text" class="form-control" value="{{pedido.status}}" name="txtEntregador" id="txtEntregador" placeholder="Entregador">
-                                        </div>-->
+                                        <!--                                        <div class="form-group col-md-6" ng-if="pedido.status === 'Entregue' || pedido.status === 'Devolvido'">
+                                                                                    <label for="txtEntregador">Entregador</label>
+                                                                                    <input readonly="true" type="text" class="form-control" value="{{pedido.status}}" name="txtEntregador" id="txtEntregador" placeholder="Entregador">
+                                                                                </div>-->
                                     </div>
                                     <br>
                                     <div class="box-header with-border">
@@ -183,7 +188,7 @@
                                     <table class="table table-striped">
                                         <tr>
                                             <th>ID da marmitex</th>
-                                            <th>Itens</th>                                            
+                                            <th>Itens</th>
                                             <th></th>
                                         </tr>
                                         <tr ng-repeat="p in pedido.marmitex">

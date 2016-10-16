@@ -2,20 +2,19 @@ package com.les.marmitex.core.dao.impl;
 
 import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RED;
 import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RESET;
-import com.les.marmitex.core.dominio.Categoria;
 import com.les.marmitex.core.dominio.Cliente;
 import com.les.marmitex.core.dominio.Credito;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Ingrediente;
 import com.les.marmitex.core.dominio.Marmitex;
+import com.les.marmitex.core.dominio.Pedido;
+import com.les.marmitex.core.dominio.Status;
 import com.les.marmitex.core.dominio.Usuario;
 import com.les.marmitex.core.strategy.impl.ValidarEstoque;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -102,19 +101,26 @@ public class MarmitexDAO extends AbstractJdbcDAO {
     public void excluir(EntidadeDominio entidade) {
         openConnection();
         PreparedStatement pst = null;
-
         try {
             Marmitex marmitex = (Marmitex) entidade;
             buscarMarmitex(marmitex);
-            
+
+            if (marmitex.getStatus().getDescricao().equals(Status.CANCELADO.getDescricao())) {
+                if (verificarStatusPedido().equals(Status.ABERTO.getDescricao())) {
+                    reposicaoEstoque(marmitex);
+                }
+            } else if (marmitex.getStatus().getDescricao().equals(Status.DEVOLVIDO.getDescricao())) {
+                creditarCliente(marmitex.getValor());
+                tirarValorPedido(marmitex);
+            }
+
             StringBuilder sql = new StringBuilder();
             sql.append("delete from tb_marmitex where id_marmitex=?;");
 
             pst = connection.prepareStatement(sql.toString());
-            pst.setInt(1, marmitex.getId());            
+            pst.setInt(1, marmitex.getId());
             excluirMarmitexIngrediente(marmitex);
             pst.executeUpdate();
-            creditarCliente(marmitex.getValor());
             connection.commit();
         } catch (SQLException e) {
             try {
@@ -217,6 +223,7 @@ public class MarmitexDAO extends AbstractJdbcDAO {
             ResultSet rs = pstB.executeQuery();
             while (rs.next()) {
                 id_pedido = rs.getInt("id_pedido");
+                m.setValor(rs.getDouble("valor"));
             }
         } catch (SQLException ex) {
             try {
@@ -231,7 +238,7 @@ public class MarmitexDAO extends AbstractJdbcDAO {
             try {
                 if (pstB != null) {
                     pstB.close();
-                }                
+                }
             } catch (SQLException ex) {
                 System.out.println(ANSI_RED + "[ERROR] [BUSCAR MARMITEX]- " + ex.getMessage() + ANSI_RESET);
             }
@@ -244,7 +251,7 @@ public class MarmitexDAO extends AbstractJdbcDAO {
         Cliente c = new Cliente();
         ClienteDAO cDAO = new ClienteDAO();
 
-        try {            
+        try {
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
@@ -253,6 +260,7 @@ public class MarmitexDAO extends AbstractJdbcDAO {
                     + "inner join tb_cliente c on c.id_cliente=p.id_cliente\n"
                     + "where p.id_pedido=?;");
 
+            pst = connection.prepareStatement(sql.toString());
             pst.setInt(1, id_pedido);
 
             ResultSet rs = pst.executeQuery();
@@ -288,7 +296,7 @@ public class MarmitexDAO extends AbstractJdbcDAO {
             try {
                 if (pst != null) {
                     pst.close();
-                }                
+                }
             } catch (SQLException e) {
                 System.out.println(ANSI_RED + "[ERROR] [CREDITAR CLIENTE]- " + e.getMessage() + ANSI_RESET);
             }
@@ -299,13 +307,13 @@ public class MarmitexDAO extends AbstractJdbcDAO {
         openConnection();
         PreparedStatement pst = null;
 
-        try {           
-            
+        try {
+
             StringBuilder sql = new StringBuilder();
             sql.append("delete from tb_marmitex_ingrediente where id_marmitex=?;");
 
             pst = connection.prepareStatement(sql.toString());
-            pst.setInt(1, marmitex.getId());            
+            pst.setInt(1, marmitex.getId());
 
             pst.executeUpdate();
             connection.commit();
@@ -327,5 +335,43 @@ public class MarmitexDAO extends AbstractJdbcDAO {
                 System.out.println(ANSI_RED + "[ERROR] [EXCLUIR MARMITEXINGREDIENTE]- " + e.getMessage() + ANSI_RESET);
             }
         }
+    }
+
+    private String verificarStatusPedido() throws SQLException {
+        PedidoDAO pDAO = new PedidoDAO();
+        Pedido p = new Pedido();
+        p.setId(id_pedido);
+        Pedido pe = (Pedido) pDAO.consultar(p).get(0);
+        return pe.getStatus();
+    }
+
+    private void reposicaoEstoque(Marmitex m) throws SQLException {
+        PedidoDAO pDAO = new PedidoDAO();
+        IngredienteDAO iDAO = new IngredienteDAO();
+        Ingrediente i;
+        Pedido p = new Pedido();
+        p.setId(id_pedido);
+        Pedido pe = (Pedido) pDAO.consultar(p).get(0);
+        pe.setValorTotal(pe.getValorTotal() - m.getValor());
+        pDAO.alterar(pe);
+        for (Ingrediente ingrediente : m.getIngredientes()) {
+            i = (Ingrediente) iDAO.consultar(ingrediente).get(0);
+            if (i.getMedida().equals("Unidade(s)")) {
+                i.setQuantidade(i.getQuantidade() + 1);
+            } else {
+                i.setQuantidade(i.getQuantidade() + 0.150);
+            }
+            iDAO.alterar(i);
+        }
+    }
+
+    private void tirarValorPedido(Marmitex marmitex) throws SQLException {
+        PedidoDAO pDAO = new PedidoDAO();
+        Pedido p = new Pedido();
+        p.setId(id_pedido);
+        Pedido pe = (Pedido) pDAO.consultar(p).get(0);
+        double aux = pe.getValorTotal() - marmitex.getValor();
+        pe.setValorTotal(aux);
+        pDAO.alterar(pe);
     }
 }
