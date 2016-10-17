@@ -61,6 +61,31 @@
                         }
                     });
                 };
+                
+                $scope.cancelar = function (pedido) {
+                    alert("Entrou no cancelar");
+//                    $.ajax({
+//                        url: "/marmitex/pedido",
+//                        type: "POST",
+//                        async: false,
+//                        data: {
+//                            operacao: "ALTERAR",
+//                            valor_total: pedido.valorTotal,
+//                            id_pedido: pedido.id,
+//                            status: "Cancelado",
+//                            cliente: JSON.stringify(pedido.cliente)
+//                        },
+//                        success: function (data) {
+//                            $scope.usuario.credito.valor = ($scope.usuario.credito.valor + pedido.valorTotal);
+//                            window.sessionStorage.setItem("usuario", JSON.stringify($scope.usuario));
+//                            $scope.getCreditos();
+//                            window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html"
+//                        },
+//                        error: function (err) {
+//                            alert("Erro ao alterar o pedido!\n" + err);
+//                        }
+//                    });
+                };
 
                 $scope.devolverMarmitex = function (marmitex) {
                     $.ajax({
@@ -78,6 +103,25 @@
                             $scope.usuario.credito.valor = ($scope.usuario.credito.valor - m.valorTotal);
                             window.sessionStorage.setItem("usuario", JSON.stringify($scope.usuario));
                             $scope.getCreditos();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+                
+                $scope.cancelarMarmitex = function (marmitex) {
+                    $.ajax({
+                        url: "/marmitex/marmitex",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "EXCLUIR",
+                            marmita: JSON.stringify(marmitex),
+                            status: "Cancelado"
+                        },
+                        success: function (data) {
+                            alert("Marmitex cancelada!");
                         },
                         error: function (err) {
                             console.log(err.statusText);
@@ -138,7 +182,7 @@
                                         <i class="glyphicon glyphicon-edit"></i>
                                         <h3 class="box-title">Dados do pedido</h3>
                                         <button type="button" class="btn btn-danger pull-right" name="devolver" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="devolver(pedido)" id="excluir">Devolver tudo</button>
-
+                                        <button type="button" class="btn btn-danger pull-right" name="devolver" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status !== 'Entregue'" ng-click="cancelar(pedido)" id="excluir">Cancelar pedido</button>
                                     </div>
                                     <br>
                                     <!-- PRIMEIRA LINHA -->
@@ -198,6 +242,7 @@
                                             <td>{{getDescricao(p)}}</td>
                                             <td>
                                                 <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="devolverMarmitex(p);">Devolver</button>
+                                                <button class="btn btn-github" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status !== 'Entregue'" ng-click="cancelarMarmitex(p);">Cancelar</button>
                                             </td>
                                         </tr>
                                     </table>

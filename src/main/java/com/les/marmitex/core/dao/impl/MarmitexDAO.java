@@ -7,6 +7,7 @@ import com.les.marmitex.core.dominio.Credito;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Ingrediente;
 import com.les.marmitex.core.dominio.Marmitex;
+import com.les.marmitex.core.dominio.Pagamento;
 import com.les.marmitex.core.dominio.Pedido;
 import com.les.marmitex.core.dominio.Status;
 import com.les.marmitex.core.dominio.Usuario;
@@ -106,8 +107,16 @@ public class MarmitexDAO extends AbstractJdbcDAO {
             buscarMarmitex(marmitex);
 
             if (marmitex.getStatus().getDescricao().equals(Status.CANCELADO.getDescricao())) {
+                boolean reposicaoOK = false;
+                if (verificarPagamentoPedido()) {
+                    creditarCliente(marmitex.getValor());
+                }
                 if (verificarStatusPedido().equals(Status.ABERTO.getDescricao())) {
                     reposicaoEstoque(marmitex);
+                    reposicaoOK = true;
+                }
+                if (!reposicaoOK) {
+                    tirarValorPedido(marmitex);
                 }
             } else if (marmitex.getStatus().getDescricao().equals(Status.DEVOLVIDO.getDescricao())) {
                 creditarCliente(marmitex.getValor());
@@ -373,5 +382,20 @@ public class MarmitexDAO extends AbstractJdbcDAO {
         double aux = pe.getValorTotal() - marmitex.getValor();
         pe.setValorTotal(aux);
         pDAO.alterar(pe);
+    }
+
+    private boolean verificarPagamentoPedido() throws SQLException {
+        PedidoDAO pDAO = new PedidoDAO();
+        Pedido p = new Pedido();
+        p.setId(id_pedido);
+        Pedido pe = (Pedido) pDAO.consultar(p).get(0);
+        if (pe.getPagamento().size() == 1) {
+            for (Pagamento e : pe.getPagamento()) {
+                if (e.getDescricao().equals(Pagamento.CREDITO.getDescricao())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
