@@ -61,7 +61,23 @@
                 };
 
                 $scope.getCreditos = function () {
-                    return $scope.usuario.credito.valor.toFixed(2);
+                    $.ajax({
+                        url: "/marmitex/cliente",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR",
+                            login: $scope.usuario.usuario.login,
+                            senha: $scope.usuario.usuario.senha
+                        },
+                        success: function (data) {
+                            $scope.usuario = JSON.parse(data);
+                            window.sessionStorage.setItem("usuario", data);
+                        },
+                        error: function () {
+                            alert("[ERRO] Nenhum usuário encontrado com o login e a senha informados!");
+                        }
+                    });
                 };
 
 

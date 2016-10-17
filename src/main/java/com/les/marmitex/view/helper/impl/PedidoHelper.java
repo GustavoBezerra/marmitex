@@ -85,7 +85,7 @@ public class PedidoHelper implements IViewHelper {
                 marmitex = new Marmitex();
                 auxs = new ArrayList<>();
                 valor_marmitex = 0;
-                for (int j = 0; j < ja.getJSONArray(i).length(); j++) {                    
+                for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
                     JSONObject jsonObj = ja.getJSONArray(i).getJSONObject(j);
                     in = new Ingrediente();
                     in.setNome(jsonObj.getString("nome"));
@@ -93,13 +93,13 @@ public class PedidoHelper implements IViewHelper {
                     in.setMedida(jsonObj.getString("medida"));
                     in.setQuantidade(jsonObj.getDouble("quantidade"));
                     in.setValor(jsonObj.getDouble("valor"));
-                    
+
                     valor_marmitex += in.getValor();
                     auxs.add(in);
                 }
                 Double truncatedDouble = new BigDecimal(valor_marmitex)
-                    .setScale(3, BigDecimal.ROUND_HALF_UP)
-                    .doubleValue();
+                        .setScale(3, BigDecimal.ROUND_HALF_UP)
+                        .doubleValue();
                 marmitex.setIngredientes(auxs);
                 marmitex.setValor(truncatedDouble);
                 marmitexs.add(marmitex);
@@ -137,8 +137,15 @@ public class PedidoHelper implements IViewHelper {
         } else if (("CONSULTAR").equals(operacao)) {
             pedido = new Pedido();
             c = new Cliente();
-            c.setId(Integer.valueOf(request.getParameter("id_cliente")));
-            pedido.setCliente(c);
+            String aux = request.getParameter("id_pedido");
+            String aux_cliente = request.getParameter("id_cliente");
+            if (aux_cliente != null & aux_cliente != "") {
+                c.setId(Integer.valueOf(request.getParameter("id_cliente")));
+                pedido.setCliente(c);
+            }
+            if (aux != null && aux != "") {
+                pedido.setId(Integer.valueOf(request.getParameter("id_pedido")));
+            }            
         } else if (("ALTERAR").equals(operacao)) {
             pedido = new Pedido();
             pedido.setId(Integer.valueOf(request.getParameter("id_pedido")));

@@ -209,7 +209,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
 
             sql.append("select\n"
                     + "p.id_pedido, p.id_entregador, p.status, p.valor_total, p.valor_frete, p.troco, p.dt_criacao, p.id_cliente,\n"
-                    + "                    m.id_marmitex, i.id_ingrediente, i.nome, i.valor as valor_ingrediente,\n"
+                    + "                    m.id_marmitex, m.valor as valor_marmitex, i.id_ingrediente, i.nome, i.valor as valor_ingrediente,\n"
                     + "                    e.id_endereco, e.cep, e.bairro, e.cidade, e.complemento, e.logradouro, e.numero\n"
                     + "from tb_marmitex m\n"
                     + "inner join tb_marmitex_ingrediente mi on m.id_marmitex=mi.id_marmitex\n"
@@ -267,6 +267,8 @@ public class PedidoDAO extends AbstractJdbcDAO {
                         ingredientes = new ArrayList<>();
                         
                         m.setId(rs.getInt("id_marmitex"));
+                        m.setValor(rs.getDouble("valor_marmitex"));
+                        
                         i.setId(rs.getInt("id_ingrediente"));
                         i.setNome(rs.getString("nome"));
                         i.setValor(rs.getDouble("valor_ingrediente"));
@@ -302,6 +304,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
 
                     //settar a marmitex
                     m.setId(rs.getInt("id_marmitex"));
+                    m.setValor(rs.getDouble("valor_marmitex"));
                     i.setId(rs.getInt("id_ingrediente"));
                     i.setNome(rs.getString("nome"));
                     i.setValor(rs.getDouble("valor_ingrediente"));

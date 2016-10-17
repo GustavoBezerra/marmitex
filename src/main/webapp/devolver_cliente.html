@@ -29,6 +29,25 @@
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
 
+                $scope.getPedido = function () {
+                    $.ajax({
+                        url: "/marmitex/pedido",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR",
+                            id_pedido: $scope.pedido.id
+                        },
+                        success: function (data) {
+                            var aux = JSON.parse(data);
+                            $scope.pedido = aux[0];
+                        },
+                        error: function (err) {
+                            alert("Erro ao consultar o pedido!\n" + err);
+                        }
+                    });
+                };
+
                 $scope.getCreditos = function () {
                     $.ajax({
                         url: "/marmitex/cliente",
@@ -42,7 +61,6 @@
                         success: function (data) {
                             $scope.usuario = JSON.parse(data);
                             window.sessionStorage.setItem("usuario", data);
-                            return $scope.usuario.credito.valor;
                         },
                         error: function () {
                             alert("[ERRO] Nenhum usuário encontrado com o login e a senha informados!");
@@ -52,9 +70,8 @@
 
                 $scope.getValorTotal = function () {
                     return $scope.pedido.valorTotal.toFixed(2);
-                }
+                };
 
-//retirar o parametro.
                 $scope.devolver = function (pedido) {
                     $.ajax({
                         url: "/marmitex/pedido",
@@ -117,6 +134,7 @@
                         success: function (data) {
                             alert("Marmitex devolvida!");
                             $scope.getCreditos();
+                            $scope.getPedido();
                         },
                         error: function (err) {
                             console.log(err.statusText);
@@ -137,6 +155,7 @@
                         success: function (data) {
                             alert("Marmitex cancelada!");
                             $scope.getCreditos();
+                            $scope.getPedido();
                         },
                         error: function (err) {
                             console.log(err.statusText);
@@ -181,7 +200,7 @@
         </script>
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="DadosPedidoCtrl">
-        <div id="body" class="hold-transition skin-blue sidebar-mini">
+        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="getPedido()">
             <div class="wrapper">
                 <div ng-include="'templates/template_cliente.html'"></div>
 
@@ -197,7 +216,7 @@
                                         <i class="glyphicon glyphicon-edit"></i>
                                         <h3 class="box-title">Dados do pedido</h3>
                                         <button type="button" class="btn btn-danger pull-right" name="devolver" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="devolver(pedido)" id="excluir">Devolver tudo</button>
-                                        <button type="button" class="btn btn-danger pull-right" name="devolver" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status !== 'Entregue'" ng-click="cancelar(pedido)" id="excluir">Cancelar pedido</button>
+                                        <button type="button" class="btn btn-github pull-right" name="devolver" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status !== 'Entregue'" ng-click="cancelar(pedido)" id="excluir">Cancelar pedido</button>
                                     </div>
                                     <br>
                                     <!-- PRIMEIRA LINHA -->
@@ -256,10 +275,10 @@
                                                 {{p.id}}
                                             </td>
                                             <td>{{getDescricao(p)}}</td>
-                                            <td>{{p.valor | number:2}}</td>
+                                            <td>{{p.valor| number:2}}</td>
                                             <td>
-                                                <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="devolverMarmitex(p);">Devolver</button>
-                                                <button class="btn btn-github" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status !== 'Entregue'" ng-click="cancelarMarmitex(p);">Cancelar</button>
+                                                <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="(pedido.status === 'Entregue') && (pedido.marmitex.length > 1)" ng-click="devolverMarmitex(p);">Devolver</button>
+                                                <button class="btn btn-github" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="(pedido.status !== 'Entregue') && (pedido.marmitex.length > 1)" ng-click="cancelarMarmitex(p);">Cancelar</button>
                                             </td>
                                         </tr>
                                     </table>
