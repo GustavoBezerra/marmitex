@@ -30,10 +30,27 @@
                 };
 
                 $scope.getCreditos = function () {
-                    return $scope.usuario.credito.valor.toFixed(2);
+                    $.ajax({
+                        url: "/marmitex/cliente",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR",
+                            login: $scope.usuario.usuario.login,
+                            senha: $scope.usuario.usuario.senha
+                        },
+                        success: function (data) {
+                            $scope.usuario = JSON.parse(data);
+                            window.sessionStorage.setItem("usuario", data);
+                            return $scope.usuario.credito.valor;
+                        },
+                        error: function () {
+                            alert("[ERRO] Nenhum usuário encontrado com o login e a senha informados!");
+                        }
+                    });
                 };
-                
-                $scope.getValorTotal = function(){
+
+                $scope.getValorTotal = function () {
                     return $scope.pedido.valorTotal.toFixed(2);
                 }
 
@@ -61,7 +78,7 @@
                         }
                     });
                 };
-                
+
                 $scope.cancelar = function (pedido) {
                     alert("Entrou no cancelar");
 //                    $.ajax({
@@ -99,9 +116,6 @@
                         },
                         success: function (data) {
                             alert("Marmitex devolvida!");
-                            var m = JSON.parse(data);
-                            $scope.usuario.credito.valor = ($scope.usuario.credito.valor - m.valorTotal);
-                            window.sessionStorage.setItem("usuario", JSON.stringify($scope.usuario));
                             $scope.getCreditos();
                         },
                         error: function (err) {
@@ -109,7 +123,7 @@
                         }
                     });
                 };
-                
+
                 $scope.cancelarMarmitex = function (marmitex) {
                     $.ajax({
                         url: "/marmitex/marmitex",
@@ -122,6 +136,7 @@
                         },
                         success: function (data) {
                             alert("Marmitex cancelada!");
+                            $scope.getCreditos();
                         },
                         error: function (err) {
                             console.log(err.statusText);
@@ -233,6 +248,7 @@
                                         <tr>
                                             <th>ID da marmitex</th>
                                             <th>Itens</th>
+                                            <th>Valor</th>
                                             <th></th>
                                         </tr>
                                         <tr ng-repeat="p in pedido.marmitex">
@@ -240,6 +256,7 @@
                                                 {{p.id}}
                                             </td>
                                             <td>{{getDescricao(p)}}</td>
+                                            <td>{{p.valor | number:2}}</td>
                                             <td>
                                                 <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="devolverMarmitex(p);">Devolver</button>
                                                 <button class="btn btn-github" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status !== 'Entregue'" ng-click="cancelarMarmitex(p);">Cancelar</button>
