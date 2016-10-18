@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("com.les.marmitex.core.dominio.Prato")
 public class PratoDAO extends AbstractJdbcDAO{
-    
+
     public PratoDAO(){
         super("tb_prato", "id_prato");
     }
@@ -41,7 +41,7 @@ public class PratoDAO extends AbstractJdbcDAO{
             sql.append("VALUES (?,?);");
 
             pst = connection.prepareStatement(sql.toString(),
-                    Statement.RETURN_GENERATED_KEYS);            
+                    Statement.RETURN_GENERATED_KEYS);
             pst.setDouble(1, prato.getValor());
             Timestamp dtDisponivel = new Timestamp(prato.getDtDisponivel().getTime());
             pst.setTimestamp(2, dtDisponivel);
@@ -91,7 +91,7 @@ public class PratoDAO extends AbstractJdbcDAO{
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE tb_prato SET valor=?, dt_disponivel=? where id_prato=?;");
 
-            pst = connection.prepareStatement(sql.toString());            
+            pst = connection.prepareStatement(sql.toString());
             pst.setDouble(1, prato.getValor());
             Timestamp dtDisponivel = new Timestamp(prato.getDtDisponivel().getTime());
             pst.setTimestamp(2, dtDisponivel);
@@ -101,7 +101,7 @@ public class PratoDAO extends AbstractJdbcDAO{
             connection.commit();
 
             limparIngredientes(prato.getId());
-            
+
             for (int i = 0; i < prato.getIngredientes().size(); i++) {
                 salvarIngredientes(prato.getIngredientes().get(i), prato.getId());
             }
@@ -143,15 +143,15 @@ public class PratoDAO extends AbstractJdbcDAO{
             Prato prato = (Prato) entidade;
             connection.setAutoCommit(false);
 
-            StringBuilder sql = new StringBuilder();            
-            
+            StringBuilder sql = new StringBuilder();
+
             sql.append("SELECT * FROM tb_prato WHERE ativo=true");
             if (prato.getId() != 0) {
                 sql.append(" and id_ingrediente=?");
                 ingredienteEspecifico = true;
             }
-            
-            pst = connection.prepareStatement(sql.toString());            
+
+            pst = connection.prepareStatement(sql.toString());
             if (ingredienteEspecifico) {
                 pst.setInt(1, prato.getId());
             }
@@ -166,7 +166,7 @@ public class PratoDAO extends AbstractJdbcDAO{
                 i.setMedida(rs.getString("medida"));
                 i.setDtVencimento(rs.getDate("dt_vencimento"));
                 i.setDtCriacao(rs.getDate("dt_cadastro"));
-                c.setId(rs.getInt("categoria"));                
+                c.setId(rs.getInt("categoria"));
                 i.setCategoria((Categoria)categoriaDAO.consultar(c).get(0));
                 i.setValor(rs.getDouble("valor"));
 
@@ -193,7 +193,7 @@ public class PratoDAO extends AbstractJdbcDAO{
         }
         return ingredientes;
     }
-    
+
     @Override
     public void excluir(EntidadeDominio entidade){
         openConnection();
@@ -211,7 +211,7 @@ public class PratoDAO extends AbstractJdbcDAO{
 
             pst.executeUpdate();
             connection.commit();
-            
+
             StringBuilder sql2 = new StringBuilder();
             sql2.append("DELETE FROM tb_prato WHERE id_prato=?;");
 
@@ -220,7 +220,7 @@ public class PratoDAO extends AbstractJdbcDAO{
             pst.setInt(1, p.getId());
 
             pst.executeUpdate();
-            connection.commit();            
+            connection.commit();
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -241,7 +241,7 @@ public class PratoDAO extends AbstractJdbcDAO{
             }
         }
     }
-    
+
     private void salvarIngredientes(Ingrediente i, int id_prato) {
         openConnection();
         PreparedStatement pst = null;
@@ -279,7 +279,7 @@ public class PratoDAO extends AbstractJdbcDAO{
             }
         }
     }
-    
+
     private void limparIngredientes(int id_prato) {
         openConnection();
         PreparedStatement pst = null;
@@ -315,5 +315,5 @@ public class PratoDAO extends AbstractJdbcDAO{
             }
         }
     }
-    
+
 }

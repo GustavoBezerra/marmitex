@@ -144,6 +144,6 @@ public class Pedido extends EntidadeDominio{
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
- 
+
 
 }

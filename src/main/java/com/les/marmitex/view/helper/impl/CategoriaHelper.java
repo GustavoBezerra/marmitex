@@ -58,7 +58,7 @@ public class CategoriaHelper implements IViewHelper {
 
         } else if (("CONSULTAR").equals(operacao)) {
             retorno = gson.toJson(resultado.getEntidades());
-            try {                
+            try {
                 response.getWriter().write(retorno);
             } catch (IOException ex) {
                 System.out.println("ERRO!");

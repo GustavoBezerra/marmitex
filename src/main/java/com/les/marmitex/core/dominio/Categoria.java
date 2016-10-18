@@ -8,7 +8,7 @@ package com.les.marmitex.core.dominio;
 public class Categoria extends EntidadeDominio{
 
     private String nome;
-    
+
 
     /**
      * @return the nome

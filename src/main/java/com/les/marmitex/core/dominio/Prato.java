@@ -24,5 +24,5 @@ public class Prato extends Marmitex{
     public void setDtDisponivel(Date dtDisponivel) {
         this.dtDisponivel = dtDisponivel;
     }
-    
+
 }

@@ -22,7 +22,7 @@ public class EfetuarDevolucao implements IStrategy{
         Credito credito = new Credito();
         ClienteDAO cDAO = new ClienteDAO();
         double saldo=0;
-        if(pedido.getStatus().equals(Status.DEVOLVIDO.getDescricao())){            
+        if(pedido.getStatus().equals(Status.DEVOLVIDO.getDescricao())){
             cliente = pedido.getCliente();
             saldo += cliente.getCredito().getValor() + pedido.getValorTotal();
             credito.setValor(saldo);
@@ -30,5 +30,5 @@ public class EfetuarDevolucao implements IStrategy{
             cDAO.alterar(cliente);
         }
         return null;
-    }    
+    }
 }

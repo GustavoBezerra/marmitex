@@ -52,7 +52,7 @@ public class FrontControllerServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // para aceitar acentuacao
-        request.setCharacterEncoding("UTF-8");        
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
 

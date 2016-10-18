@@ -12,10 +12,10 @@
         <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
-        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>        
+        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
 
         <script>
-            var parseObj = JSON.parse(window.sessionStorage["usuario"]);            
+            var parseObj = JSON.parse(window.sessionStorage["usuario"]);
         </script>
 
         <script>
@@ -28,7 +28,7 @@
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
-                
+
                 $scope.getCreditos = function(){
                     return $scope.usuario.credito.valor.toFixed(2);
                 };
@@ -47,7 +47,7 @@
                                 senha: usuario.usuario.senha,
                                 telefone: usuario.telefone
                             },
-                            success: function (data) {                                
+                            success: function (data) {
                                 window.sessionStorage.setItem("usuario", data);
                                 alert("Dados alterados!");
                             },
@@ -139,11 +139,11 @@
                                             <input type="password" class="form-control col-md-10" ng-model="usuario.confirmar_senha" name="txtConfirmarSenha" id="txtConfirmarSenha" placeholder="Confirmar senha">
                                         </div>
                                     </div>
-                                    
+
                                     <!-- QUINTA LINHA -->
                                     <div class="row">
                                         <div class="form-group col-md-7">
-                                            <button type="submit" class="btn btn-success pull-right" name="operacao" 
+                                            <button type="submit" class="btn btn-success pull-right" name="operacao"
                                                     ng-click="alterar(usuario)" value="SALVAR"
                                                     ng-disabled="!(usuario.nome && usuario.telefone && usuario.usuario.login
                                                                         && usuario.usuario.senha)">

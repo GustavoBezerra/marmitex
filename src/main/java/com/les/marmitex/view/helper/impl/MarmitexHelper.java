@@ -22,13 +22,13 @@ import org.springframework.stereotype.Component;
  */
 @Component("/marmitex/marmitex")
 public class MarmitexHelper implements IViewHelper {
-    
+
     Marmitex m = null;
 
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         String operacao = request.getParameter("operacao");
-        
+
         Gson gson = new GsonBuilder()
                 .setDateFormat("dd/MM/yyyy").create();
         if (("EXCLUIR").equals(operacao)) {

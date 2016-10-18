@@ -117,8 +117,8 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             try {
                 if (pst != null) {
                     pst.close();
-                    
-                }                
+
+                }
                 connection.close();
             } catch (SQLException e) {
                 System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
@@ -140,15 +140,15 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             Ingrediente ingrediente = (Ingrediente) entidade;
             connection.setAutoCommit(false);
 
-            StringBuilder sql = new StringBuilder();            
-            
+            StringBuilder sql = new StringBuilder();
+
             sql.append("SELECT * FROM tb_ingredientes WHERE ativo=true");
             if (ingrediente.getId() != 0) {
                 sql.append(" and id_ingrediente=?");
                 ingredienteEspecifico = true;
             }
-            
-            pst = connection.prepareStatement(sql.toString());            
+
+            pst = connection.prepareStatement(sql.toString());
             if (ingredienteEspecifico) {
                 pst.setInt(1, ingrediente.getId());
             }
@@ -163,7 +163,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
                 i.setMedida(rs.getString("medida"));
                 i.setDtVencimento(rs.getDate("dt_vencimento"));
                 i.setDtCriacao(rs.getDate("dt_cadastro"));
-                c.setId(rs.getInt("categoria"));                
+                c.setId(rs.getInt("categoria"));
                 i.setCategoria((Categoria)categoriaDAO.consultar(c).get(0));
                 i.setValor(rs.getDouble("valor"));
 
@@ -182,8 +182,8 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             try {
                 if (pst != null) {
                     pst.close();
-                    
-                }                
+
+                }
                 connection.close();
             } catch (SQLException ex) {
                 System.out.println(ANSI_RED + "[ERROR] - " + ex.getMessage() + ANSI_RESET);
@@ -191,14 +191,14 @@ public class IngredienteDAO extends AbstractJdbcDAO {
         }
         return ingredientes;
     }
-    
+
     @Override
     public void excluir(EntidadeDominio entidade){
         openConnection();
         PreparedStatement pst = null;
         StringBuilder sb = new StringBuilder();
         sb.append("UPDATE tb_ingredientes SET ativo=false WHERE id_ingrediente=?;");
-        
+
         try {
             connection.setAutoCommit(false);
             pst = connection.prepareStatement(sb.toString());
@@ -226,7 +226,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             }
         }
     }
-    
+
     public void alterarQtde(EntidadeDominio entidade) throws SQLException {
         openConnection();
         PreparedStatement pst = null;
@@ -239,8 +239,8 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             sql.append("UPDATE tb_ingredientes SET quantidade=? ");
             sql.append("where id_ingrediente=?;");
 
-            pst = connection.prepareStatement(sql.toString());            
-            pst.setDouble(1, ingrediente.getQuantidade());            
+            pst = connection.prepareStatement(sql.toString());
+            pst.setDouble(1, ingrediente.getQuantidade());
             pst.setInt(2, ingrediente.getId());
 
             pst.executeUpdate();

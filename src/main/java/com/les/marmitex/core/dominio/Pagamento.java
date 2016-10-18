@@ -6,10 +6,10 @@ package com.les.marmitex.core.dominio;
  * @date 23/09/2016
  */
 public enum Pagamento {
-    
+
     CARTAO("Cartão",1),
     DINHEIRO("Dinheiro",2),
-    CREDITO("Crédito",3);    
+    CREDITO("Crédito",3);
 
     private int codigo;
     private String descricao;

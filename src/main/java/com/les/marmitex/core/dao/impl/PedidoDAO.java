@@ -104,7 +104,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
                 if (pst != null) {
                     pst.close();
                     connection.close();
-                }                
+                }
             } catch (SQLException e) {
                 System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
             }
@@ -133,7 +133,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
                 sql.append(", id_entregador=?");
                 entregador = true;
             }
-            else if (pedido.getStatus().equals(Status.CANCELADO.getDescricao())) {  
+            else if (pedido.getStatus().equals(Status.CANCELADO.getDescricao())) {
                 p = (Pedido)consultar(pedido).get(0);
                 if(p.getStatus().equals(Status.ABERTO.getDescricao())){
                     for (Marmitex m : p.getMarmitex()) {
@@ -257,18 +257,18 @@ public class PedidoDAO extends AbstractJdbcDAO {
                         i.setNome(rs.getString("nome"));
                         i.setValor(rs.getDouble("valor_ingrediente"));
                         ingredientes.add(i);
-                    } else { // é outra marmitex do mesmo pedido                        
+                    } else { // é outra marmitex do mesmo pedido
                         // salvar a marmitex anterior
                         marmitexs.add(m);
-                        
+
                         // nova marmitex
                         m = new Marmitex();
                         i = new Ingrediente();
                         ingredientes = new ArrayList<>();
-                        
+
                         m.setId(rs.getInt("id_marmitex"));
                         m.setValor(rs.getDouble("valor_marmitex"));
-                        
+
                         i.setId(rs.getInt("id_ingrediente"));
                         i.setNome(rs.getString("nome"));
                         i.setValor(rs.getDouble("valor_ingrediente"));
@@ -344,7 +344,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
                 if (pst_consultar != null) {
                     pst_consultar.close();
                     connection.close();
-                }                                
+                }
             } catch (SQLException ex) {
                 System.out.println(ANSI_RED + "[ERROR] - " + ex.getMessage() + ANSI_RESET);
             }
@@ -433,8 +433,8 @@ public class PedidoDAO extends AbstractJdbcDAO {
     private void alterarValor(Pedido p) {
         openConnection();
         PreparedStatement pst = null;
-        
-        try {            
+
+        try {
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE tb_pedido SET valor_total=?");
             sql.append(" WHERE id_pedido=?;");
@@ -457,7 +457,7 @@ public class PedidoDAO extends AbstractJdbcDAO {
             try {
                 if (pst != null) {
                     pst.close();
-                }                
+                }
             } catch (SQLException e) {
                 System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
             }

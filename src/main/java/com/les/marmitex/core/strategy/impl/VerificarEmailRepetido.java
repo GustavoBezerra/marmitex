@@ -19,6 +19,6 @@ public class VerificarEmailRepetido implements IStrategy{
         if(!cDAO.verificarDuplicidade(c)){
             return "Já existe um registro com este e-mail!";
         }
-        return null;        
-    }    
+        return null;
+    }
 }

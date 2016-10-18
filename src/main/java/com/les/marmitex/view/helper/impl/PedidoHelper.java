@@ -145,7 +145,7 @@ public class PedidoHelper implements IViewHelper {
             }
             if (aux != null && aux != "") {
                 pedido.setId(Integer.valueOf(request.getParameter("id_pedido")));
-            }            
+            }
         } else if (("ALTERAR").equals(operacao)) {
             pedido = new Pedido();
             pedido.setId(Integer.valueOf(request.getParameter("id_pedido")));

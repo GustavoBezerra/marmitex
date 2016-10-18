@@ -38,7 +38,7 @@ public class CategoriaDAO extends AbstractJdbcDAO{
             sql.append(" VALUES (?);");
 
             pst = connection.prepareStatement(sql.toString());
-            pst.setString(1, categoria.getNome());            
+            pst.setString(1, categoria.getNome());
 
             pst.executeUpdate();
             connection.commit();
@@ -78,7 +78,7 @@ public class CategoriaDAO extends AbstractJdbcDAO{
             sql.append(" WHERE id_categoria=?;");
 
             pst = connection.prepareStatement(sql.toString());
-            pst.setString(1, categoria.getNome());            
+            pst.setString(1, categoria.getNome());
             pst.setInt(3, categoria.getId());
 
             pst.executeUpdate();
@@ -134,7 +134,7 @@ public class CategoriaDAO extends AbstractJdbcDAO{
             while (rs.next()) {
                 c = new Categoria();
                 c.setNome(rs.getString("nome"));
-                c.setId(rs.getInt("id_categoria"));                
+                c.setId(rs.getInt("id_categoria"));
                 categorias.add(c);
             }
         } catch (SQLException ex) {

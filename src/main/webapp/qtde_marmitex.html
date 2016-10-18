@@ -37,15 +37,16 @@
                 };
 
                 $scope.acrescentar = function () {
-                    $scope.quantidade++;                    
+                    $scope.quantidade++;
                 };
 
                 $scope.retirar = function () {
                     if ($scope.quantidade > 1) {
-                        $scope.quantidade--;                        
+                        $scope.quantidade--;
                     } else
                         alert("Quantidade minima de marmitex por pedido é 1!");
                 };
+
             });
         </script>
     </head>
@@ -75,7 +76,7 @@
                                     <!-- OPÇÕES DO DIA -->
 
                                     <div class="row col-md-12">
-                                        <label for="qtde">Quantas marmitex você deseja?</label>                                        
+                                        <label for="qtde">Quantas marmitex você deseja?</label>
                                         <input type="text" value="1" class="form-control" ng-model="quantidade" id="qtde" style="width: 50px">
                                         <img src="photos/plus.png" ng-click="acrescentar()">
                                         <img src="photos/minus.png" ng-click="retirar()">

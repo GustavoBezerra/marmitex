@@ -78,7 +78,7 @@
                         }
                     });
                 };
-                
+
                 $scope.verDetalhes = function (pedido) {
                     window.sessionStorage.setItem("pedido", JSON.stringify(pedido));
                     window.location.href = "http://localhost:8084/marmitex/devolver_admin.html";
@@ -283,7 +283,7 @@
                                                 <button class="btn btn-info" ng-if="pedido.status === 'Pronto'" ng-click="buscarEntregadores(pedido)">Entregar</button>
                                                 <div ng-if="entregar && (id_pedido_entregar === pedido.id)">
                                                     <label for="categoria">Selecione o entregador:</label>
-                                                    <select class="form-control" id="categoria" ng-model="pedido.entregador"> 
+                                                    <select class="form-control" id="categoria" ng-model="pedido.entregador">
                                                         <option value="{{entregador.id}}" ng-repeat="entregador in entregadores">{{entregador.nome}}</option>
                                                     </select>
                                                 </div>
@@ -328,7 +328,7 @@
                                             <td>{{getEndereco(pedido)}}</td>
                                             <td>{{getPagamento(pedido)}}</td>
                                             <td>{{pedido.troco| number:2}}</td>
-                                            <td>                                                
+                                            <td>
                                                 <label class='label label-success' ng-if="pedido.status === 'Entregue'">Entregue</label>
                                                 <label class='label btn-github' ng-if="pedido.status === 'Cancelado'">Cancelado</label>
                                                 <label class='label btn-danger' ng-if="pedido.status === 'Devolvido'">Devolvido</label>

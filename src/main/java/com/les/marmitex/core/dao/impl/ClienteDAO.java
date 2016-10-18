@@ -39,7 +39,7 @@ public class ClienteDAO extends AbstractJdbcDAO {
         try {
             Cliente cliente = (Cliente) entidade;
             connection.setAutoCommit(false);
-            
+
             StringBuilder sql = new StringBuilder();
             sql.append("INSERT INTO tb_cliente(nome, telefone, login, senha, ");
             sql.append("dt_criacao, credito) VALUES (?,?,?,?,?,?)");
@@ -227,22 +227,22 @@ public class ClienteDAO extends AbstractJdbcDAO {
         }
         return clientes;
     }
-    
+
     public boolean verificarDuplicidade(Cliente c){
         openConnection();
         PreparedStatement pst = null;
-        
-        try {            
+
+        try {
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
 
             sql.append("SELECT * FROM tb_cliente WHERE login like ?;");
-            
-            pst = connection.prepareStatement(sql.toString());            
+
+            pst = connection.prepareStatement(sql.toString());
             pst.setString(1, c.getUsuario().getLogin());
-                
-            ResultSet rs = pst.executeQuery();            
+
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 return false;
             }
