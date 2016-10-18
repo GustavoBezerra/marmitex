@@ -145,6 +145,20 @@
                     var ano = data.getFullYear();
                     return dia + "/" + mes + "/" + ano;
                 };
+
+                $scope.filtrarPedidos = function (filtro) {
+                    var aux = new Array();
+                    if (filtro === "Todos") {
+                        return $scope.pedidos;
+                    } else if (filtro === "Entregue") {
+                        for (var i = 0; i < $scope.pedidos.length; i++) {
+                            if ($scope.pedidos[i].status === "Entregue") {
+                                aux.push($scope.pedidos[i]);
+                            }
+                        }
+                        return aux;
+                    }
+                };
             });
         </script>
     </head>
@@ -165,34 +179,49 @@
                                         <i class="glyphicon glyphicon-check"></i>
                                         <h3 class="box-title">Pedidos finalizados</h3>
                                     </div>
-                                    <table class="table table-striped" ng-show="pedidos.length > 0">
-                                        <tr>
-                                            <th>ID do pedido</th>
-                                            <th>Data do pedido</th>
-                                            <th>Descrição do pedido</th>
-                                            <th>Endereço de entrega</th>
-                                            <th>Status</th>
-                                            <th></th>
-                                        </tr>
-                                        <tr ng-repeat="pedido in pedidos" >
-                                            <td>
-                                                <a ng-click="verDetalhes(pedido);">
-                                                    {{pedido.id}}
-                                                </a>
-                                            </td>
-                                            <td>{{pedido.dtCriacao}}</td>
-                                            <td>{{getDescricao(pedido)}}</td>
-                                            <td>{{getEndereco(pedido)}}</td>
-                                            <td>
-                                                <label class='label label-success' ng-if="pedido.status === 'Entregue'">Entregue</label>
-                                                <label class='label btn-github' ng-if="pedido.status === 'Cancelado'">Cancelado</label>
-                                                <label class='label btn-danger' ng-if="pedido.status === 'Devolvido'">Devolvido</label>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="Devolver(pedido);">Devolver</button>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                    <div class="row col-md-12">
+                                        <div class="col-md-3">
+                                            <label for="filtro_txt">Filtrar por texto</label>
+                                            <input id="filtro_txt" class="form-control" ng-model="filtro"/>
+                                        </div>
+                                        
+                                    </div>
+                                    <br/>
+                                    <div class="row col-md-12">
+                                        <table class="table table-striped" ng-show="pedidos.length > 0">
+                                            <tr>
+                                                <th>ID do pedido</th>
+                                                <th>Data do pedido</th>
+                                                <th>Descrição do pedido</th>
+                                                <th>Endereço de entrega</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                            <tr ng-repeat="pedido in pedidos| filter:filtro" >
+                                                <td>
+                                                    <a ng-click="verDetalhes(pedido);">
+                                                        {{pedido.id}}
+                                                    </a>
+                                                </td>
+                                                <td>{{pedido.dtCriacao}}</td>
+                                                <td>{{getDescricao(pedido)}}</td>
+                                                <td>{{getEndereco(pedido)}}</td>
+                                                <td>
+                                                    <label class='label label-primary' ng-if="pedido.status === 'Aberto'">Aberto</label>
+                                                    <label class='label label-warning' ng-if="pedido.status === 'Em preparo'">Em preparo</label>
+                                                    <label class='label btn-foursquare' ng-if="pedido.status === 'Pronto'">Pronto</label>
+                                                    <label class='label label-info' ng-if="pedido.status === 'A caminho'">A caminho</label>                                                
+                                                    <label class='label label-success' ng-if="pedido.status === 'Entregue'">Entregue</label>
+                                                    <label class='label btn-github' ng-if="pedido.status === 'Cancelado'">Cancelado</label>
+                                                    <label class='label btn-danger' ng-if="pedido.status === 'Devolvido'">Devolvido</label>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="Devolver(pedido);">Devolver</button>
+                                                    <button class="btn btn-github" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status !== 'Entregue' && pedido.status !== 'Cancelado' && pedido.status !== 'Devolvido'">Cancelar</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
