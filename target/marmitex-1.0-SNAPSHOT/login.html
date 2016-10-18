@@ -19,20 +19,25 @@
             var app = angular.module("login", []);
             app.controller("loginCtrl", function ($scope) {
                 $scope.titulo = "Login";
-
                 $scope.redirecionar = function (data) {
                     window.sessionStorage.setItem("usuario", data);
                     var usuario = JSON.parse(data);
                     if (usuario.id === 1) { // é o admin?
                         window.location.href = "http://localhost:8084/marmitex/pedidos_abertos.html";
                     } else {
-                        if (window.sessionStorage["marmitex"] !== undefined) {
-                            window.location.href = "http://localhost:8084/marmitex/escolhas_pedido.html";
+                        var marmitex = window.sessionStorage["marmitex"];
+                        if (marmitex !== undefined) {
+                            var marmitex = JSON.parse(window.sessionStorage["marmitex"]);
+                            if (marmitex.length !== 0) {
+                                window.location.href = "http://localhost:8084/marmitex/escolhas_pedido.html";
+                            } else {
+                                window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html";
+                            }
                         } else {
                             window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html";
                         }
                     }
-                }
+                };
 
                 $scope.consultar = function (login) {
                     $.ajax({
@@ -56,7 +61,6 @@
                         }
                     });
                 };
-
                 $scope.salvar = function (usuario) {
                     if (usuario.confirmar_senha !== usuario.senha) {
                         alert("Senhas diferentes!");
@@ -87,7 +91,6 @@
                         });
                     }
                 };
-
             });
         </script>
     </head>

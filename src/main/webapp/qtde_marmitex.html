@@ -16,7 +16,7 @@
 
         <script>
             var qtde = new Array();
-            var teste="";
+            var teste = "";
             qtde.push(teste);
             var app = angular.module("qtdeMarmitex", []);
             app.controller("marmitexQtde", function ($scope) {
@@ -28,26 +28,22 @@
                 ];
 
                 $scope.proximo = function () {
+                    for (var i = 0; i < $scope.quantidade - 1; i++) {
+                        var novo = "";
+                        qtde.push(novo);
+                    }
                     window.sessionStorage.setItem("qtde", JSON.stringify(qtde));
                     window.location.href = "http://localhost:8084/marmitex/marmitex.html";
                 };
 
                 $scope.acrescentar = function () {
-                    if ($scope.quantidade < 5){
-                        var novo = "";
-                        $scope.quantidade++;
-                        qtde.push(novo);
-                    }
-                    else
-                        alert("Quantidade máxima de marmitex por pedido alcançada!");
+                    $scope.quantidade++;                    
                 };
 
                 $scope.retirar = function () {
-                    if ($scope.quantidade > 1){
-                        $scope.quantidade--;
-                        qtde.pop();
-                    }
-                    else
+                    if ($scope.quantidade > 1) {
+                        $scope.quantidade--;                        
+                    } else
                         alert("Quantidade minima de marmitex por pedido é 1!");
                 };
             });
@@ -80,7 +76,7 @@
 
                                     <div class="row col-md-12">
                                         <label for="qtde">Quantas marmitex você deseja?</label>                                        
-                                        <input type="text" value="1" class="form-control" ng-model="quantidade" id="qtde" style="width: 40px">
+                                        <input type="text" value="1" class="form-control" ng-model="quantidade" id="qtde" style="width: 50px">
                                         <img src="photos/plus.png" ng-click="acrescentar()">
                                         <img src="photos/minus.png" ng-click="retirar()">
                                     </div>

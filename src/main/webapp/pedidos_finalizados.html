@@ -174,7 +174,7 @@
                                             <th>Status</th>
                                             <th></th>
                                         </tr>
-                                        <tr ng-repeat="pedido in pedidos" ng-if="(pedido.status === 'Entregue' || pedido.status === 'Cancelado' || pedido.status === 'Devolvido')">
+                                        <tr ng-repeat="pedido in pedidos" >
                                             <td>
                                                 <a ng-click="verDetalhes(pedido);">
                                                     {{pedido.id}}

@@ -54,13 +54,15 @@
                     var r = document.getElementById(recurso.nome + "_" + id);
                     if (r.value > 0) {
                         for (var i = $scope.marmitas[id - 1].length; i >= 0; i--) {
-                            if ($scope.marmitas[id - 1][i] === recurso) {
-                                $scope.marmitas[id - 1].splice(i, 1);
-                                break;
+                            for (var j = 0; j < $scope.marmitas[id - 1].length; j++) {
+                                if ($scope.marmitas[id - 1][j].id === recurso.id) {
+                                    $scope.marmitas[id - 1].splice(j, 1);
+                                    r.value--;
+                                    $scope.preco -= recurso.valor;
+                                    return;
+                                }
                             }
                         }
-                        r.value--;
-                        $scope.preco -= recurso.valor;
                     }
                 };
 
@@ -123,6 +125,14 @@
                     }
                 };
 
+                $scope.verificarMarmitas = function () {
+                    for (var i = 0; i < $scope.marmitas.length; i++) {
+                        if($scope.marmitas[i].length === 0){
+                            return false;
+                        }
+                    }
+                    return true;
+                };
             });
         </script>
     </head>
@@ -161,34 +171,38 @@
                                     <div class="row">
                                         <label class="text-green text-bold col-md-12 col-md-offset-5"><h3>Valor do pedido: R${{preco| number: 2}}</h3></label>
                                     </div>
-                                    <div ng-repeat="qtde in qtdeMarmita">
-                                        <label class="text-blue"><h2>Marmitex {{qtde}}</h2></label>
-                                        <div id="escolhas" class="row" ng-repeat="categoria in categorias">
-                                            <div class="form-group col-md-6" >
-                                                <div class="box-header with-border">
-                                                    <i class="glyphicon glyphicon-asterisk"></i>
-                                                    <h3 class="box-title">{{categoria.nome}}</h3>
-                                                </div><!-- /.box-header -->
-                                                <div class="form-group">
-                                                    <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
-                                                        <label>
-                                                            <input type="number" value="0" readonly="true" style="width: 40px" name="{{categoria.nome}}" id="{{recurso.nome}}_{{qtde}}" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
 
-                                                            <img src="photos/plus.png" ng-click="acrescentar(recurso, qtde)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
-                                                            <img src="photos/minus.png" ng-click="retirar(recurso, qtde)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
 
-                                                            {{recurso.nome}} (R${{recurso.valor| number:2}} )
-                                                        </label>
+                                    <div class="box-header with-border">
+                                        <i class="fa fa-user"></i>
+                                        <h3 class="box-title">Montar marmitex</h3>
+                                    </div><!-- /.box-header -->
+                                    <div class="table-responsive">
+                                        <table class="table" style="overflow: scroll">
+                                            <tr>
+                                                <th>Categoria</th>
+                                                <th>Recurso</th>
+                                                <th ng-repeat="qtde in qtdeMarmita">
+                                                    <div class="table-responsive">
+                                                        Marmitex {{qtde}}
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                </th>
+                                            </tr>
+                                            <tr ng-repeat="recurso in recursos">
+                                                <td>{{recurso.categoria.nome}}</td>
+                                                <td>{{recurso.nome}} (R${{recurso.valor| number:2}})</td>
+                                                <td ng-repeat="qtde in qtdeMarmita">
+                                                    <input type="number" value="0" readonly="true" style="width: 40px" name="{{categoria.nome}}" id="{{recurso.nome}}_{{qtde}}" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                                    <img src="photos/plus.png" ng-click="acrescentar(recurso, qtde)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                                    <img src="photos/minus.png" ng-click="retirar(recurso, qtde)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
-
 
                                     <br>
                                     <div class="row">
-                                        <button type="button" ng-click="verificar()" class="btn btn-google col-md-2 col-md-offset-5"><h4>Pedir marmitex</h4></button>
+                                        <button type="button" ng-click="verificar()" ng-disabled="!verificarMarmitas()" class="btn btn-google col-md-2 col-md-offset-5"><h4>Pedir marmitex</h4></button>
                                     </div>
                                 </div>
                             </div>
