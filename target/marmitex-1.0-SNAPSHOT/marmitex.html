@@ -38,15 +38,23 @@
 
                 $scope.acrescentar = function (recurso, id) {
                     var r = document.getElementById(recurso.nome + "_" + id);
-                    if (recurso.medida === "Unidade(s)" && (parseInt(r.value)) === (recurso.quantidade - 1)) {
-                        alert("Quantidade máxima de " + recurso.nome + " atingida!");
-                    } else if (recurso.medida !== "Unidade(s)" && ((r.value * 0.150) >= (recurso.quantidade - 0.150))) {
-                        alert("Quantidade máxima de " + recurso.nome + " atingida!");
-                    } else {
-                        r.value++;
-                        $scope.preco += recurso.valor;
-                        $scope.marmitas[id - 1].push(angular.copy(recurso));
-                        //ingredientesCheckados.push(angular.copy(recurso));
+                    for (var i = 0; i < $scope.bkp_recursos.length; i++) {
+                        if ($scope.bkp_recursos[i].id === recurso.id) {
+                            if (recurso.medida === "Unidade(s)" && $scope.bkp_recursos[i].quantidade === 1) {
+                                alert("Quantidade máxima de " + recurso.nome + " atingida!");
+                            } else if (recurso.medida !== "Unidade(s)" && $scope.bkp_recursos[i].quantidade <= 0.150) {
+                                alert("Quantidade máxima de " + recurso.nome + " atingida!");
+                            } else {
+                                r.value++;
+                                $scope.preco += recurso.valor;
+                                $scope.marmitas[id - 1].push(angular.copy(recurso));
+                                if (recurso.medida === "Unidade(s)") {
+                                    $scope.bkp_recursos[i].quantidade -= 1;
+                                } else {
+                                    $scope.bkp_recursos[i].quantidade -= 0.150;
+                                }
+                            }
+                        }
                     }
                 };
 
@@ -59,7 +67,16 @@
                                     $scope.marmitas[id - 1].splice(j, 1);
                                     r.value--;
                                     $scope.preco -= recurso.valor;
-                                    return;
+                                    for (var i = 0; i < $scope.bkp_recursos.length; i++) {
+                                        if ($scope.bkp_recursos[i].id === recurso.id) {
+                                            if (recurso.medida === "Unidade(s)") {
+                                                $scope.bkp_recursos[i].quantidade += 1;
+                                            } else {
+                                                $scope.bkp_recursos[i].quantidade += 0.150;
+                                            }
+                                            return;
+                                        }
+                                    }                                    
                                 }
                             }
                         }
@@ -93,6 +110,7 @@
                         },
                         success: function (data) {
                             $scope.recursos = JSON.parse(data);
+                            $scope.bkp_recursos = angular.copy($scope.recursos);
                         },
                         error: function (err) {
                             console.log(err.statusText);
@@ -127,7 +145,7 @@
 
                 $scope.verificarMarmitas = function () {
                     for (var i = 0; i < $scope.marmitas.length; i++) {
-                        if($scope.marmitas[i].length === 0){
+                        if ($scope.marmitas[i].length === 0) {
                             return false;
                         }
                     }
