@@ -183,6 +183,7 @@
                                         <div class="col-md-3">
                                             <label for="filtro_txt">Filtrar por texto</label>
                                             <input id="filtro_txt" class="form-control" ng-model="filtro"/>
+                                            Total de registros encontrados: {{pedidosFiltrados.length}}
                                         </div>
                                         
                                     </div>
@@ -197,7 +198,7 @@
                                                 <th>Status</th>
                                                 <th></th>
                                             </tr>
-                                            <tr ng-repeat="pedido in pedidos| filter:filtro" >
+                                            <tr ng-repeat="pedido in pedidosFiltrados = (pedidos | filter:filtro)" >
                                                 <td>
                                                     <a ng-click="verDetalhes(pedido);">
                                                         {{pedido.id}}
