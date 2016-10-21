@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!-- @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com> -->
+<!-- Data de criação: 26/09/2016 -->
+<html ng-app="pedidosFinalizados">
+    <head>
+        <title>Todos os pedidos finalizados</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
+        <script src="angularJS/angular.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
+        <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
+
+        <script>
+            var parseObj = JSON.parse(window.sessionStorage["usuario"]);
+        </script>
+
+        <script>
+            var app = angular.module("pedidosFinalizados", []);
+            app.controller("PedidosFinalizadosCtrl", function ($scope) {
+                $scope.titulo = "Pedidos Abertos";
+                $scope.usuario = parseObj;
+                $scope.entregar = false;
+                $scope.id_pedido_entregar;
+
+                $scope.buscarEntregadores = function (pedido) {
+                    $scope.entregar = true;
+                    $scope.id_pedido_entregar = pedido.id;
+
+                    $.ajax({
+                        url: "/marmitex/entregador",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"
+                        },
+                        success: function (data) {
+                            console.log("consultou");
+                            $scope.entregadores = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.verDetalhes = function (pedido) {
+                    window.sessionStorage.setItem("pedido", JSON.stringify(pedido));
+                    window.location.href = "http://localhost:8084/marmitex/devolver_admin.html";
+                };
+
+                $scope.getPedidos = function () {
+                    $.ajax({
+                        url: "/marmitex/pedido",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR",
+                            id_cliente: $scope.usuario.id
+                        },
+                        success: function (data) {
+                            $scope.pedidos = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            alert("Erro ao consultar seus pedidos!\n" + err);
+                        }
+                    });
+                };
+
+                $scope.alterar = function (pedido, status) {
+                    if (status === 'A caminho') {
+                        $.ajax({
+                            url: "/marmitex/pedido",
+                            type: "POST",
+                            async: false,
+                            data: {
+                                operacao: "ALTERAR",
+                                id_pedido: pedido.id,
+                                status: status,
+                                entregador: pedido.entregador
+                            },
+                            success: function (data) {
+                                $scope.id_pedido_entregar = 0;
+                                $scope.entregar = false;
+                                $scope.getPedidos();
+                            },
+                            error: function (err) {
+                                alert("Erro ao alterar o pedido!\n" + err);
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            url: "/marmitex/pedido",
+                            type: "POST",
+                            async: false,
+                            data: {
+                                operacao: "ALTERAR",
+                                id_pedido: pedido.id,
+                                status: status
+                            },
+                            success: function (data) {
+                                $scope.getPedidos();
+                            },
+                            error: function (err) {
+                                alert("Erro ao alterar o pedido!\n" + err);
+                            }
+                        });
+                    }
+
+                };
+
+                $scope.getDescricao = function (pedido) {
+                    var desc = "";
+                    for (var i = 0; i < pedido.marmitex.length; i++) {
+                        desc += "Marmitex " + (i + 1) + ":";
+                        for (var j = 0; j < pedido.marmitex[i].ingredientes.length; j++) {
+                            desc += pedido.marmitex[i].ingredientes[j].nome + ", ";
+                        }
+                        desc = desc.slice(0, -2);
+                        desc += "; ";
+                    }
+                    return desc;
+                };
+
+                $scope.getEndereco = function (pedido) {
+                    return pedido.endereco.rua + ", " + pedido.endereco.numero + " - " + pedido.endereco.bairro;
+                };
+
+                $scope.sair = function () {
+                    window.sessionStorage.clear();
+                    window.location.href = "http://localhost:8084/marmitex/login.html";
+                };
+
+                $scope.dataAtualFormatada = function () {
+                    var data = new Date();
+                    var dia = data.getDate();
+                    if (dia.toString().length === 1)
+                        dia = "0" + dia;
+                    var mes = data.getMonth() + 1;
+                    if (mes.toString().length === 1)
+                        mes = "0" + mes;
+                    var ano = data.getFullYear();
+                    return dia + "/" + mes + "/" + ano;
+                };
+
+                $scope.filtrarPedidos = function (filtro) {
+                    var aux = new Array();
+                    if (filtro === "Todos") {
+                        return $scope.pedidos;
+                    } else if (filtro === "Entregue") {
+                        for (var i = 0; i < $scope.pedidos.length; i++) {
+                            if ($scope.pedidos[i].status === "Entregue") {
+                                aux.push($scope.pedidos[i]);
+                            }
+                        }
+                        return aux;
+                    }
+                };
+            });
+        </script>
+    </head>
+    <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="PedidosFinalizadosCtrl">
+        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="getPedidos()">
+            <div class="wrapper">
+                <div ng-include="'templates/template_admin.html'"></div>
+
+                <!-- Content Wrapper. Contains page content -->
+                <div class="content-wrapper">
+                    <!-- Main content -->
+
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="box box-success">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-check"></i>
+                                        <h3 class="box-title">Todos pedidos</h3>
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div class="col-md-3">
+                                            <label for="filtro_txt">Filtrar por texto</label>
+                                            <input id="filtro_txt" class="form-control" ng-model="filtro"/>
+                                            Total de registros encontrados: {{pedidosFiltrados.length}}
+                                        </div>
+                                        
+                                    </div>
+                                    <br/>
+                                    <div class="row col-md-12">
+                                        <table class="table table-striped" ng-show="pedidos.length > 0">
+                                            <tr>
+                                                <th>ID do pedido</th>
+                                                <th>Data do pedido</th>
+                                                <th>Descrição do pedido</th>
+                                                <th>Endereço de entrega</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                            <tr ng-repeat="pedido in pedidosFiltrados = (pedidos | filter:filtro)" >
+                                                <td>
+                                                    <a ng-click="verDetalhes(pedido);">
+                                                        {{pedido.id}}
+                                                    </a>
+                                                </td>
+                                                <td>{{pedido.dtCriacao}}</td>
+                                                <td>{{getDescricao(pedido)}}</td>
+                                                <td>{{getEndereco(pedido)}}</td>
+                                                <td>
+                                                    <label class='label label-primary' ng-if="pedido.status === 'Aberto'">Aberto</label>
+                                                    <label class='label label-warning' ng-if="pedido.status === 'Em preparo'">Em preparo</label>
+                                                    <label class='label btn-foursquare' ng-if="pedido.status === 'Pronto'">Pronto</label>
+                                                    <label class='label label-info' ng-if="pedido.status === 'A caminho'">A caminho</label>                                                
+                                                    <label class='label label-success' ng-if="pedido.status === 'Entregue'">Entregue</label>
+                                                    <label class='label btn-github' ng-if="pedido.status === 'Cancelado'">Cancelado</label>
+                                                    <label class='label btn-danger' ng-if="pedido.status === 'Devolvido'">Devolvido</label>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status === 'Entregue'" ng-click="Devolver(pedido);">Devolver</button>
+                                                    <button class="btn btn-github" ng-disabled="pedido.dtCriacao !== dataAtualFormatada()" ng-if="pedido.status !== 'Entregue' && pedido.status !== 'Cancelado' && pedido.status !== 'Devolvido'">Cancelar</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div> <!-- content wraper -->
+            </div> <!-- wrapper -->
+        </div>
+    </body>
+</html>
