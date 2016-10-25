@@ -1,6 +1,7 @@
 package com.les.marmitex.core.dominio;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Classe para representar os ingredientes
@@ -15,6 +16,7 @@ public class Ingrediente extends EntidadeDominio{
     private Date dtVencimento;
     private Categoria categoria;
     private double valor;
+    private List<Dias> dias;
 
     /**
      * @return the nome
@@ -98,6 +100,20 @@ public class Ingrediente extends EntidadeDominio{
      */
     public void setValor(double valor) {
         this.valor = valor;
+    }
+
+    /**
+     * @return the dias
+     */
+    public List<Dias> getDias() {
+        return dias;
+    }
+
+    /**
+     * @param dias the dias to set
+     */
+    public void setDias(List<Dias> dias) {
+        this.dias = dias;
     }
 
 }

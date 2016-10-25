@@ -27,6 +27,40 @@
                     {id: 5, descricao: "Grama(s)"}
                 ];
                 $scope.opAlterar = false;
+                $scope.dias = [
+                    {
+                        id: 10,
+                        titulo: "Todos os dias"
+                    },
+                    {
+                        id: 1,
+                        titulo: "Segunda-feira"
+                    },
+                    {
+                        id: 2,
+                        titulo: "Terça-feira"
+                    },
+                    {
+                        id: 3,
+                        titulo: "Quarta-feira"
+                    },
+                    {
+                        id: 4,
+                        titulo: "Quinta-feira"
+                    },
+                    {
+                        id: 5,
+                        titulo: "Sexta-feira"
+                    },
+                    {
+                        id: 6,
+                        titulo: "Sabado"
+                    },
+                    {
+                        id: 0,
+                        titulo: "Domingo"
+                    }
+                ];
 
                 $scope.sair = function () {
                     window.sessionStorage.clear();
@@ -114,6 +148,10 @@
                 };
 
                 $scope.visualizar = function (ingrediente) {
+                    var ds = document.getElementsByName("ck_dias");
+                    for (var i = 0; i < ds.length; i++) {
+                        
+                    }
                     $scope.opAlterar = true;
                     $scope.recurso = angular.copy(ingrediente);
                     document.getElementById("txtVencimento").value = converterData(ingrediente.dtVencimento);
@@ -157,11 +195,10 @@
                     delete $scope.recurso;
                 };
 
-                $scope.getQtde = function(r){
-                    if(r.medida === 'Unidade(s)'){
+                $scope.getQtde = function (r) {
+                    if (r.medida === 'Unidade(s)') {
                         return r.quantidade;
-                    }
-                    else{
+                    } else {
                         return r.quantidade.toFixed(3);
                     }
                 };
@@ -204,6 +241,10 @@
                                                 <option value="">Selecione uma categoria</option>
                                             </select>
                                         </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="txtVencimento">Data de validade:</label>
+                                            <input type="date" id="txtVencimento" ng-model="recurso.dtVencimento" class="form-control"/>
+                                        </div>
                                     </div>
 
                                     <div class="row">
@@ -217,14 +258,21 @@
                                                     ng-options="medida.descricao as medida.descricao for medida in medidas">
                                                 <option value="">Selecione uma medida</option>
                                             </select>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="txtVencimento">Data de validade:</label>
-                                            <input type="date" id="txtVencimento" ng-model="recurso.dtVencimento" class="form-control"/>
-                                        </div>
+                                        </div>                                        
                                         <div class="form-group col-md-3">
                                             <label for="txtQuantidade">Valor</label>
                                             <input type="text" class="form-control" ng-model="recurso.valor" name="txtValor" id="txtValor" placeholder="R$">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="categoria">Dias da semana:</label>
+                                            <div class="form-group">
+                                                <div class="checkbox" ng-repeat="dia in dias">
+                                                    <label>
+                                                        <input type="checkbox" id="dia_{{dia.id}}" name="ck_dias">
+                                                        {{dia.titulo}}
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -271,7 +319,7 @@
                                             <td>{{getQtde(r)}}</td>
                                             <td>{{r.medida}}</td>
                                             <td>{{r.dtVencimento}}</td>
-                                            <td>R${{r.valor | number:2}}</td>
+                                            <td>R${{r.valor| number:2}}</td>
                                             <td>
                                                 <button type='button' class='btn btn-warning' ng-click='visualizar(r)'>Alterar</button>
                                                 <button type='button' class='btn btn-danger' ng-click='excluir(r)'>Excluir</button>

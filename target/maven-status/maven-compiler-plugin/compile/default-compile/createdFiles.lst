@@ -54,6 +54,7 @@ com\les\marmitex\util\teste\TestarConexao.class
 com\les\marmitex\util\teste\TestarEndereco.class
 com\les\marmitex\util\teste\TestarSalvarPedido.class
 com\les\marmitex\core\dao\impl\EntregadorDAO.class
+com\les\marmitex\core\dominio\Dias.class
 com\les\marmitex\core\dominio\Pedido.class
 com\les\marmitex\view\helper\impl\IngredienteHelper.class
 com\les\marmitex\core\strategy\IStrategy.class
