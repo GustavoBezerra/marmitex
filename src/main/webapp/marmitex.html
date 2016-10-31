@@ -65,6 +65,26 @@
                                     <div class="table-responsive">
                                         <table class="table table-striped" style="overflow: scroll">
                                             <tr>
+                                                <th>Marmitex</th>
+                                                <th ng-repeat="recurso in recursos">{{recurso.nome}}</th>
+                                                
+                                            </tr>
+                                            <tr ng-repeat="qtde in qtdeMarmita">
+                                                <td>
+                                                    <div class="table-responsive">
+                                                        Marmitex {{qtde}}
+                                                    </div>
+                                                </td>
+                                                <td ng-repeat="recurso in recursos"> 
+                                                    {{recurso.nome}}(R${{recurso.valor| number:2}})
+                                                    <input type="number" value="0" readonly="true" style="width: 40px" name="{{categoria.nome}}" id="{{recurso.nome}}_{{qtde}}" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                                    <img src="photos/plus.png" ng-click="acrescentar(recurso, qtde)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                                    <img src="photos/minus.png" ng-click="retirar(recurso, qtde)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
+                                                </td>
+                                            </tr>
+                                            
+                                            
+<!--                                            <tr>
                                                 <th>Categoria</th>
                                                 <th>Recurso</th>
                                                 <th ng-repeat="qtde in qtdeMarmita">
@@ -81,7 +101,7 @@
                                                     <img src="photos/plus.png" ng-click="acrescentar(recurso, qtde)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
                                                     <img src="photos/minus.png" ng-click="retirar(recurso, qtde)" ng-if="((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))">
                                                 </td>
-                                            </tr>
+                                            </tr>-->
                                         </table>
                                     </div>
 
