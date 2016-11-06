@@ -17,7 +17,12 @@
         <script src="js/angular.min.js"></script>
         <script src="dist/Chart.min.js"></script>
         <script src="dist/angular-chart.min.js"></script>
-        <script src="dist/jquery-3.1.1.min.js"></script>
+        <!--        <script src="dist/jquery-3.1.1.min.js"></script>-->
+
+        <!-- Importes para o Date -->
+        <script src="adminLTE/plugins/daterangepicker/moment.min.js" type="text/javascript"></script>
+        <script src="adminLTE/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+        <link href="adminLTE/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
 
         <script>
             angular.module("app", ["chart.js"]).controller("LineCtrl", function ($scope) {
@@ -27,13 +32,11 @@
                     window.location.href = "http://localhost:8084/marmitex/login.html";
                 };
 
-                $scope.labels_line = ["Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado", "Domingo"];
-                $scope.series_line = ['Frango', 'Carne', 'Calabresa'];
-                $scope.data_line = [
-                    [65, 59, 80, 81, 56, 55, 40],
-                    [28, 48, 40, 19, 86, 27, 90],
-                    [35, 15, 54, 56, 10, 47, 76]
-                ];
+                $scope.consultarTudo = function () {
+                    $scope.consultarIngredientes();
+                };
+
+
 
                 $scope.labels_bar = ["Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado", "Domingo"];
                 $scope.series_bar = ['Nilton', 'Pedro'];
@@ -51,11 +54,100 @@
 
                 $scope.labels_pie = ["Campanha 1", "Campanha 2", "Campanha 3"];
                 $scope.data_pie = [300, 500, 100];
+
+                $scope.escolhaGrafico = function (obj) {
+                    var radios = document.getElementsByName("optionsRadios");
+                    for (var i = 0; i < radios.length; i++) {
+                        if (radios[i].checked) {
+
+                        }
+                    }
+                };
+
+                $scope.consultarIngredientes = function () {
+                    $.ajax({
+                        url: "/marmitex/ingrediente",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"
+                        },
+                        success: function (data) {
+                            $scope.recursos = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.gerarLinhas = function (linhas) {
+                    $.ajax({
+                        url: "/marmitex/analise",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR",
+                            inicio: linhas.inicio,
+                            fim: linhas.fim,
+                            tipo: "linhas"
+                        },
+                        success: function (data) {
+                            var results = JSON.parse(data);
+                            var itens = new Array();
+                            var datas = new Array();
+
+                            if (results.length === 0) {
+                                alert("Sem registros!");
+                            } else {
+                                itens.push(results[0].nome);
+                                datas.push(results[0].data);
+                                for (var i = 0; i < results.length; i++) {
+                                    if (itens.indexOf(results[i].nome) === -1) {
+                                        itens.push(results[i].nome);
+                                    }
+                                    if (datas.indexOf(results[i].data) === -1) {
+                                        datas.push(results[i].data);
+                                    }
+                                }
+                                $scope.labels_line = datas;
+                                $scope.series_line = itens;
+                                
+                                var ingValor = new Array(itens.length);
+
+                                for (var i = 0; i < ingValor.length; i++) {
+                                    ingValor[i] = new Array(datas.length);
+                                }
+
+
+                                for (var j = 0; j < results.length; j++) {
+                                    var indiceItem = itens.indexOf(results[j].nome);
+                                    var indiceData = datas.indexOf(results[j].data);
+                                    ingValor[indiceItem][indiceData] = results[j].valor;
+                                }
+
+                                for (var i = 0; i < ingValor.length; i++) {
+                                    for (var j = 0; j < ingValor[i].length; j++) {
+                                        if(ingValor[i][j] === undefined){
+                                            ingValor[i][j] = "0";
+                                        }
+                                    }
+                                }
+
+                                // CADA LINHA REPRESENTA UM INGREDIENTE, COM TODOS OS VALORES DE TODOS OS DIAS
+                                $scope.data_line = ingValor;
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
             });
         </script>
     </head>
     <body class="hold-transition skin-red sidebar-mini" style="background-color: lightgray;" ng-controller="LineCtrl">
-        <div id="body" class="hold-transition skin-blue sidebar-mini">
+        <div id="body" class="hold-transition skin-blue sidebar-mini" data-ng-init="consultarTudo()">
             <div class="wrapper">
                 <div ng-include="'templates/template_admin.html'"></div>
 
@@ -64,28 +156,132 @@
                     <!-- Main content -->
                     <!-- form start -->
                     <div class="box-body">
-                        <div style="width: 535px; heigth: 535px;">
-                            <label style="font-size: 20px">Vendas por dia - Visao por ingrediente</label>
-                            <canvas id="line" class="chart chart-line" chart-data="data_line" chart-labels="labels_line" chart-series="series_line" style="width: 50px;">
-                            </canvas>        
-                        </div>
-                        <br/><br/>
-                        <div style="width: 535px; heigth: 535px;">
-                            <label style="font-size: 20px">Quantidade de entregas por motoboy</label>
-                            <canvas id="bar" class="chart chart-bar" chart-data="data_bar" chart-labels="labels_bar" chart-series="series_bar">
-                            </canvas>
-                        </div>
-                        <br/><br/>
-                        <div style="width: 535px; heigth: 535px;">
-                            <label style="font-size: 20px">Motivos de devolucao da marmitex - Visao por ingrediente</label>
-                            <canvas id="radar" class="chart chart-radar" chart-data="data_radar" chart-labels="labels_radar" chart-series="series_radar">
-                            </canvas>
-                        </div>
-                        <br/><br/>
-                        <div style="width: 535px; heigth: 535px;">
-                            <label style="font-size: 20px">Quantidade de vendas utilizando as campanhas</label>
-                            <canvas id="radar" class="chart chart-pie" chart-data="data_pie" chart-labels="labels_pie" chart-series="series_pie">
-                            </canvas>
+                        <div class="col-md-12">
+                            <div class="box box-success">
+                                <div class="box-body">
+                                    <div class="box-header with-border" style="text-align: center;">
+                                        <i class="glyphicon glyphicon-stats"></i>
+                                        <h3 class="box-title">Análise</h3>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-12">
+                                            <div class="form-group">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="linhas" ng-model="radio">
+                                                        Linhas
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="barras" ng-model="radio">
+                                                        Barras
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="optionsRadios" id="optionsRadios3" value="radar" ng-model="radio">
+                                                        Radar
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="optionsRadios" id="optionsRadios4" value="pizza" ng-model="radio">
+                                                        Pizza
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- GRÁFICO DE LINHAS -->
+                                    <div class="row" ng-if="radio === 'linhas'">
+                                        <div class="form-group col-md-6" >
+                                            <div class="box-header with-border">
+                                                <i class="glyphicon glyphicon-filter"></i>
+                                                <h3 class="box-title">Filtros</h3>
+                                            </div><!-- /.box-header -->
+                                            <div id="escolhas" class="row">
+                                                <div class="form-group col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="checkbox" ng-repeat="recurso in recursos">
+                                                            <label class="col-md-3">
+                                                                <input type="checkbox" name="recursos" id="{{recurso.id}}">
+                                                                {{recurso.nome}}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <div class="row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="inicio">Data inicio</label>
+                                                    <input id="inicio" type="date" ng-model="linhas.inicio" placeholder="Data inicio"/>
+                                                    <label for="fim">Data fim</label>
+                                                    <input id="fim" type="date" ng-model="linhas.fim" placeholder="Data fim"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-11">
+                                                    <button type="submit" class="btn btn-success pull-right" ng-click="gerarLinhas(linhas)" ng-disabled="!(linhas.inicio && linhas.fim)">Gerar</button>
+                                                </div>
+                                            </div>
+
+                                            <br/>
+                                            <div style="width: 600px; heigth: 600px;">
+                                                <label style="font-size: 20px">Vendas por dia - Visao por ingrediente</label>
+                                                <canvas id="line" class="chart chart-line" chart-data="data_line" chart-labels="labels_line" chart-series="series_line" style="width: 50px;">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- GRÁFICO DE BARRAS -->
+                                    <div class="row" ng-if="radio === 'barras'">
+                                        <div class="form-group col-md-6" >
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Barras</h3>
+                                            </div><!-- /.box-header -->
+                                            <br/>
+                                            <div style="width: 535px; heigth: 535px;">
+                                                <label style="font-size: 20px">Quantidade de entregas por motoboy</label>
+                                                <canvas id="bar" class="chart chart-bar" chart-data="data_bar" chart-labels="labels_bar" chart-series="series_bar">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- GRÁFICO DE RADAR -->
+                                    <div class="row" ng-if="radio === 'radar'">
+                                        <div class="form-group col-md-6" >
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Radar</h3>
+                                            </div><!-- /.box-header -->
+                                            <br/>
+                                            <div style="width: 535px; heigth: 535px;">
+                                                <label style="font-size: 20px">Motivos de devolucao da marmitex - Visao por ingrediente</label>
+                                                <canvas id="radar" class="chart chart-radar" chart-data="data_radar" chart-labels="labels_radar" chart-series="series_radar">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- GRÁFICO DE PIZZA -->
+                                    <div class="row" ng-if="radio === 'pizza'">
+                                        <div class="form-group col-md-6" >
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Pizza</h3>
+                                            </div><!-- /.box-header -->
+                                            <br/>
+                                            <div style="width: 535px; heigth: 535px;">
+                                                <label style="font-size: 20px">Quantidade de vendas utilizando as campanhas</label>
+                                                <canvas id="radar" class="chart chart-pie" chart-data="data_pie" chart-labels="labels_pie" chart-series="series_pie">
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

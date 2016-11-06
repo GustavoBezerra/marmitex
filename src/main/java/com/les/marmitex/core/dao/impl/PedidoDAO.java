@@ -246,9 +246,6 @@ public class PedidoDAO extends AbstractJdbcDAO {
             int id;
             while (rs.next()) {
                 id = rs.getInt("id_pedido");
-                if(id == 55){
-                    System.out.println("Chegou!");
-                }
                 if (id == anterior) {
                     if (m.getId() == rs.getInt("id_marmitex")) {
                         //novo ingrediente do mesmo pedido
