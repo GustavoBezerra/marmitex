@@ -82,6 +82,13 @@
                 };
 
                 $scope.gerarLinhas = function (linhas) {
+                    var cheks = document.getElementsByName("recursos");
+                    var chekados = new Array();
+                    for (var i = 0; i < cheks.length; i++) {
+                        if(cheks[i].checked){
+                            chekados.push(cheks[i].value);
+                        }
+                    }
                     $.ajax({
                         url: "/marmitex/analise",
                         type: "POST",
@@ -90,7 +97,8 @@
                             operacao: "CONSULTAR",
                             inicio: linhas.inicio,
                             fim: linhas.fim,
-                            tipo: "linhas"
+                            tipo: "linhas",
+                            itens: chekados.toString()
                         },
                         success: function (data) {
                             var results = JSON.parse(data);
@@ -112,7 +120,7 @@
                                 }
                                 $scope.labels_line = datas;
                                 $scope.series_line = itens;
-                                
+
                                 var ingValor = new Array(itens.length);
 
                                 for (var i = 0; i < ingValor.length; i++) {
@@ -128,7 +136,7 @@
 
                                 for (var i = 0; i < ingValor.length; i++) {
                                     for (var j = 0; j < ingValor[i].length; j++) {
-                                        if(ingValor[i][j] === undefined){
+                                        if (ingValor[i][j] === undefined) {
                                             ingValor[i][j] = "0";
                                         }
                                     }
@@ -205,7 +213,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox" ng-repeat="recurso in recursos">
                                                             <label class="col-md-3">
-                                                                <input type="checkbox" name="recursos" id="{{recurso.id}}">
+                                                                <input type="checkbox" value="{{recurso.nome}}" name="recursos" id="{{recurso.id}}">                                                                
                                                                 {{recurso.nome}}
                                                             </label>
                                                         </div>

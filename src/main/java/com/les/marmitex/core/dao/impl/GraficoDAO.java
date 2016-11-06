@@ -52,23 +52,39 @@ public class GraficoDAO extends AbstractJdbcDAO {
                     + "inner join tb_marmitex_ingrediente mi on mi.id_ingrediente=i.id_ingrediente\n"
                     + "inner join tb_marmitex m on m.id_marmitex=mi.id_marmitex\n"
                     + "inner join tb_pedido p on m.id_pedido=p.id_pedido\n"
-                    + "where p.dt_criacao BETWEEN ? and ?\n"
-                    + "GROUP BY i.nome, p.dt_criacao\n"
-                    + "ORDER BY p.dt_criacao;");
+                    + "where ");
+            if (grafico.getItens() == null || grafico.getItens().isEmpty()) {
+                sql.append("p.dt_criacao BETWEEN ? and ?\n"
+                        + "GROUP BY i.nome, p.dt_criacao\n"
+                        + "ORDER BY p.dt_criacao;");
+            } else {
+                sql.append("(");
+                for (int i = 0; i < grafico.getItens().size(); i++) {
+                    sql.append("i.nome='" + grafico.getItens().get(i) + "' ");
+                    if ((i + 1) == grafico.getItens().size()) {
+                        sql.append(") and ");
+                        sql.append("p.dt_criacao BETWEEN ? and ?\n"
+                                + "GROUP BY i.nome, p.dt_criacao\n"
+                                + "ORDER BY p.dt_criacao;");
+                    } else {
+                        sql.append("or ");
+                    }
+                }
+            }
 
             pst = connection.prepareStatement(sql.toString());
             Timestamp timeInicio = new Timestamp(grafico.getDtInicio().getTime());
             Timestamp timeFim = new Timestamp(grafico.getDtFim().getTime());
             pst.setTimestamp(1, timeInicio);
             pst.setTimestamp(2, timeFim);
-            System.out.println("QUERY: \n"+pst.toString());
+            System.out.println("QUERY: \n" + pst.toString());
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 ig = new ItemGrafico();
                 ig.setNome(rs.getString("nome"));
                 ig.setValor(rs.getString(("valor")));
                 ig.setData(rs.getDate("data"));
-                
+
                 itens.add(ig);
             }
         } catch (SQLException ex) {

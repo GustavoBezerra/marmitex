@@ -6,7 +6,9 @@ import com.les.marmitex.core.dominio.Grafico;
 import com.les.marmitex.core.dominio.Resultado;
 import com.les.marmitex.view.helper.IViewHelper;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,10 +25,20 @@ public class AnaliseHelper implements IViewHelper {
 
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
+        Grafico grafico = new Grafico();
+        
         String operacao = request.getParameter("operacao");
         String tipo = request.getParameter("tipo");
-        Grafico grafico = new Grafico();
-
+        String teste = request.getParameter("itens");
+        if(!teste.equals("")){
+            List<String> itens = new ArrayList();
+            for (String parte : teste.split(",")) {
+                itens.add(parte);
+            }
+            grafico.setItens(itens);
+        }
+        
+        
         if (tipo.equals("linhas")) {
             grafico.setTipo(tipo);
             String dtInicio = request.getParameter("inicio");
