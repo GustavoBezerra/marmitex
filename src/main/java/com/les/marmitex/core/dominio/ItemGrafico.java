@@ -10,6 +10,7 @@ import java.util.Date;
 public class ItemGrafico extends EntidadeDominio{
     private String nome;
     private String valor;
+    private String ingrediente;
     private Date data;
 
     /**
@@ -52,6 +53,20 @@ public class ItemGrafico extends EntidadeDominio{
      */
     public void setData(Date data) {
         this.data = data;
+    }
+
+    /**
+     * @return the ingrediente
+     */
+    public String getIngrediente() {
+        return ingrediente;
+    }
+
+    /**
+     * @param ingrediente the ingrediente to set
+     */
+    public void setIngrediente(String ingrediente) {
+        this.ingrediente = ingrediente;
     }
     
     

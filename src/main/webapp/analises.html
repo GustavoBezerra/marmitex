@@ -34,26 +34,19 @@
 
                 $scope.consultarTudo = function () {
                     $scope.consultarIngredientes();
+                    $scope.consultarEntregador();
+                    $scope.consultarJustificativas();
                 };
-
-
-
-                $scope.labels_bar = ["Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado", "Domingo"];
-                $scope.series_bar = ['Nilton', 'Pedro'];
-                $scope.data_bar = [
-                    [65, 59, 80, 81, 56, 55, 40],
-                    [35, 15, 54, 56, 10, 47, 76]
-                ];
-
-                $scope.labels_radar = ["Temperatura", "Sabor", "Tempero", "Entrega", "Motoboy", "Embalagem"];
-                $scope.series_radar = ['Frango', 'Carne'];
-                $scope.data_radar = [
-                    [65, 59, 90, 81, 56, 55],
-                    [28, 48, 40, 19, 96, 27]
-                ];
 
                 $scope.labels_pie = ["Campanha 1", "Campanha 2", "Campanha 3"];
                 $scope.data_pie = [300, 500, 100];
+                
+//                $scope.labels_radar = ["Temperatura", "Sabor", "Tempero", "Entrega", "Motoboy", "Embalagem"];
+//                $scope.series_radar = ['Frango', 'Carne'];
+//                $scope.data_radar = [
+//                    [2, 2, 1, 2, 1, 1],
+//                    [28, 48, 40, 19, 96, 27]
+//                ];
 
                 $scope.escolhaGrafico = function (obj) {
                     var radios = document.getElementsByName("optionsRadios");
@@ -62,6 +55,23 @@
 
                         }
                     }
+                };
+
+                $scope.consultarEntregador = function () {
+                    $.ajax({
+                        url: "/marmitex/entregador",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"
+                        },
+                        success: function (data) {
+                            $scope.entregadores = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
                 };
 
                 $scope.consultarIngredientes = function () {
@@ -80,12 +90,29 @@
                         }
                     });
                 };
+                
+                $scope.consultarJustificativas = function () {
+                    $.ajax({
+                        url: "/marmitex/justificativa",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR"
+                        },
+                        success: function (data) {
+                            $scope.justificativas = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
 
                 $scope.gerarLinhas = function (linhas) {
                     var cheks = document.getElementsByName("recursos");
                     var chekados = new Array();
                     for (var i = 0; i < cheks.length; i++) {
-                        if(cheks[i].checked){
+                        if (cheks[i].checked) {
                             chekados.push(cheks[i].value);
                         }
                     }
@@ -144,6 +171,148 @@
 
                                 // CADA LINHA REPRESENTA UM INGREDIENTE, COM TODOS OS VALORES DE TODOS OS DIAS
                                 $scope.data_line = ingValor;
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+                
+                $scope.gerarRadar = function (radar) {
+                    var cheks = document.getElementsByName("justificativas");
+                    var chekados = new Array();
+                    for (var i = 0; i < cheks.length; i++) {
+                        if (cheks[i].checked) {
+                            chekados.push(cheks[i].value);
+                        }
+                    }
+                    $.ajax({
+                        url: "/marmitex/analise",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR",
+                            inicio: radar.inicio,
+                            fim: radar.fim,
+                            tipo: "radar",
+                            itens: chekados.toString()
+                        },
+                        success: function (data) {
+                            var results = JSON.parse(data);
+                            var itens = new Array();
+                            var datas = new Array();
+
+                            if (results.length === 0) {
+                                alert("Sem registros!");
+                            } else {
+                                itens.push(results[0].nome);
+                                datas.push(results[0].ingrediente);
+                                for (var i = 0; i < results.length; i++) {
+                                    if (itens.indexOf(results[i].nome) === -1) {
+                                        itens.push(results[i].nome);
+                                    }
+                                    if (datas.indexOf(results[i].ingrediente) === -1) {
+                                        datas.push(results[i].ingrediente);
+                                    }
+                                }
+                                $scope.labels_radar = itens;
+                                $scope.series_radar = datas;
+
+                                var ingValor = new Array(itens.length);
+
+                                for (var i = 0; i < ingValor.length; i++) {
+                                    ingValor[i] = new Array(datas.length);
+                                }
+
+
+                                for (var j = 0; j < results.length; j++) {
+                                    var indiceItem = itens.indexOf(results[j].nome);
+                                    var indiceData = datas.indexOf(results[j].ingrediente);
+                                    ingValor[indiceItem][indiceData] = results[j].valor;
+                                }
+
+                                for (var i = 0; i < ingValor.length; i++) {
+                                    for (var j = 0; j < ingValor[i].length; j++) {
+                                        if (ingValor[i][j] === undefined) {
+                                            ingValor[i][j] = "0";
+                                        }
+                                    }
+                                }
+
+                                // CADA LINHA REPRESENTA UM INGREDIENTE, COM TODOS OS VALORES DE TODOS OS DIAS
+                                $scope.data_radar = ingValor;
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+                
+                $scope.gerarBarras = function (barras) {
+                    var cheks = document.getElementsByName("nomes");
+                    var chekados = new Array();
+                    for (var i = 0; i < cheks.length; i++) {
+                        if (cheks[i].checked) {
+                            chekados.push(cheks[i].value);
+                        }
+                    }
+                    $.ajax({
+                        url: "/marmitex/analise",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR",
+                            inicio: barras.inicio,
+                            fim: barras.fim,
+                            tipo: "barras",
+                            itens: chekados.toString()
+                        },
+                        success: function (data) {
+                            var results = JSON.parse(data);
+                            var itens = new Array();
+                            var datas = new Array();
+
+                            if (results.length === 0) {
+                                alert("Sem registros!");
+                            } else {
+                                itens.push(results[0].nome);
+                                datas.push(results[0].data);
+                                for (var i = 0; i < results.length; i++) {
+                                    if (itens.indexOf(results[i].nome) === -1) {
+                                        itens.push(results[i].nome);
+                                    }
+                                    if (datas.indexOf(results[i].data) === -1) {
+                                        datas.push(results[i].data);
+                                    }
+                                }
+                                $scope.labels_bar = datas;
+                                $scope.series_bar = itens;
+
+                                var ingValor = new Array(itens.length);
+
+                                for (var i = 0; i < ingValor.length; i++) {
+                                    ingValor[i] = new Array(datas.length);
+                                }
+
+
+                                for (var j = 0; j < results.length; j++) {
+                                    var indiceItem = itens.indexOf(results[j].nome);
+                                    var indiceData = datas.indexOf(results[j].data);
+                                    ingValor[indiceItem][indiceData] = results[j].valor;
+                                }
+
+                                for (var i = 0; i < ingValor.length; i++) {
+                                    for (var j = 0; j < ingValor[i].length; j++) {
+                                        if (ingValor[i][j] === undefined) {
+                                            ingValor[i][j] = "0";
+                                        }
+                                    }
+                                }
+
+                                // CADA LINHA REPRESENTA UM INGREDIENTE, COM TODOS OS VALORES DE TODOS OS DIAS
+                                $scope.data_bar = ingValor;
                             }
                         },
                         error: function (err) {
@@ -213,7 +382,7 @@
                                                     <div class="form-group">
                                                         <div class="checkbox" ng-repeat="recurso in recursos">
                                                             <label class="col-md-3">
-                                                                <input type="checkbox" value="{{recurso.nome}}" name="recursos" id="{{recurso.id}}">                                                                
+                                                                <input type="checkbox" value="{{recurso.nome}}" name="recursos" id="{{recurso.id}}">
                                                                 {{recurso.nome}}
                                                             </label>
                                                         </div>
@@ -248,8 +417,36 @@
                                     <div class="row" ng-if="radio === 'barras'">
                                         <div class="form-group col-md-6" >
                                             <div class="box-header with-border">
-                                                <h3 class="box-title">Barras</h3>
+                                                <i class="glyphicon glyphicon-filter"></i>
+                                                <h3 class="box-title">Filtros</h3>
                                             </div><!-- /.box-header -->
+                                            <div id="escolhas" class="row">
+                                                <div class="form-group col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="checkbox" ng-repeat="entregador in entregadores">
+                                                            <label class="col-md-3">
+                                                                <input type="checkbox" value="{{entregador.nome}}" name="nomes" id="{{entregador.id}}">
+                                                                {{entregador.nome}}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <div class="row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="inicio">Data inicio</label>
+                                                    <input id="inicio" type="date" ng-model="barras.inicio" placeholder="Data inicio"/>
+                                                    <label for="fim">Data fim</label>
+                                                    <input id="fim" type="date" ng-model="barras.fim" placeholder="Data fim"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-11">
+                                                    <button type="submit" class="btn btn-success pull-right" ng-click="gerarBarras(barras)" ng-disabled="!(barras.inicio && barras.fim)">Gerar</button>
+                                                </div>
+                                            </div>
+
                                             <br/>
                                             <div style="width: 535px; heigth: 535px;">
                                                 <label style="font-size: 20px">Quantidade de entregas por motoboy</label>
@@ -263,8 +460,36 @@
                                     <div class="row" ng-if="radio === 'radar'">
                                         <div class="form-group col-md-6" >
                                             <div class="box-header with-border">
-                                                <h3 class="box-title">Radar</h3>
+                                                <i class="glyphicon glyphicon-filter"></i>
+                                                <h3 class="box-title">Filtros</h3>
                                             </div><!-- /.box-header -->
+                                            <div id="escolhas" class="row">
+                                                <div class="form-group col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="checkbox" ng-repeat="justificativa in justificativas">
+                                                            <label class="col-md-3">
+                                                                <input type="checkbox" value="{{justificativa.descricao}}" name="justificativas" id="{{justificativa.id}}">
+                                                                {{justificativa.descricao}}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <div class="row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="inicio">Data inicio</label>
+                                                    <input id="inicio" type="date" ng-model="radar.inicio" placeholder="Data inicio"/>
+                                                    <label for="fim">Data fim</label>
+                                                    <input id="fim" type="date" ng-model="radar.fim" placeholder="Data fim"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-md-11">
+                                                    <button type="submit" class="btn btn-success pull-right" ng-click="gerarRadar(radar)" ng-disabled="!(radar.inicio && radar.fim)">Gerar</button>
+                                                </div>
+                                            </div>
+
                                             <br/>
                                             <div style="width: 535px; heigth: 535px;">
                                                 <label style="font-size: 20px">Motivos de devolucao da marmitex - Visao por ingrediente</label>

@@ -26,26 +26,23 @@ public class AnaliseHelper implements IViewHelper {
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         Grafico grafico = new Grafico();
-        
+
         String operacao = request.getParameter("operacao");
         String tipo = request.getParameter("tipo");
         String teste = request.getParameter("itens");
-        if(!teste.equals("")){
+        if (!teste.equals("")) {
             List<String> itens = new ArrayList();
             for (String parte : teste.split(",")) {
                 itens.add(parte);
             }
             grafico.setItens(itens);
         }
-        
-        
-        if (tipo.equals("linhas")) {
-            grafico.setTipo(tipo);
-            String dtInicio = request.getParameter("inicio");
-            String dtFim = request.getParameter("fim");
-            grafico.setDtInicio(new Date(dtInicio));
-            grafico.setDtFim(new Date(dtFim));
-        }
+
+        grafico.setTipo(tipo);
+        String dtInicio = request.getParameter("inicio");
+        String dtFim = request.getParameter("fim");
+        grafico.setDtInicio(new Date(dtInicio));
+        grafico.setDtFim(new Date(dtFim));
 
         return grafico;
     }

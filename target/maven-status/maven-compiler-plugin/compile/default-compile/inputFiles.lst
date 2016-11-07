@@ -9,9 +9,12 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Administrador.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\ClienteHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\IngredienteHelper.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\JustificativaDAO.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\strategy\IStrategy.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Beneficios.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Justificativa.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\MarmitexDAO.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\ItemGrafico.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\PratoDAO.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Credito.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\CategoriaHelper.java
@@ -22,11 +25,14 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Campanha.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\IEntidade.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\EntregadorHelper.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Grafico.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\EnderecoHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Regras.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Pagamento.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\PagamentoDAO.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestaAnalise.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Cliente.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\ResultadoGrafico.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\command\impl\AbstractCommand.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Marmitex.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\EntidadeDominio.java
@@ -36,6 +42,7 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestarCliente.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\command\impl\SalvarCommand.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\Conexao.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\AnaliseHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\CampanhaDAO.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\strategy\impl\ValidarEstoque.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\teste\TestarSalvarPedido.java
@@ -64,6 +71,7 @@ C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmite
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\util\ConverteDate.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\PedidoHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dominio\Ingrediente.java
+C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\JustificativaHelper.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\controller\FrontControllerServlet.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\core\dao\impl\EnderecoDAO.java
 C:\Users\guh_g\Documents\NetBeansProjects\marmitex\src\main\java\com\les\marmitex\view\helper\impl\MarmitexHelper.java

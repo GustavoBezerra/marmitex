@@ -18,6 +18,7 @@ public class Pedido extends EntidadeDominio{
     private List<Pagamento> pagamento;
     private double troco;
     private Cliente cliente;
+    private List<Justificativa> justificativa;
 
     /**
      * @return the marmitex
@@ -143,6 +144,20 @@ public class Pedido extends EntidadeDominio{
      */
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    /**
+     * @return the justificativa
+     */
+    public List<Justificativa> getJustificativa() {
+        return justificativa;
+    }
+
+    /**
+     * @param justificativa the justificativa to set
+     */
+    public void setJustificativa(List<Justificativa> justificativa) {
+        this.justificativa = justificativa;
     }
 
 

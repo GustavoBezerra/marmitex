@@ -40,6 +40,10 @@
         <servlet-name>FrontControllerServlet</servlet-name>
         <url-pattern>/analise</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FrontControllerServlet</servlet-name>
+        <url-pattern>/justificativa</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
