@@ -82,6 +82,26 @@
                         $scope.preco -= recurso.valor;
                     }
                 };
+                
+                $scope.salvar = function () {
+                    $.ajax({
+                        url: "/marmitex/prato",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "SALVAR",
+                            ingredientes: JSON.stringify(ingredientesCheckados),
+                            nome: $scope.nome,
+                            preco: $scope.preco
+                        },
+                        success: function (data) {
+                            $scope.recursos = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
             });
         </script>
     </head>
@@ -104,13 +124,13 @@
                                     <div class="row">
                                         <div class="form-group col-md-5">
                                             <label for="txtNome">Nome do prato</label>
-                                            <input type="text" class="form-control" name="txtNome" id="txtNome" placeholder="Nome do prato">
+                                            <input type="text" class="form-control" ng-model="nome" name="txtNome" id="txtNome" placeholder="Nome do prato">
                                             <label class="text-green text-bold"><h3>Valor do prato: R${{preco| number: 2}}</h3></label>
                                         </div>
 
                                     </div>
-                                    <div id="escolhas" class="row" ng-repeat="categoria in categorias">
-                                        <div class="form-group col-md-6" >
+                                    <div id="escolhas" class="row col-md-6" ng-repeat="categoria in categorias">
+                                        <div  >
                                             <div class="box-header with-border">
                                                 <i class="glyphicon glyphicon-asterisk"></i>
                                                 <h3 class="box-title">{{categoria.nome}}</h3>
@@ -129,7 +149,7 @@
 
                                     <div class="row">
                                         <div class="form-group col-md-11">
-                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" >Cadastrar</button>
+                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" ng-disabled="preco <= 0" ng-click="salvar()">Cadastrar</button>
                                             <button type="submit" class="btn btn-warning pull-right" id="alterar" name="operacao" value="ALTERAR" >Alterar</button>
                                         </div>
                                     </div>

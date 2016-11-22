@@ -10,6 +10,7 @@ import java.util.Date;
 public class Prato extends Marmitex{
 
     private Date dtDisponivel;
+    private String nome;    
 
     /**
      * @return the dtDisponivel
@@ -25,4 +26,11 @@ public class Prato extends Marmitex{
         this.dtDisponivel = dtDisponivel;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 }

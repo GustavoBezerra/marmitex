@@ -37,14 +37,15 @@ public class PratoDAO extends AbstractJdbcDAO{
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO tb_prato(valor, dt_disponivel) ");
-            sql.append("VALUES (?,?);");
+            sql.append("INSERT INTO tb_prato(valor, dt_disponivel, nome) ");
+            sql.append("VALUES (?,?, ?);");
 
             pst = connection.prepareStatement(sql.toString(),
                     Statement.RETURN_GENERATED_KEYS);
             pst.setDouble(1, prato.getValor());
             Timestamp dtDisponivel = new Timestamp(prato.getDtDisponivel().getTime());
             pst.setTimestamp(2, dtDisponivel);
+            pst.setString(3, prato.getNome());
 
             pst.executeUpdate();
             connection.commit();
