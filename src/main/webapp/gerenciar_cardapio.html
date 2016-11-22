@@ -23,6 +23,41 @@
                 $scope.titulo = "Gerenciar Cardapio";
                 $scope.preco = 0;
 
+                $scope.dias = [
+                    {
+                        id: 10,
+                        titulo: "Todos os dias"
+                    },
+                    {
+                        id: 1,
+                        titulo: "Segunda-feira"
+                    },
+                    {
+                        id: 2,
+                        titulo: "Terça-feira"
+                    },
+                    {
+                        id: 3,
+                        titulo: "Quarta-feira"
+                    },
+                    {
+                        id: 4,
+                        titulo: "Quinta-feira"
+                    },
+                    {
+                        id: 5,
+                        titulo: "Sexta-feira"
+                    },
+                    {
+                        id: 6,
+                        titulo: "Sabado"
+                    },
+                    {
+                        id: 0,
+                        titulo: "Domingo"
+                    }
+                ];
+
                 $scope.sair = function () {
                     window.sessionStorage.clear();
                     window.location.href = "http://localhost:8084/marmitex/login.html";
@@ -82,7 +117,7 @@
                         $scope.preco -= recurso.valor;
                     }
                 };
-                
+
                 $scope.salvar = function () {
                     $.ajax({
                         url: "/marmitex/prato",
@@ -129,6 +164,21 @@
                                         </div>
 
                                     </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
+                                            <label for="categoria">Dias da semana:</label>
+                                            <div class="form-group">
+                                                <div class="checkbox" ng-repeat="dia in dias">
+                                                    <label>
+                                                        <input type="checkbox" id="dia_{{dia.id}}" name="ck_dias">
+                                                        {{dia.titulo}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br/>
                                     <div id="escolhas" class="row col-md-6" ng-repeat="categoria in categorias">
                                         <div  >
                                             <div class="box-header with-border">
@@ -146,7 +196,6 @@
                                         </div>
                                     </div>
                                     <!-- SEGUNDA LINHA -->
-
                                     <div class="row">
                                         <div class="form-group col-md-11">
                                             <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" ng-disabled="preco <= 0" ng-click="salvar()">Cadastrar</button>
