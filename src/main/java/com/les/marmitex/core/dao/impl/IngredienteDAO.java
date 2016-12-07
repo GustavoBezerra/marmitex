@@ -2,7 +2,9 @@ package com.les.marmitex.core.dao.impl;
 
 import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RED;
 import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RESET;
+import com.les.marmitex.core.dominio.Cardapio;
 import com.les.marmitex.core.dominio.Categoria;
+import com.les.marmitex.core.dominio.Dias;
 import com.les.marmitex.core.dominio.Endereco;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Ingrediente;
@@ -32,7 +34,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
     public void salvar(EntidadeDominio entidade) throws SQLException {
         openConnection();
         PreparedStatement pst = null;
-
+        
         try {
             Ingrediente ingrediente = (Ingrediente) entidade;
             connection.setAutoCommit(false);
@@ -42,7 +44,8 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             sql.append("medida, dt_vencimento, dt_cadastro, categoria, valor, ativo)");
             sql.append(" VALUES (?,?,?,?,?,?,?,?);");
 
-            pst = connection.prepareStatement(sql.toString());
+            pst = connection.prepareStatement(sql.toString(),
+                    Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, ingrediente.getNome());
             pst.setDouble(2, ingrediente.getQuantidade());
             pst.setString(3, ingrediente.getMedida());
@@ -55,8 +58,25 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             pst.setBoolean(8, ingrediente.isAtivo());
 
             pst.executeUpdate();
+            ResultSet rs = pst.getGeneratedKeys();
+            int idIngri = 0;
+            if (rs.next()) {
+                idIngri = rs.getInt(1);
+            }
+            ingrediente.setId(idIngri);
+            
             connection.commit();
-
+            
+            if(ingrediente.getDias() != null){
+                Cardapio agenda;
+                CardapioDAO agendaDAO = new CardapioDAO();
+                for (Dias dia : ingrediente.getDias()) {
+                    agenda = new Cardapio();
+                    agenda.setIngrediente(ingrediente);
+                    agenda.setDia(dia);
+                    agendaDAO.salvar(agenda);
+                }
+            }
         } catch (SQLException e) {
             try {
                 connection.rollback();

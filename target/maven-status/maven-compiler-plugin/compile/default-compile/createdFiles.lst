@@ -9,7 +9,6 @@ com\les\marmitex\core\fachada\impl\Fachada.class
 com\les\marmitex\util\ConverteDate.class
 com\les\marmitex\util\teste\TestarSpring.class
 com\les\marmitex\core\dao\impl\IngredienteDAO.class
-com\les\marmitex\util\teste\TestaPratoDAO.class
 com\les\marmitex\view\helper\IViewHelper.class
 com\les\marmitex\core\dao\impl\PagamentoDAO.class
 com\les\marmitex\core\strategy\impl\ValidarCamposEmBranco.class
@@ -21,9 +20,12 @@ com\les\marmitex\util\Conexao.class
 com\les\marmitex\core\dao\impl\MarmitexDAO.class
 com\les\marmitex\view\helper\impl\EntregadorHelper.class
 com\les\marmitex\core\dominio\Prato.class
+com\les\marmitex\view\helper\impl\PratoHelper.class
+com\les\marmitex\core\dominio\Cardapio.class
 com\les\marmitex\core\dominio\Pessoa.class
 com\les\marmitex\util\teste\TestarIngredienteDAO.class
 com\les\marmitex\view\command\impl\AbstractCommand.class
+com\les\marmitex\core\dao\impl\CardapioDAO.class
 com\les\marmitex\core\dominio\Grafico.class
 com\les\marmitex\core\dominio\Campanha.class
 com\les\marmitex\core\strategy\impl\ValidarCamposEndereco.class
@@ -62,6 +64,7 @@ com\les\marmitex\util\teste\TestarSalvarPedido.class
 com\les\marmitex\core\dao\impl\JustificativaDAO.class
 com\les\marmitex\core\dao\impl\EntregadorDAO.class
 com\les\marmitex\core\dao\impl\GraficoDAO.class
+com\les\marmitex\core\strategy\impl\ConverterDiaDaSemana.class
 com\les\marmitex\core\dominio\Dias.class
 com\les\marmitex\core\dominio\Pedido.class
 com\les\marmitex\view\helper\impl\JustificativaHelper.class

@@ -3,6 +3,7 @@ package com.les.marmitex.view.helper.impl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.les.marmitex.core.dominio.Categoria;
+import com.les.marmitex.core.dominio.Dias;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Ingrediente;
 import com.les.marmitex.core.dominio.Resultado;
@@ -10,7 +11,9 @@ import com.les.marmitex.view.helper.IViewHelper;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -40,6 +43,7 @@ public class IngredienteHelper implements IViewHelper {
         String categoria;
         String id_categoria;
         Double valor;
+        String dia;
 
         if (("SALVAR").equals(operacao)) {
             i = new Ingrediente();
@@ -51,6 +55,7 @@ public class IngredienteHelper implements IViewHelper {
             categoria = request.getParameter("categoria");
             id_categoria = request.getParameter("id_categoria");
             valor = Double.valueOf(request.getParameter("valor"));
+            dia = request.getParameter("dias");
 
             c.setNome(categoria);
             c.setId(Integer.valueOf(id_categoria));
@@ -69,6 +74,36 @@ public class IngredienteHelper implements IViewHelper {
                 }
             } else {
                 i.setDtVencimento(new Date(dtVencimento));
+            }
+            if (!dia.isEmpty()) {
+                List<Dias> uteis = new ArrayList();
+                String[] dias = dia.split(";");
+                for (int j = 0; j < dias.length; j++) {
+                    switch (dias[j]) {
+                        case "Segunda-feira":
+                            uteis.add(Dias.SEGUNDA);
+                            break;
+                        case "Terça-feira":
+                            uteis.add(Dias.TERCA);
+                            break;
+                        case "Quarta-feira":
+                            uteis.add(Dias.QUARTA);
+                            break;
+                        case "Quinta-feira":
+                            uteis.add(Dias.QUINTA);
+                            break;
+                        case "Sexta-feira":
+                            uteis.add(Dias.SEXTA);
+                            break;
+                        case "Sabado":
+                            uteis.add(Dias.SABADO);
+                            break;
+                        case "Domingo":
+                            uteis.add(Dias.DOMINGO);
+                            break;
+                    }
+                }
+                i.setDias(uteis);
             }
             i.setValor(valor);
             i.setAtivo(true);

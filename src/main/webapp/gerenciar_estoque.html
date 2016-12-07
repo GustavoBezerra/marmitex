@@ -19,6 +19,7 @@
             var app = angular.module("gerenciarEstoque", []);
             app.controller("gerenciarEstoqueCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Estoque";
+                var todosOsDias = false;
                 $scope.medidas = [
                     {id: 1, descricao: "Litro(s)"},
                     {id: 2, descricao: "Ml(s)"},
@@ -123,6 +124,16 @@
                 };
 
                 $scope.salvar = function (ingrediente) {
+                    var dias = document.getElementsByName("ck_dias");
+                    var texto = "";
+                    for (var i = 0; i < dias.length; i++) {
+                        if (dias[i].checked){
+                            texto += dias[i].value+";";
+                        }
+                    }
+                    if(texto.length > 0){
+                        texto = texto.substr(0, texto.length-1);
+                    }
                     $.ajax({
                         url: "/marmitex/ingrediente",
                         type: "POST",
@@ -135,7 +146,8 @@
                             vencimento: ingrediente.dtVencimento,
                             categoria: ingrediente.categoria.nome,
                             id_categoria: ingrediente.categoria.id,
-                            valor: ingrediente.valor
+                            valor: ingrediente.valor,
+                            dias: texto
                         },
                         success: function () {
                             $scope.consultar();
@@ -150,7 +162,7 @@
                 $scope.visualizar = function (ingrediente) {
                     var ds = document.getElementsByName("ck_dias");
                     for (var i = 0; i < ds.length; i++) {
-                        
+
                     }
                     $scope.opAlterar = true;
                     $scope.recurso = angular.copy(ingrediente);
@@ -182,6 +194,21 @@
                             console.log(err.statusText);
                         }
                     });
+                };
+
+                $scope.selecionouDia = function (aux) {
+                    var dias = document.getElementsByName("ck_dias");
+                    if (aux.dia.titulo === "Todos os dias" && todosOsDias) {
+                        for (var i = 0; i < dias.length; i++) {
+                            dias[i].checked = false;
+                        }
+                        todosOsDias = false;
+                    } else if (aux.dia.titulo === "Todos os dias" && !todosOsDias) {
+                        for (var i = 0; i < dias.length; i++) {
+                            dias[i].checked = true;
+                        }
+                        todosOsDias = true;
+                    }
                 };
 
                 $scope.cancelar = function () {
@@ -268,7 +295,7 @@
                                             <div class="form-group">
                                                 <div class="checkbox" ng-repeat="dia in dias">
                                                     <label>
-                                                        <input type="checkbox" id="dia_{{dia.id}}" name="ck_dias">
+                                                        <input type="checkbox" value="{{dia.titulo}}" id="dia_{{dia.id}}" name="ck_dias" ng-click="selecionouDia(this)">
                                                         {{dia.titulo}}
                                                     </label>
                                                 </div>

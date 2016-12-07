@@ -1,6 +1,7 @@
 package com.les.marmitex.core.dominio;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Entidade para representar um prato pré-definido
@@ -9,22 +10,8 @@ import java.util.Date;
  */
 public class Prato extends Marmitex{
 
-    private Date dtDisponivel;
+    private List<Dias> dtDisponivel;
     private String nome;    
-
-    /**
-     * @return the dtDisponivel
-     */
-    public Date getDtDisponivel() {
-        return dtDisponivel;
-    }
-
-    /**
-     * @param dtDisponivel the dtDisponivel to set
-     */
-    public void setDtDisponivel(Date dtDisponivel) {
-        this.dtDisponivel = dtDisponivel;
-    }
 
     public String getNome() {
         return nome;
@@ -32,5 +19,19 @@ public class Prato extends Marmitex{
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    /**
+     * @return the dtDisponivel
+     */
+    public List<Dias> getDtDisponivel() {
+        return dtDisponivel;
+    }
+
+    /**
+     * @param dtDisponivel the dtDisponivel to set
+     */
+    public void setDtDisponivel(List<Dias> dtDisponivel) {
+        this.dtDisponivel = dtDisponivel;
     }
 }

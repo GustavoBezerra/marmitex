@@ -29,102 +29,102 @@ public class PratoDAO extends AbstractJdbcDAO{
 
     @Override
     public void salvar(EntidadeDominio entidade) throws SQLException {
-        openConnection();
-        PreparedStatement pst = null;
-
-        try {
-            Prato prato = (Prato) entidade;
-            connection.setAutoCommit(false);
-
-            StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO tb_prato(valor, dt_disponivel, nome) ");
-            sql.append("VALUES (?,?, ?);");
-
-            pst = connection.prepareStatement(sql.toString(),
-                    Statement.RETURN_GENERATED_KEYS);
-            pst.setDouble(1, prato.getValor());
-            Timestamp dtDisponivel = new Timestamp(prato.getDtDisponivel().getTime());
-            pst.setTimestamp(2, dtDisponivel);
-            pst.setString(3, prato.getNome());
-
-            pst.executeUpdate();
-            connection.commit();
-            ResultSet rs = pst.getGeneratedKeys();
-            int idPrato = 0;
-            if (rs.next()) {
-                idPrato = rs.getInt(1);
-            }
-            prato.setId(idPrato);
-
-            for (int i = 0; i < prato.getIngredientes().size(); i++) {
-                salvarIngredientes(prato.getIngredientes().get(i), prato.getId());
-            }
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
-            }
-            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
-        } catch (ClassCastException ce) {
-            System.out.println(ANSI_RED + "[ERROR] - Entidade " + entidade.getClass().getSimpleName() + " não é um Endereço!" + ANSI_RESET);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                connection.close();
-            } catch (SQLException e) {
-                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
-            }
-        }
+//        openConnection();
+//        PreparedStatement pst = null;
+//
+//        try {
+//            Prato prato = (Prato) entidade;
+//            connection.setAutoCommit(false);
+//
+//            StringBuilder sql = new StringBuilder();
+//            sql.append("INSERT INTO tb_prato(valor, dt_disponivel, nome) ");
+//            sql.append("VALUES (?,?, ?);");
+//
+//            pst = connection.prepareStatement(sql.toString(),
+//                    Statement.RETURN_GENERATED_KEYS);
+//            pst.setDouble(1, prato.getValor());
+//            Timestamp dtDisponivel = new Timestamp(prato.getDtDisponivel().getTime());
+//            pst.setTimestamp(2, dtDisponivel);
+//            pst.setString(3, prato.getNome());
+//
+//            pst.executeUpdate();
+//            connection.commit();
+//            ResultSet rs = pst.getGeneratedKeys();
+//            int idPrato = 0;
+//            if (rs.next()) {
+//                idPrato = rs.getInt(1);
+//            }
+//            prato.setId(idPrato);
+//
+//            for (int i = 0; i < prato.getIngredientes().size(); i++) {
+//                salvarIngredientes(prato.getIngredientes().get(i), prato.getId());
+//            }
+//        } catch (SQLException e) {
+//            try {
+//                connection.rollback();
+//            } catch (SQLException e1) {
+//                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
+//            }
+//            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+//        } catch (ClassCastException ce) {
+//            System.out.println(ANSI_RED + "[ERROR] - Entidade " + entidade.getClass().getSimpleName() + " não é um Endereço!" + ANSI_RESET);
+//        } finally {
+//            try {
+//                if (pst != null) {
+//                    pst.close();
+//                }
+//                connection.close();
+//            } catch (SQLException e) {
+//                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+//            }
+//        }
     }
 
     @Override
     public void alterar(EntidadeDominio entidade) throws SQLException {
-        openConnection();
-        PreparedStatement pst = null;
-
-        try {
-            Prato prato = (Prato) entidade;
-            connection.setAutoCommit(false);
-
-            StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE tb_prato SET valor=?, dt_disponivel=? where id_prato=?;");
-
-            pst = connection.prepareStatement(sql.toString());
-            pst.setDouble(1, prato.getValor());
-            Timestamp dtDisponivel = new Timestamp(prato.getDtDisponivel().getTime());
-            pst.setTimestamp(2, dtDisponivel);
-            pst.setInt(3, prato.getId());
-
-            pst.executeUpdate();
-            connection.commit();
-
-            limparIngredientes(prato.getId());
-
-            for (int i = 0; i < prato.getIngredientes().size(); i++) {
-                salvarIngredientes(prato.getIngredientes().get(i), prato.getId());
-            }
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
-            }
-            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
-        } catch (ClassCastException ce) {
-            System.out.println(ANSI_RED + "[ERROR] - Entidade " + entidade.getClass().getSimpleName() + " não é um Endereço!" + ANSI_RESET);
-        } finally {
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-                connection.close();
-            } catch (SQLException e) {
-                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
-            }
-        }
+//        openConnection();
+//        PreparedStatement pst = null;
+//
+//        try {
+//            Prato prato = (Prato) entidade;
+//            connection.setAutoCommit(false);
+//
+//            StringBuilder sql = new StringBuilder();
+//            sql.append("UPDATE tb_prato SET valor=?, dt_disponivel=? where id_prato=?;");
+//
+//            pst = connection.prepareStatement(sql.toString());
+//            pst.setDouble(1, prato.getValor());
+//            Timestamp dtDisponivel = new Timestamp(prato.getDtDisponivel().getTime());
+//            pst.setTimestamp(2, dtDisponivel);
+//            pst.setInt(3, prato.getId());
+//
+//            pst.executeUpdate();
+//            connection.commit();
+//
+//            limparIngredientes(prato.getId());
+//
+//            for (int i = 0; i < prato.getIngredientes().size(); i++) {
+//                salvarIngredientes(prato.getIngredientes().get(i), prato.getId());
+//            }
+//        } catch (SQLException e) {
+//            try {
+//                connection.rollback();
+//            } catch (SQLException e1) {
+//                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
+//            }
+//            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+//        } catch (ClassCastException ce) {
+//            System.out.println(ANSI_RED + "[ERROR] - Entidade " + entidade.getClass().getSimpleName() + " não é um Endereço!" + ANSI_RESET);
+//        } finally {
+//            try {
+//                if (pst != null) {
+//                    pst.close();
+//                }
+//                connection.close();
+//            } catch (SQLException e) {
+//                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+//            }
+//        }
     }
 
     @Override

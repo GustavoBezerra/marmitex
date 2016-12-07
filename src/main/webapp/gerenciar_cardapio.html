@@ -195,7 +195,7 @@
                                         </div>
                                     </div>
                                     <br/>
-                                    <div id="escolhas" class="row col-md-6" ng-repeat="categoria in categorias">
+                                    <div id="escolhas" class="row col-md-6" ng-repeat="categoria in categorias" ng-if="categoria.nome !== 'Prato'">
                                         <div  >
                                             <div class="box-header with-border">
                                                 <i class="glyphicon glyphicon-asterisk"></i>
