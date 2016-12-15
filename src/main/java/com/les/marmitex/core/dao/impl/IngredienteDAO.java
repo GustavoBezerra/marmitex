@@ -2,7 +2,6 @@ package com.les.marmitex.core.dao.impl;
 
 import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RED;
 import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RESET;
-import com.les.marmitex.core.dominio.Cardapio;
 import com.les.marmitex.core.dominio.Categoria;
 import com.les.marmitex.core.dominio.Dias;
 import com.les.marmitex.core.dominio.Endereco;
@@ -68,14 +67,8 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             connection.commit();
             
             if(ingrediente.getDias() != null){
-                Cardapio agenda;
-                CardapioDAO agendaDAO = new CardapioDAO();
-                for (Dias dia : ingrediente.getDias()) {
-                    agenda = new Cardapio();
-                    agenda.setIngrediente(ingrediente);
-                    agenda.setDia(dia);
-                    agendaDAO.salvar(agenda);
-                }
+                DisponibilidadeDAO disponibilidadeDAO = new DisponibilidadeDAO();
+                disponibilidadeDAO.salvar(ingrediente);
             }
         } catch (SQLException e) {
             try {
@@ -226,6 +219,11 @@ public class IngredienteDAO extends AbstractJdbcDAO {
 
             pst.executeUpdate();
             connection.commit();
+            Ingrediente ingrediente = (Ingrediente) entidade;
+            if(ingrediente.getDias() != null){
+                DisponibilidadeDAO disponibilidadeDAO = new DisponibilidadeDAO();
+                disponibilidadeDAO.excluir(entidade);
+            }
         } catch (SQLException e) {
             try {
                 connection.rollback();

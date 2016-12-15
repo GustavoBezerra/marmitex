@@ -1,6 +1,7 @@
 package com.les.marmitex.view.helper.impl;
 
 import com.google.gson.Gson;
+import com.les.marmitex.core.dominio.Dias;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Ingrediente;
 import com.les.marmitex.core.dominio.Marmitex;
@@ -53,8 +54,7 @@ public class PratoHelper implements IViewHelper{
                 ingredientes.add(ingrediente);
             }
             p.setIngredientes(ingredientes);
-        }
-        
+        }        
         return p;
     }
 

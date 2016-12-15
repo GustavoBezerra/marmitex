@@ -67,6 +67,7 @@
                 $scope.consultarTudo = function () {
                     $scope.consultarCategorias();
                     $scope.consultarIngredientes();
+                    $scope.consultarCardapio();
                 };
 
                 $scope.selecionouDia = function (aux) {
@@ -111,6 +112,24 @@
                         },
                         success: function (data) {
                             $scope.recursos = JSON.parse(data);
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+                
+                $scope.consultarCardapio = function () {
+                    $.ajax({
+                        url: "/marmitex/prato",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "CONSULTAR",
+                            dia: "2"
+                        },
+                        success: function (data) {
+                            alert("Funcionou");
                         },
                         error: function (err) {
                             console.log(err.statusText);

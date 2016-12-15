@@ -21,11 +21,9 @@ com\les\marmitex\core\dao\impl\MarmitexDAO.class
 com\les\marmitex\view\helper\impl\EntregadorHelper.class
 com\les\marmitex\core\dominio\Prato.class
 com\les\marmitex\view\helper\impl\PratoHelper.class
-com\les\marmitex\core\dominio\Cardapio.class
 com\les\marmitex\core\dominio\Pessoa.class
 com\les\marmitex\util\teste\TestarIngredienteDAO.class
 com\les\marmitex\view\command\impl\AbstractCommand.class
-com\les\marmitex\core\dao\impl\CardapioDAO.class
 com\les\marmitex\core\dominio\Grafico.class
 com\les\marmitex\core\dominio\Campanha.class
 com\les\marmitex\core\strategy\impl\ValidarCamposEndereco.class
@@ -47,6 +45,7 @@ com\les\marmitex\core\dominio\Ingrediente.class
 com\les\marmitex\view\helper\impl\AnaliseHelper.class
 com\les\marmitex\view\helper\impl\CampanhaHelper.class
 com\les\marmitex\core\dominio\Usuario.class
+com\les\marmitex\core\strategy\impl\BuscarDisponibilidade.class
 com\les\marmitex\view\controller\FrontControllerServlet.class
 com\les\marmitex\core\dominio\ResultadoGrafico.class
 com\les\marmitex\core\dominio\Administrador.class
@@ -83,4 +82,5 @@ com\les\marmitex\core\dao\impl\AbstractJdbcDAO.class
 com\les\marmitex\core\dominio\Resultado.class
 com\les\marmitex\view\helper\impl\ClienteHelper.class
 com\les\marmitex\core\dominio\EntidadeDominio.class
+com\les\marmitex\core\dao\impl\DisponibilidadeDAO.class
 com\les\marmitex\view\helper\impl\CategoriaHelper.class

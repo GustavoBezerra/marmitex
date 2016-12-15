@@ -13,7 +13,8 @@ public enum Dias {
     QUINTA("Quinta-feira",4),
     SEXTA("Sexta-feira",5),
     SABADO("Sabado",6),
-    DOMINGO("Domingo",7);
+    DOMINGO("Domingo",7),
+    TODOS("Todos os dias", 8);
 
     private int codigo;
     private String descricao;
