@@ -162,7 +162,32 @@
                 $scope.visualizar = function (ingrediente) {
                     var ds = document.getElementsByName("ck_dias");
                     for (var i = 0; i < ds.length; i++) {
-
+                        ds[i].checked = false;
+                    }
+                    for (var i = 0; i < ds.length; i++) {
+                        for (var j = 0; j < ingrediente.dias.length; j++) {
+                            if(ds[i].value === "Segunda-feira" && ingrediente.dias[j] === "SEGUNDA"){
+                                ds[i].checked = true;
+                            }
+                            else if(ds[i].value === "Terça-feira" && ingrediente.dias[j] === "TERÇA"){
+                                ds[i].checked = true;
+                            }
+                            else if(ds[i].value === "Quarta-feira" && ingrediente.dias[j] === "QUARTA"){
+                                ds[i].checked = true;
+                            }
+                            else if(ds[i].value === "Quinta-feira" && ingrediente.dias[j] === "QUINTA"){
+                                ds[i].checked = true;
+                            }
+                            else if(ds[i].value === "Sexta-feira" && ingrediente.dias[j] === "SEXTA"){
+                                ds[i].checked = true;
+                            }
+                            else if(ds[i].value === "Sabado" && ingrediente.dias[j] === "SABADO"){
+                                ds[i].checked = true;
+                            }
+                            else if(ds[i].value === "Domingo" && ingrediente.dias[j] === "DOMINGO"){
+                                ds[i].checked = true;
+                            }
+                        }
                     }
                     $scope.opAlterar = true;
                     $scope.recurso = angular.copy(ingrediente);
@@ -170,6 +195,16 @@
                 };
 
                 $scope.alterar = function (ingrediente) {
+                    var dias = document.getElementsByName("ck_dias");
+                    var texto = "";
+                    for (var i = 0; i < dias.length; i++) {
+                        if (dias[i].checked){
+                            texto += dias[i].value+";";
+                        }
+                    }
+                    if(texto.length > 0){
+                        texto = texto.substr(0, texto.length-1);
+                    }
                     $.ajax({
                         url: "/marmitex/ingrediente",
                         type: "POST",
@@ -183,7 +218,8 @@
                             categoria: ingrediente.categoria.nome,
                             id_categoria: ingrediente.categoria.id,
                             valor: ingrediente.valor,
-                            id: ingrediente.id
+                            id: ingrediente.id,
+                            dias: texto
                         },
                         success: function () {
                             alert("Recurso alterado!");

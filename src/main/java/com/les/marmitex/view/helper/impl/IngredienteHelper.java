@@ -110,7 +110,35 @@ public class IngredienteHelper implements IViewHelper {
 
         } else if (("CONSULTAR").equals(operacao)) {
             i = new Ingrediente();
-
+            String diaDaSemana = request.getParameter("dia");
+            if (diaDaSemana != null) {
+                List<Dias> dias = new ArrayList<>();
+                switch (diaDaSemana) {
+                    case "1":
+                        dias.add(Dias.SEGUNDA);
+                        break;
+                    case "2":
+                        dias.add(Dias.TERCA);
+                        break;
+                    case "3":
+                        dias.add(Dias.QUARTA);
+                        break;
+                    case "4":
+                        dias.add(Dias.QUINTA);
+                        break;
+                    case "5":
+                        dias.add(Dias.SEXTA);
+                        break;
+                    case "6":
+                        dias.add(Dias.SABADO);
+                        break;
+                    case "7":
+                        dias.add(Dias.DOMINGO);
+                        break;
+                }
+                i.setDias(dias);
+            }            
+            
         } else if (("EXCLUIR").equals(operacao)) {
             i = new Ingrediente();
             String id = request.getParameter("id");
@@ -126,6 +154,7 @@ public class IngredienteHelper implements IViewHelper {
             categoria = request.getParameter("categoria");
             id_categoria = request.getParameter("id_categoria");
             valor = Double.valueOf(request.getParameter("valor"));
+            dia = request.getParameter("dias");
 
             c.setNome(categoria);
             c.setId(Integer.valueOf(id_categoria));
@@ -145,6 +174,36 @@ public class IngredienteHelper implements IViewHelper {
                 }
             } else {
                 i.setDtVencimento(new Date(dtVencimento));
+            }
+            if (!dia.isEmpty()) {
+                List<Dias> uteis = new ArrayList();
+                String[] dias = dia.split(";");
+                for (int j = 0; j < dias.length; j++) {
+                    switch (dias[j]) {
+                        case "Segunda-feira":
+                            uteis.add(Dias.SEGUNDA);
+                            break;
+                        case "Terça-feira":
+                            uteis.add(Dias.TERCA);
+                            break;
+                        case "Quarta-feira":
+                            uteis.add(Dias.QUARTA);
+                            break;
+                        case "Quinta-feira":
+                            uteis.add(Dias.QUINTA);
+                            break;
+                        case "Sexta-feira":
+                            uteis.add(Dias.SEXTA);
+                            break;
+                        case "Sabado":
+                            uteis.add(Dias.SABADO);
+                            break;
+                        case "Domingo":
+                            uteis.add(Dias.DOMINGO);
+                            break;
+                    }
+                }
+                i.setDias(uteis);
             }
 
             i.setValor(valor);

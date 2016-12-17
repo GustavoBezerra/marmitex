@@ -33,7 +33,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
     public void salvar(EntidadeDominio entidade) throws SQLException {
         openConnection();
         PreparedStatement pst = null;
-        
+
         try {
             Ingrediente ingrediente = (Ingrediente) entidade;
             connection.setAutoCommit(false);
@@ -63,10 +63,10 @@ public class IngredienteDAO extends AbstractJdbcDAO {
                 idIngri = rs.getInt(1);
             }
             ingrediente.setId(idIngri);
-            
+
             connection.commit();
-            
-            if(ingrediente.getDias() != null){
+
+            if (ingrediente.getDias() != null) {
                 DisponibilidadeDAO disponibilidadeDAO = new DisponibilidadeDAO();
                 disponibilidadeDAO.salvar(ingrediente);
             }
@@ -116,6 +116,10 @@ public class IngredienteDAO extends AbstractJdbcDAO {
 
             pst.executeUpdate();
             connection.commit();
+            
+            DisponibilidadeDAO disponibilidadeDAO = new DisponibilidadeDAO();
+            disponibilidadeDAO.excluir(ingrediente);
+            disponibilidadeDAO.salvar(ingrediente);
 
         } catch (SQLException e) {
             try {
@@ -154,19 +158,26 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
+            if (ingrediente.getDias() != null) {
+                sql.append("SELECT * FROM tb_ingredientes i\n"
+                        + "inner join tb_disponibilidade d on d.id_ingrediente=i.id_ingrediente\n"
+                        + "WHERE i.ativo=true and d.id_dia=?;");
+                pst = connection.prepareStatement(sql.toString());
+                pst.setInt(1, ingrediente.getDias().get(0).getCodigo());
+            } else {
+                sql.append("SELECT * FROM tb_ingredientes WHERE ativo=true");
+                if (ingrediente.getId() != 0) {
+                    sql.append(" and id_ingrediente=?");
+                    ingredienteEspecifico = true;
+                }
 
-            sql.append("SELECT * FROM tb_ingredientes WHERE ativo=true");
-            if (ingrediente.getId() != 0) {
-                sql.append(" and id_ingrediente=?");
-                ingredienteEspecifico = true;
+                pst = connection.prepareStatement(sql.toString());
+                if (ingredienteEspecifico) {
+                    pst.setInt(1, ingrediente.getId());
+                }
             }
-
-            pst = connection.prepareStatement(sql.toString());
-            if (ingredienteEspecifico) {
-                pst.setInt(1, ingrediente.getId());
-            }
-
             ResultSet rs = pst.executeQuery();
+            DisponibilidadeDAO disponibilidadeDAO = new DisponibilidadeDAO();
             while (rs.next()) {
                 i = new Ingrediente();
                 c = new Categoria();
@@ -177,8 +188,9 @@ public class IngredienteDAO extends AbstractJdbcDAO {
                 i.setDtVencimento(rs.getDate("dt_vencimento"));
                 i.setDtCriacao(rs.getDate("dt_cadastro"));
                 c.setId(rs.getInt("categoria"));
-                i.setCategoria((Categoria)categoriaDAO.consultar(c).get(0));
+                i.setCategoria((Categoria) categoriaDAO.consultar(c).get(0));
                 i.setValor(rs.getDouble("valor"));
+                disponibilidadeDAO.consultar(i);
 
                 ingredientes.add(i);
             }
@@ -206,7 +218,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
     }
 
     @Override
-    public void excluir(EntidadeDominio entidade){
+    public void excluir(EntidadeDominio entidade) {
         openConnection();
         PreparedStatement pst = null;
         StringBuilder sb = new StringBuilder();
@@ -220,7 +232,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             pst.executeUpdate();
             connection.commit();
             Ingrediente ingrediente = (Ingrediente) entidade;
-            if(ingrediente.getDias() != null){
+            if (ingrediente.getDias() != null) {
                 DisponibilidadeDAO disponibilidadeDAO = new DisponibilidadeDAO();
                 disponibilidadeDAO.excluir(entidade);
             }
