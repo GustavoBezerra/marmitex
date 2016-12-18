@@ -1,6 +1,7 @@
 package com.les.marmitex.view.helper.impl;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.les.marmitex.core.dominio.Dias;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Ingrediente;
@@ -30,12 +31,13 @@ public class PratoHelper implements IViewHelper{
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         String operacao = request.getParameter("operacao");
-        Prato p = new Prato();
+        Prato p = new Prato();;
         Ingrediente ingrediente;
         List<Ingrediente> ingredientes;
         Gson gson = new Gson();
         
-        if(("SALVAR".equals(operacao))){
+        if(("SALVAR").equals(operacao)){
+            p = new Prato();
             p.setNome(request.getParameter("nome"));
             String json = request.getParameter("ingredientes");
             double preco = Double.valueOf(request.getParameter("preco"));
@@ -54,13 +56,38 @@ public class PratoHelper implements IViewHelper{
                 ingredientes.add(ingrediente);
             }
             p.setIngredientes(ingredientes);
-        }        
+        } else if(("EXCLUIR").equals(operacao)){
+            p = new Prato();
+            p.setId(Integer.valueOf(request.getParameter("id")));
+        } else if(("CONSULTAR").equals(operacao)){
+            p = new Prato();
+        } else if(("ALTERAR").equals(operacao)){
+            p = gson.fromJson(request.getParameter("prato"), Prato.class);
+        }
         return p;
     }
 
     @Override
     public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String operacao = request.getParameter("operacao");
+        String retorno = null;
+        //Gson gson = new Gson();
+        Gson gson = new Gson();
+
+        if (("SALVAR").equals(operacao)) {
+
+        } else if (("CONSULTAR").equals(operacao)) {
+            retorno = gson.toJson(resultado.getEntidades());
+            try {
+                response.getWriter().write(retorno);
+            } catch (IOException ex) {
+                System.out.println("ERRO!");
+            }
+        } else if (("EXCLUIR").equals(operacao)) {
+
+        } else if (("ALTERAR").equals(operacao)) {
+
+        }
     }
     
 }

@@ -17,128 +17,122 @@ import org.springframework.stereotype.Component;
 
 /**
  * Classe responsável pela persistência dos dados do prato do dias
+ *
  * @author Gustavo de Souza Bezerra <gustavo.bezerra@hotmail.com>
  * @date 02/10/2016
  */
 @Component("com.les.marmitex.core.dominio.Prato")
-public class PratoDAO extends AbstractJdbcDAO{
+public class PratoDAO extends AbstractJdbcDAO {
 
-    public PratoDAO(){
+    public PratoDAO() {
         super("tb_prato", "id_prato");
     }
 
     @Override
     public void salvar(EntidadeDominio entidade) throws SQLException {
-//        openConnection();
-//        PreparedStatement pst = null;
-//
-//        try {
-//            Prato prato = (Prato) entidade;
-//            connection.setAutoCommit(false);
-//
-//            StringBuilder sql = new StringBuilder();
-//            sql.append("INSERT INTO tb_prato(valor, dt_disponivel, nome) ");
-//            sql.append("VALUES (?,?, ?);");
-//
-//            pst = connection.prepareStatement(sql.toString(),
-//                    Statement.RETURN_GENERATED_KEYS);
-//            pst.setDouble(1, prato.getValor());
-//            Timestamp dtDisponivel = new Timestamp(prato.getDtDisponivel().getTime());
-//            pst.setTimestamp(2, dtDisponivel);
-//            pst.setString(3, prato.getNome());
-//
-//            pst.executeUpdate();
-//            connection.commit();
-//            ResultSet rs = pst.getGeneratedKeys();
-//            int idPrato = 0;
-//            if (rs.next()) {
-//                idPrato = rs.getInt(1);
-//            }
-//            prato.setId(idPrato);
-//
-//            for (int i = 0; i < prato.getIngredientes().size(); i++) {
-//                salvarIngredientes(prato.getIngredientes().get(i), prato.getId());
-//            }
-//        } catch (SQLException e) {
-//            try {
-//                connection.rollback();
-//            } catch (SQLException e1) {
-//                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
-//            }
-//            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
-//        } catch (ClassCastException ce) {
-//            System.out.println(ANSI_RED + "[ERROR] - Entidade " + entidade.getClass().getSimpleName() + " não é um Endereço!" + ANSI_RESET);
-//        } finally {
-//            try {
-//                if (pst != null) {
-//                    pst.close();
-//                }
-//                connection.close();
-//            } catch (SQLException e) {
-//                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
-//            }
-//        }
+        openConnection();
+        PreparedStatement pst = null;
+
+        try {
+            Prato prato = (Prato) entidade;
+            connection.setAutoCommit(false);
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("INSERT INTO tb_prato(valor, nome) ");
+            sql.append("VALUES (?,?);");
+
+            pst = connection.prepareStatement(sql.toString(),
+                    Statement.RETURN_GENERATED_KEYS);
+            pst.setDouble(1, prato.getValor());
+            pst.setString(2, prato.getNome());
+
+            pst.executeUpdate();
+            connection.commit();
+            ResultSet rs = pst.getGeneratedKeys();
+            int idPrato = 0;
+            if (rs.next()) {
+                idPrato = rs.getInt(1);
+            }
+            prato.setId(idPrato);
+
+            for (int i = 0; i < prato.getIngredientes().size(); i++) {
+                salvarIngredientes(prato.getIngredientes().get(i), prato.getId());
+            }
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
+            }
+            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+        } catch (ClassCastException ce) {
+            System.out.println(ANSI_RED + "[ERROR] - Entidade " + entidade.getClass().getSimpleName() + " não é um Endereço!" + ANSI_RESET);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+            }
+        }
     }
 
     @Override
     public void alterar(EntidadeDominio entidade) throws SQLException {
-//        openConnection();
-//        PreparedStatement pst = null;
-//
-//        try {
-//            Prato prato = (Prato) entidade;
-//            connection.setAutoCommit(false);
-//
-//            StringBuilder sql = new StringBuilder();
-//            sql.append("UPDATE tb_prato SET valor=?, dt_disponivel=? where id_prato=?;");
-//
-//            pst = connection.prepareStatement(sql.toString());
-//            pst.setDouble(1, prato.getValor());
-//            Timestamp dtDisponivel = new Timestamp(prato.getDtDisponivel().getTime());
-//            pst.setTimestamp(2, dtDisponivel);
-//            pst.setInt(3, prato.getId());
-//
-//            pst.executeUpdate();
-//            connection.commit();
-//
-//            limparIngredientes(prato.getId());
-//
-//            for (int i = 0; i < prato.getIngredientes().size(); i++) {
-//                salvarIngredientes(prato.getIngredientes().get(i), prato.getId());
-//            }
-//        } catch (SQLException e) {
-//            try {
-//                connection.rollback();
-//            } catch (SQLException e1) {
-//                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
-//            }
-//            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
-//        } catch (ClassCastException ce) {
-//            System.out.println(ANSI_RED + "[ERROR] - Entidade " + entidade.getClass().getSimpleName() + " não é um Endereço!" + ANSI_RESET);
-//        } finally {
-//            try {
-//                if (pst != null) {
-//                    pst.close();
-//                }
-//                connection.close();
-//            } catch (SQLException e) {
-//                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
-//            }
-//        }
+        openConnection();
+        PreparedStatement pst = null;
+
+        try {
+            Prato prato = (Prato) entidade;
+            connection.setAutoCommit(false);
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("UPDATE tb_prato SET valor=?, nome=? where id_prato=?;");
+
+            pst = connection.prepareStatement(sql.toString());
+            pst.setDouble(1, prato.getValor());
+            pst.setString(2, prato.getNome());
+
+            pst.executeUpdate();
+            connection.commit();
+
+            limparIngredientes(prato.getId());
+
+            for (int i = 0; i < prato.getIngredientes().size(); i++) {
+                salvarIngredientes(prato.getIngredientes().get(i), prato.getId());
+            }
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                System.out.println(ANSI_RED + "[ERROR] ROLLBACK - " + e1.getMessage() + ANSI_RESET);
+            }
+            System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+        } catch (ClassCastException ce) {
+            System.out.println(ANSI_RED + "[ERROR] - Entidade " + entidade.getClass().getSimpleName() + " não é um Endereço!" + ANSI_RESET);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println(ANSI_RED + "[ERROR] - " + e.getMessage() + ANSI_RESET);
+            }
+        }
     }
 
     @Override
     public List<EntidadeDominio> consultar(EntidadeDominio entidade) throws SQLException {
-        //TODO pensar melhor no consultar
-    	// teste de commit
         openConnection();
         PreparedStatement pst = null;
         Ingrediente i;
-        Categoria c;
-        CategoriaDAO categoriaDAO = new CategoriaDAO();
-        List<EntidadeDominio> ingredientes = new ArrayList<>();
-        Prato p;
-        boolean ingredienteEspecifico = false;
+        List<Ingrediente> ingredientes = new ArrayList<>();
+        List<EntidadeDominio> pratos = new ArrayList<>();
+        Prato p = null;
+        boolean pratoEspecifico = false;
 
         try {
             Prato prato = (Prato) entidade;
@@ -146,32 +140,60 @@ public class PratoDAO extends AbstractJdbcDAO{
 
             StringBuilder sql = new StringBuilder();
 
-            sql.append("SELECT * FROM tb_prato WHERE ativo=true");
+            sql.append("SELECT * FROM tb_prato p inner join tb_prato_ingrediente pi on p.id_prato=pi.id_prato");
             if (prato.getId() != 0) {
-                sql.append(" and id_ingrediente=?");
-                ingredienteEspecifico = true;
+                sql.append(" WHERE id_prato=?");
+                pratoEspecifico = true;
             }
-
+            sql.append(";");
             pst = connection.prepareStatement(sql.toString());
-            if (ingredienteEspecifico) {
+            if (pratoEspecifico) {
                 pst.setInt(1, prato.getId());
             }
 
             ResultSet rs = pst.executeQuery();
+            int aux, anterior = 0;
+            IngredienteDAO ingredienteDAO = new IngredienteDAO();
             while (rs.next()) {
-                i = new Ingrediente();
-                c = new Categoria();
-                i.setId(rs.getInt("id_ingrediente"));
-                i.setNome(rs.getString("nome"));
-                i.setQuantidade(rs.getDouble("quantidade"));
-                i.setMedida(rs.getString("medida"));
-                i.setDtVencimento(rs.getDate("dt_vencimento"));
-                i.setDtCriacao(rs.getDate("dt_cadastro"));
-                c.setId(rs.getInt("categoria"));
-                i.setCategoria((Categoria)categoriaDAO.consultar(c).get(0));
-                i.setValor(rs.getDouble("valor"));
+                aux = rs.getInt("p.id_prato");
+                if (anterior == 0) {
+                    p = new Prato();
+                    ingredientes = new ArrayList<>();
+                    i = new Ingrediente();
+                    p.setIngredientes(ingredientes);
 
-                ingredientes.add(i);
+                    p.setId(aux);
+                    p.setValor(rs.getDouble("valor"));
+                    p.setNome(rs.getString("nome"));
+
+                    i.setId(rs.getInt("id_ingrediente"));
+                    p.getIngredientes().add((Ingrediente) ingredienteDAO.consultar(i).get(0));
+
+                    anterior = aux;
+                } else if (aux == anterior) {
+                    i = new Ingrediente();
+                    i.setId(rs.getInt("id_ingrediente"));
+                    p.getIngredientes().add((Ingrediente) ingredienteDAO.consultar(i).get(0));
+                } else{
+                    pratos.add(p);
+                    
+                    p = new Prato();
+                    ingredientes = new ArrayList<>();
+                    i = new Ingrediente();
+                    p.setIngredientes(ingredientes);
+
+                    p.setId(aux);
+                    p.setValor(rs.getDouble("valor"));
+                    p.setNome(rs.getString("nome"));
+
+                    i.setId(rs.getInt("id_ingrediente"));
+                    p.getIngredientes().add((Ingrediente) ingredienteDAO.consultar(i).get(0));
+
+                    anterior = aux;
+                }
+            }
+            if(p != null){
+                pratos.add(p);
             }
         } catch (SQLException ex) {
             try {
@@ -192,16 +214,16 @@ public class PratoDAO extends AbstractJdbcDAO{
                 System.out.println(ANSI_RED + "[ERROR] - " + ex.getMessage() + ANSI_RESET);
             }
         }
-        return ingredientes;
+        return pratos;
     }
 
     @Override
-    public void excluir(EntidadeDominio entidade){
+    public void excluir(EntidadeDominio entidade) {
         openConnection();
         PreparedStatement pst = null;
 
         try {
-            Prato p = (Prato)entidade;
+            Prato p = (Prato) entidade;
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
@@ -216,7 +238,7 @@ public class PratoDAO extends AbstractJdbcDAO{
             StringBuilder sql2 = new StringBuilder();
             sql2.append("DELETE FROM tb_prato WHERE id_prato=?;");
 
-            pst=null;
+            pst = null;
             pst = connection.prepareStatement(sql2.toString());
             pst.setInt(1, p.getId());
 

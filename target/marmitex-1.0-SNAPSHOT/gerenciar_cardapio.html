@@ -23,41 +23,7 @@
             app.controller("gerenciarCardapioCtrl", function ($scope) {
                 $scope.titulo = "Gerenciar Cardapio";
                 $scope.preco = 0;
-
-                $scope.dias = [
-                    {
-                        id: 10,
-                        titulo: "Todos os dias"
-                    },
-                    {
-                        id: 1,
-                        titulo: "Segunda-feira"
-                    },
-                    {
-                        id: 2,
-                        titulo: "Terça-feira"
-                    },
-                    {
-                        id: 3,
-                        titulo: "Quarta-feira"
-                    },
-                    {
-                        id: 4,
-                        titulo: "Quinta-feira"
-                    },
-                    {
-                        id: 5,
-                        titulo: "Sexta-feira"
-                    },
-                    {
-                        id: 6,
-                        titulo: "Sabado"
-                    },
-                    {
-                        id: 0,
-                        titulo: "Domingo"
-                    }
-                ];
+                $scope.opAlterar = false;
 
                 $scope.sair = function () {
                     window.sessionStorage.clear();
@@ -68,21 +34,6 @@
                     $scope.consultarCategorias();
                     $scope.consultarIngredientes();
                     $scope.consultarCardapio();
-                };
-
-                $scope.selecionouDia = function (aux) {
-                    var dias = document.getElementsByName("ck_dias");
-                    if (aux.dia.titulo === "Todos os dias" && todosOsDias) {
-                        for (var i = 0; i < dias.length; i++) {
-                            dias[i].checked = false;
-                        }
-                        todosOsDias = false;
-                    } else if (aux.dia.titulo === "Todos os dias" && !todosOsDias) {
-                        for (var i = 0; i < dias.length; i++) {
-                            dias[i].checked = true;
-                        }
-                        todosOsDias = true;
-                    }
                 };
 
                 $scope.consultarCategorias = function () {
@@ -118,18 +69,17 @@
                         }
                     });
                 };
-                
+
                 $scope.consultarCardapio = function () {
                     $.ajax({
                         url: "/marmitex/prato",
                         type: "POST",
                         async: false,
                         data: {
-                            operacao: "CONSULTAR",
-                            dia: "2"
+                            operacao: "CONSULTAR"
                         },
                         success: function (data) {
-                            alert("Funcionou");
+                            $scope.pratos = JSON.parse(data);
                         },
                         error: function (err) {
                             console.log(err.statusText);
@@ -165,12 +115,88 @@
                             preco: $scope.preco
                         },
                         success: function (data) {
-                            $scope.recursos = JSON.parse(data);
+                            $scope.consultarCardapio();
                         },
                         error: function (err) {
                             console.log(err.statusText);
                         }
                     });
+                };
+
+                $scope.visualizar = function (prato) {
+                    $scope.opAlterar = true;
+                    $scope.nome = prato.nome;
+                    $scope.preco = prato.valor;
+                    var cks = document.getElementsByName("ck_ingredientes");
+                    for (var i = 0; i < cks.length; i++) {
+                        cks[i].checked = false;
+                    }
+                    for (var i = 0; i < cks.length; i++) {
+                        for (var j = 0; j < prato.ingredientes.length; j++) {
+                            if (cks[i].id === prato.ingredientes[j].nome) {
+                                cks[i].checked = true;
+                                break;
+                            }
+                        }
+                    }
+                    ingredientesCheckados = new Array();
+                };
+
+                $scope.alterar = function () {
+                    $.ajax({
+                        url: "/marmitex/prato",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "ALTERAR",
+                            ingredientes: JSON.stringify(ingredientesCheckados),
+                            nome: $scope.nome,
+                            preco: $scope.preco
+                        },
+                        success: function (data) {
+                            $scope.consultarCardapio();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
+                $scope.excluir = function (prato) {
+                    $.ajax({
+                        url: "/marmitex/prato",
+                        type: "POST",
+                        data: {
+                            operacao: "EXCLUIR",
+                            id: prato.id
+                        },
+                        success: function (data) {
+                            $scope.consultarCardapio();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                            alert("ERRO AO EXCLUIR O PRATO!");
+                        }
+                    });
+                };
+
+                $scope.exibirIngredientesDoPrato = function (p) {
+                    var aux = "";
+                    for (var i = 0; i < p.ingredientes.length; i++) {
+                        aux += p.ingredientes[i].nome + ",";
+                    }
+                    return aux.substring(0, aux.length - 1);
+                };
+
+                $scope.limpar = function () {
+                    var cks = document.getElementsByName("ck_ingredientes");
+                    for (var i = 0; i < cks.length; i++) {
+                        cks[i].checked = false;
+                    }
+                    $scope.nome = "";
+                    $scope.preco = 0;
+                    ingredientesCheckados = new Array();
+                    $scope.opAlterar = false;
                 };
             });
         </script>
@@ -189,7 +215,7 @@
                                     <div class="box-header with-border" style="text-align: center;">
                                         <i class="glyphicon glyphicon-road"></i>
                                         <h3 class="box-title">Cadastrar prato</h3>
-                                        <button type="button" class="btn btn-info pull-right" name="cancelar" id="cancelar">Cancelar</button>
+                                        <button type="button" class="btn btn-info pull-right" ng-click="limpar()" name="cancelar" id="cancelar">Cancelar</button>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-5">
@@ -199,20 +225,7 @@
                                         </div>
 
                                     </div>
-                                    <br/>
-                                    <div class="row">
-                                        <div class="form-group col-md-3">
-                                            <label for="categoria">Dias da semana:</label>
-                                            <div class="form-group">
-                                                <div class="checkbox" ng-repeat="dia in dias">
-                                                    <label>
-                                                        <input type="checkbox" id="dia_{{dia.id}}" name="ck_dias" ng-click="selecionouDia(this)">
-                                                        {{dia.titulo}}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     <br/>
                                     <div id="escolhas" class="row col-md-6" ng-repeat="categoria in categorias" ng-if="categoria.nome !== 'Prato'">
                                         <div  >
@@ -223,7 +236,7 @@
                                             <div class="form-group">
                                                 <div class="checkbox" ng-repeat="recurso in recursos" ng-if="recurso.categoria.nome === categoria.nome">
                                                     <label>
-                                                        <input type="checkbox" ng-disabled="!((recurso.medida !== 'Unidade(s)' && recurso.quantidade > 0.150) || (recurso.medida === 'Unidade(s)' && recurso.quantidade > 1))" ng-click="clicou(recurso)" name="{{categoria.nome}}" id="{{recurso.nome}}">
+                                                        <input type="checkbox"  ng-click="clicou(recurso)" name="ck_ingredientes" id="{{recurso.nome}}">
                                                         {{recurso.nome}} (R${{recurso.valor| number:2}} )
                                                     </label>
                                                 </div>
@@ -233,8 +246,8 @@
                                     <!-- SEGUNDA LINHA -->
                                     <div class="row">
                                         <div class="form-group col-md-11">
-                                            <button type="submit" class="btn btn-success pull-right" name="operacao" id="salvar" value="SALVAR" ng-disabled="preco <= 0" ng-click="salvar()">Cadastrar</button>
-                                            <button type="submit" class="btn btn-warning pull-right" id="alterar" name="operacao" value="ALTERAR" >Alterar</button>
+                                            <button type="submit" class="btn btn-success pull-right" ng-if="!opAlterar" name="operacao" id="salvar" value="SALVAR" ng-disabled="preco <= 0" ng-click="salvar()">Cadastrar</button>
+                                            <button type="submit" class="btn btn-warning pull-right" ng-if="opAlterar" id="alterar" name="operacao" value="ALTERAR" >Alterar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -255,20 +268,25 @@
                                         <tr>
                                             <th>ID do prato</th>
                                             <th>Nome</th>
-                                            <th>Dia</th>
+                                            <th>Valor</th>
                                             <th>Ingredientes</th>
-                                            <th>Preço</th>
+                                            <th>Ações</th>
                                         </tr>
-                                        <tr ng-repeat="e in entregadores">
+                                        <tr ng-repeat="p in pratos">
                                             <td>
-                                                <a ng-click="visualizar(e);">
-                                                    {{e.id}}
+                                                <a ng-click="visualizar(p);">
+                                                    {{p.id}}
                                                 </a>
                                             </td>
-                                            <td>{{e.nome}}</td>
+                                            <td>{{p.nome}}</td>
+                                            <td>{{p.valor}}</td>
                                             <td>
-                                                <button type='button' class='btn btn-warning' ng-click='visualizar(e)'>Alterar</button>
-                                                <button type='button' class='btn btn-danger' ng-click='excluir(e)'>Excluir</button>
+                                                {{exibirIngredientesDoPrato(p)}}
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-default" ng-click='preparar(p)' >Preparar</button>
+                                                <button type="button" class="btn btn-warning" ng-click='visualizar(p)' >Alterar</button>
+                                                <button type='button' class='btn btn-danger' ng-click='excluir(p)'>Excluir</button>
                                             </td>
                                         </tr>
                                     </table>
