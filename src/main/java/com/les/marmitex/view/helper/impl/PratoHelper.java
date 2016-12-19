@@ -31,7 +31,7 @@ public class PratoHelper implements IViewHelper{
     @Override
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         String operacao = request.getParameter("operacao");
-        Prato p = new Prato();;
+        Prato p = new Prato();
         Ingrediente ingrediente;
         List<Ingrediente> ingredientes;
         Gson gson = new Gson();

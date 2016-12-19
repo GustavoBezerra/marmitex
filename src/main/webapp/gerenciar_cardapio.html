@@ -9,11 +9,13 @@
 
         <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
         <script src="angularJS/angular.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <link href="dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
+        <script src="dist/js/bootstrap.min.js" type="text/javascript"></script>
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
-
+        <script src="dist/js/bootbox.min.js"></script>
         <script>
             var ingredientes = document.getElementsByName("ingredientes");
             var ingredientesCheckados = new Array();
@@ -123,6 +125,26 @@
                     });
                 };
 
+                $scope.preparar = function () {
+                    $.ajax({
+                        url: "/marmitex/prato",
+                        type: "POST",
+                        async: false,
+                        data: {
+                            operacao: "SALVAR",
+                            ingredientes: JSON.stringify(ingredientesCheckados),
+                            nome: $scope.nome,
+                            preco: $scope.preco
+                        },
+                        success: function (data) {
+                            $scope.consultarCardapio();
+                        },
+                        error: function (err) {
+                            console.log(err.statusText);
+                        }
+                    });
+                };
+
                 $scope.visualizar = function (prato) {
                     $scope.opAlterar = true;
                     $scope.nome = prato.nome;
@@ -198,6 +220,60 @@
                     ingredientesCheckados = new Array();
                     $scope.opAlterar = false;
                 };
+
+                $scope.teste = function (prato) {
+                    bootbox.confirm({
+                        message: "Quando que o prato será servido?",
+                        buttons: {
+                            confirm: {
+                                label: 'Hoje',
+                                className: 'btn-success'
+                            },
+                            cancel: {
+                                label: 'Amanhã',
+                                className: 'btn-danger'
+                            }
+                        },
+                        callback: function (dia) {
+                            var aux;
+                            if (dia) {
+                                aux = "Hoje";
+                            } else {
+                                aux = "Amanhã";
+                            }
+                            bootbox.prompt({
+                                title: "Quantas unidades do prato serão preparadas?",
+                                inputType: 'number',
+                                callback: function (qtde) {
+                                    if (qtde !== null) {
+                                        if (qtde > 0) {
+                                            $.ajax({
+                                                url: "/marmitex/preparo",
+                                                type: "POST",
+                                                async: false,
+                                                data: {
+                                                    operacao: "SALVAR",
+                                                    ingredientes: JSON.stringify(prato.ingredientes),
+                                                    quantidade: qtde,
+                                                    dia: aux,
+                                                    valor: prato.valor,
+                                                    nome: prato.nome
+                                                },
+                                                success: function (data) {
+                                                    alert("Prato preparado!");
+                                                },
+                                                error: function (err) {
+                                                    console.log(err.statusText);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+                }
             });
         </script>
     </head>
@@ -284,12 +360,15 @@
                                                 {{exibirIngredientesDoPrato(p)}}
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-default" ng-click='preparar(p)' >Preparar</button>
+                                                <button class="btn btn-large btn-primary" ng-click="teste(p)">
+                                                    Preparar
+                                                </button>
                                                 <button type="button" class="btn btn-warning" ng-click='visualizar(p)' >Alterar</button>
                                                 <button type='button' class='btn btn-danger' ng-click='excluir(p)'>Excluir</button>
                                             </td>
                                         </tr>
                                     </table>
+
                                 </div>
                             </div>
                         </div>

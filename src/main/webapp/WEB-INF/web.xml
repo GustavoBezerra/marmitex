@@ -48,6 +48,10 @@
         <servlet-name>FrontControllerServlet</servlet-name>
         <url-pattern>/prato</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FrontControllerServlet</servlet-name>
+        <url-pattern>/preparo</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

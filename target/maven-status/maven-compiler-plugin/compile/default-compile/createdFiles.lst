@@ -1,6 +1,7 @@
 com\les\marmitex\core\dominio\Pagamento.class
 com\les\marmitex\util\teste\TestaAnalise.class
 com\les\marmitex\view\helper\impl\EnderecoHelper.class
+com\les\marmitex\core\dao\impl\PreparoDAO.class
 com\les\marmitex\core\dao\impl\ClienteDAO.class
 com\les\marmitex\util\teste\TestaDate.class
 com\les\marmitex\core\strategy\impl\ValidarEstoque.class
@@ -17,8 +18,10 @@ com\les\marmitex\core\strategy\impl\EfetuarDevolucao.class
 com\les\marmitex\core\dominio\Regras.class
 com\les\marmitex\view\command\impl\SalvarCommand.class
 com\les\marmitex\util\Conexao.class
+com\les\marmitex\view\helper\impl\PreparoViewHelper.class
 com\les\marmitex\core\dao\impl\MarmitexDAO.class
 com\les\marmitex\view\helper\impl\EntregadorHelper.class
+com\les\marmitex\core\strategy\impl\ValidarPreparo.class
 com\les\marmitex\core\dominio\Prato.class
 com\les\marmitex\view\helper\impl\PratoHelper.class
 com\les\marmitex\core\dominio\Pessoa.class
@@ -49,6 +52,7 @@ com\les\marmitex\core\strategy\impl\BuscarDisponibilidade.class
 com\les\marmitex\view\controller\FrontControllerServlet.class
 com\les\marmitex\core\dominio\ResultadoGrafico.class
 com\les\marmitex\core\dominio\Administrador.class
+com\les\marmitex\core\dominio\Preparo.class
 com\les\marmitex\core\dominio\ItemGrafico.class
 com\les\marmitex\util\teste\TestaConsultarPedido.class
 com\les\marmitex\core\dominio\Categoria.class
@@ -70,6 +74,7 @@ com\les\marmitex\view\helper\impl\JustificativaHelper.class
 com\les\marmitex\view\helper\impl\IngredienteHelper.class
 com\les\marmitex\core\strategy\IStrategy.class
 com\les\marmitex\core\dao\impl\CategoriaDAO.class
+com\les\marmitex\util\teste\TesteDiaDaSemana.class
 com\les\marmitex\core\fachada\IFachada.class
 com\les\marmitex\view\command\impl\ExcluirCommand.class
 com\les\marmitex\core\dominio\Entregador.class
