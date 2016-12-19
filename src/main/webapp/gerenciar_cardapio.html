@@ -260,7 +260,12 @@
                                                     nome: prato.nome
                                                 },
                                                 success: function (data) {
-                                                    alert("Prato preparado!");
+                                                    if(data !== null && data !== ""){
+                                                        alert(data);
+                                                    }
+                                                    else{
+                                                        alert("Prato preparado!");
+                                                    }
                                                 },
                                                 error: function (err) {
                                                     console.log(err.statusText);

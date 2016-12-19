@@ -5,6 +5,7 @@ import static com.les.marmitex.core.dao.impl.AbstractJdbcDAO.ANSI_RESET;
 import com.les.marmitex.core.dominio.EntidadeDominio;
 import com.les.marmitex.core.dominio.Ingrediente;
 import com.les.marmitex.core.dominio.Preparo;
+import com.les.marmitex.core.strategy.impl.ValidarEstoque;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +15,8 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -72,6 +75,10 @@ public class PreparoDAO extends AbstractJdbcDAO{
                 i.setDias(preparo.getPrato().getDtDisponivel());
                 disponibilidadeDAO.salvar(i);
             }
+            
+            for (int i = 0; i < preparo.getPrato().getIngredientes().size(); i++) {
+                darBaixaNoEstoque(preparo.getPrato().getIngredientes().get(i), preparo.getQuantidade());
+            }
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -103,4 +110,27 @@ public class PreparoDAO extends AbstractJdbcDAO{
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
+    private void darBaixaNoEstoque(Ingrediente i, double quantidade) {
+        IngredienteDAO iDAO = new IngredienteDAO();
+        try {
+            Ingrediente ing = (Ingrediente) iDAO.consultar(i).get(0);
+            if (!("Unidade(s)").equals(i.getMedida())) {
+                try {
+                    i.setQuantidade(ing.getQuantidade() - (0.150*quantidade));
+                    iDAO.alterarQtde(i);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ValidarEstoque.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    i.setQuantidade(ing.getQuantidade() - quantidade);
+                    iDAO.alterarQtde(i);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ValidarEstoque.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MarmitexDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

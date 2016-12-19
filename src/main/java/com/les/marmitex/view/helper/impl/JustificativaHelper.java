@@ -26,6 +26,11 @@ public class JustificativaHelper implements IViewHelper {
     public EntidadeDominio getEntidade(HttpServletRequest request) {
         String operacao = request.getParameter("operacao");
         j = new Justificativa();
+        
+        if(("SALVAR").equals(operacao)){
+            j.setId(Integer.valueOf(request.getParameter("id")));
+            j.setId_pedido(Integer.valueOf(request.getParameter("id_pedido")));
+        }
 
         return j;
     }

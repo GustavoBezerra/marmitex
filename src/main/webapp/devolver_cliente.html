@@ -6,11 +6,13 @@
 
         <script src="adminLTE/js/jquery-3.0.0.min.js"></script>
         <script src="angularJS/angular.js" type="text/javascript"></script>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <link rel="stylesheet" href="adminLTE/bootstrap/css/bootstrap.min.css">
+        <link href="dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
+        <script src="dist/js/bootstrap.min.js" type="text/javascript"></script>
         <link rel="stylesheet" href="adminLTE/dist/css/AdminLTE.min.css">
         <link rel="stylesheet" href="adminLTE/dist/css/skins/_all-skins.min.css">
         <script src="adminLTE/dist/js/app.min.js" type="text/javascript"></script>
+        <script src="dist/js/bootbox.min.js"></script>
 
         <script>
             var parseObj = JSON.parse(window.sessionStorage["usuario"]);
@@ -73,25 +75,74 @@
                 };
 
                 $scope.devolver = function (pedido) {
-                    $.ajax({
-                        url: "/marmitex/pedido",
-                        type: "POST",
-                        async: false,
-                        data: {
-                            operacao: "ALTERAR",
-                            valor_total: pedido.valorTotal,
-                            id_pedido: pedido.id,
-                            status: "Devolvido",
-                            cliente: JSON.stringify(pedido.cliente)
-                        },
-                        success: function (data) {
-                            $scope.usuario.credito.valor = ($scope.usuario.credito.valor + pedido.valorTotal);
-                            window.sessionStorage.setItem("usuario", JSON.stringify($scope.usuario));
-                            $scope.getCreditos();
-                            window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html"
-                        },
-                        error: function (err) {
-                            alert("Erro ao alterar o pedido!\n" + err);
+                    bootbox.prompt({
+                        title: "This is a prompt with select!",
+                        inputType: 'select',
+                        inputOptions: [
+                            {
+                                text: 'Temperatura',
+                                value: '1',
+                            },
+                            {
+                                text: 'Sabor',
+                                value: '2',
+                            },
+                            {
+                                text: 'Tempero',
+                                value: '3',
+                            },
+                            {
+                                text: 'Entrega',
+                                value: '4',
+                            },
+                            {
+                                text: 'Motoboy',
+                                value: '5',
+                            },
+                            {
+                                text: 'Embalagem',
+                                value: '6',
+                            },
+                        ],
+                        callback: function (result) {
+                            if (result > 0) {
+                                $.ajax({
+                                    url: "/marmitex/justificativa",
+                                    type: "POST",
+                                    async: false,
+                                    data: {
+                                        operacao: "SALVAR",
+                                        id: result,
+                                        id_pedido: pedido.id
+                                    },
+                                    success: function () {
+                                        $.ajax({
+                                            url: "/marmitex/pedido",
+                                            type: "POST",
+                                            async: false,
+                                            data: {
+                                                operacao: "ALTERAR",
+                                                valor_total: pedido.valorTotal,
+                                                id_pedido: pedido.id,
+                                                status: "Devolvido",
+                                                cliente: JSON.stringify(pedido.cliente)
+                                            },
+                                            success: function (data) {
+                                                $scope.usuario.credito.valor = ($scope.usuario.credito.valor + pedido.valorTotal);
+                                                window.sessionStorage.setItem("usuario", JSON.stringify($scope.usuario));
+                                                $scope.getCreditos();
+                                                window.location.href = "http://localhost:8084/marmitex/meus_pedidos.html"
+                                            },
+                                            error: function (err) {
+                                                alert("Erro ao alterar o pedido!\n" + err);
+                                            }
+                                        });
+                                    },
+                                    error: function (err) {
+                                        alert("Erro ao alterar o pedido!\n" + err);
+                                    }
+                                });
+                            }
                         }
                     });
                 };
@@ -122,22 +173,56 @@
                 };
 
                 $scope.devolverMarmitex = function (marmitex) {
-                    $.ajax({
-                        url: "/marmitex/marmitex",
-                        type: "POST",
-                        async: false,
-                        data: {
-                            operacao: "EXCLUIR",
-                            marmita: JSON.stringify(marmitex),
-                            status: "Devolvido"
-                        },
-                        success: function (data) {
-                            alert("Marmitex devolvida!");
-                            $scope.getCreditos();
-                            $scope.getPedido();
-                        },
-                        error: function (err) {
-                            console.log(err.statusText);
+                    bootbox.prompt({
+                        title: "This is a prompt with select!",
+                        inputType: 'select',
+                        inputOptions: [
+                            {
+                                text: 'Temperatura',
+                                value: '1',
+                            },
+                            {
+                                text: 'Sabor',
+                                value: '2',
+                            },
+                            {
+                                text: 'Tempero',
+                                value: '3',
+                            },
+                            {
+                                text: 'Entrega',
+                                value: '4',
+                            },
+                            {
+                                text: 'Motoboy',
+                                value: '5',
+                            },
+                            {
+                                text: 'Embalagem',
+                                value: '6',
+                            },
+                        ],
+                        callback: function (result) {
+                            if (result > 0) {
+                                $.ajax({
+                                    url: "/marmitex/marmitex",
+                                    type: "POST",
+                                    async: false,
+                                    data: {
+                                        operacao: "EXCLUIR",
+                                        marmita: JSON.stringify(marmitex),
+                                        status: "Devolvido"
+                                    },
+                                    success: function (data) {
+                                        alert("Marmitex devolvida!");
+                                        $scope.getCreditos();
+                                        $scope.getPedido();
+                                    },
+                                    error: function (err) {
+                                        console.log(err.statusText);
+                                    }
+                                });
+                            }
                         }
                     });
                 };

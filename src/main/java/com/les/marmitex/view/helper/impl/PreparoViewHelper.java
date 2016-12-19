@@ -89,7 +89,17 @@ public class PreparoViewHelper implements IViewHelper {
 
     @Override
     public void setView(Resultado resultado, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String operacao = request.getParameter("operacao");
+        String retorno = null;
+        //Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .setDateFormat("dd/MM/yyyy").create();
+
+        if (("SALVAR").equals(operacao)) {
+            if(resultado.getMensagem() != null && resultado.getMensagem() != ""){
+                response.getWriter().write(gson.toJson(resultado.getMensagem()));
+            }
+        }
     }
 
     private Dias getDiaDaSemana(Calendar c) {
