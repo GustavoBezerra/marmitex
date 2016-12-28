@@ -116,7 +116,7 @@ public class IngredienteDAO extends AbstractJdbcDAO {
 
             pst.executeUpdate();
             connection.commit();
-            
+
             DisponibilidadeDAO disponibilidadeDAO = new DisponibilidadeDAO();
             disponibilidadeDAO.excluir(ingrediente);
             disponibilidadeDAO.salvar(ingrediente);
@@ -158,12 +158,19 @@ public class IngredienteDAO extends AbstractJdbcDAO {
             connection.setAutoCommit(false);
 
             StringBuilder sql = new StringBuilder();
-            if (ingrediente.getDias() != null) {
+            if (ingrediente.getDias() != null && ingrediente.getDias().size() > 0) {
                 sql.append("SELECT * FROM tb_ingredientes i\n"
                         + "inner join tb_disponibilidade d on d.id_ingrediente=i.id_ingrediente\n"
                         + "WHERE i.ativo=true and d.id_dia=?;");
                 pst = connection.prepareStatement(sql.toString());
                 pst.setInt(1, ingrediente.getDias().get(0).getCodigo());
+            } else if (ingrediente.getId() != 0) {
+                sql.append("SELECT * FROM tb_ingredientes WHERE");
+                sql.append(" id_ingrediente=?");
+
+                pst = connection.prepareStatement(sql.toString());
+
+                pst.setInt(1, ingrediente.getId());
             } else {
                 sql.append("SELECT * FROM tb_ingredientes WHERE ativo=true");
                 if (ingrediente.getId() != 0) {
